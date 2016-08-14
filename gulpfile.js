@@ -6,6 +6,7 @@ const gulpIf    = require('gulp-if');
 const coveralls = require('gulp-coveralls');
 const gulpUtil  = require('gulp-util');
 
+const path          = require('path');
 const webpack       = require('webpack');
 const webpackStream = require('webpack-stream');
 const packageJson   = require('./package.json');
