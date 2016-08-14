@@ -12,11 +12,7 @@ const webpackConfig = require('./webpack.config');
 const buildSchemas  = require('./lib/buildSchemas');
 const exec          = require('gulp-exec');
 
-gulp.task('schemas', () => {
-  buildSchemas();
-});
-
-gulp.task('build:minify', ['schemas'], () => {
+gulp.task('build:minify', () => {
   const minConfig = Object.assign({}, webpackConfig, {
     output:  {filename: packageJson.name + '-' + packageJson.version + '.min.js'},
     plugins: [
@@ -33,7 +29,7 @@ gulp.task('build:minify', ['schemas'], () => {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build:normal', ['schemas'], () => gulp.src('lib/gb-tracker.js')
+gulp.task('build:normal', () => gulp.src('lib/gb-tracker.js')
   .pipe(webpackStream(webpackConfig))
   .pipe(gulp.dest('dist')));
 
@@ -53,7 +49,7 @@ gulp.task('test:dirty', () => {
     .pipe(mocha({reporter: 'spec'}));
 });
 
-gulp.task('pre-test', ['schemas'], () => {
+gulp.task('pre-test', () => {
   return gulp.src('lib/gb-tracker-core.js')
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
