@@ -1,7 +1,6 @@
 const chai   = require('chai');
 const expect = chai.expect;
 var diff     = require('deep-diff').diff;
-var Events   = require('../../common/models/events');
 
 window                = false;
 document              = false;
@@ -270,7 +269,7 @@ describe('gb-tracker-core tests', ()=> {
     });
 
     gbTrackerCore.__private.sendEvent = (event) => {
-      if (event.eventType === Events.SessionChange.NAME) {
+      if (event.eventType === 'sessionChange') {
         return;
       }
 
@@ -294,7 +293,7 @@ describe('gb-tracker-core tests', ()=> {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
-      if (event.eventType === Events.SessionChange.NAME) {
+      if (event.eventType === 'sessionChange') {
         return;
       }
 
