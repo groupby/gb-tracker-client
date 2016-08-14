@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "eventType": {},
+    "customer": {
+      "properties": {
+        "id": {},
+        "area": {
+          "optional": false,
+          "def": "default"
+        }
+      },
+      "strict": true
+    },
+    "navigation": {
+      "properties": {
+        "type": {},
+        "exactEvent": {}
+      },
+      "strict": true
+    },
+    "visit": {
+      "properties": {
+        "customerData": {
+          "properties": {
+            "visitorId": {},
+            "sessionId": {}
+          },
+          "strict": true
+        }
+      },
+      "strict": true
+    },
+    "additionalMetadata": {
+      "optional": true
+    }
+  },
+  "strict": true
+}

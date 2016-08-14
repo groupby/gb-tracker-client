@@ -1,0 +1,85 @@
+{
+  "type": "object",
+  "properties": {
+    "eventType": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string",
+          "optional": false
+        }
+      },
+      "strict": true
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "collection": {
+          "type": "string",
+          "optional": false
+        },
+        "title": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string",
+          "optional": true
+        },
+        "id": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "string",
+          "optional": true
+        },
+        "margin": {
+          "type": "number",
+          "optional": true
+        },
+        "price": {
+          "type": "number"
+        }
+      },
+      "strict": true
+    },
+    "visit": {
+      "type": "object",
+      "properties": {
+        "customerData": {
+          "type": "object",
+          "properties": {
+            "visitorId": {
+              "type": "string",
+              "optional": true
+            },
+            "sessionId": {
+              "type": "string",
+              "optional": true
+            }
+          },
+          "strict": true
+        }
+      },
+      "strict": true
+    },
+    "additionalMetadata": {
+      "optional": true,
+      "strict": true,
+      "properties": {
+        "*": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "strict": true
+}

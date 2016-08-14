@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example - example-example33-production</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <script src="//localhost:3000/dist/gb-tracker.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="//localhost:3000/public/form.js"></script>
+</head>
+<body ng-app="formExample">
+<div ng-controller="SetPathController">
+    <form novalidate class="simple-form">
+        Pixel Path: <input type="text" ng-model="path"/><br/>
+        <input type="submit" ng-click="update()" value="Update"/>
+    </form>
+</div>
+<div ng-controller="AddToBasketController">
+    <form novalidate class="simple-form">
+        <H2>Add To Basket</H2>
+        <H3>Product</H3>
+        ID: <input type="text" ng-model="event.product.id"/><br/>
+        Category: <input type="text" ng-model="event.product.category"/><br/>
+        Collection: <input type="text" ng-model="event.product.collection"/><br/>
+        Title: <input type="text" ng-model="event.product.title"/><br/>
+        SKU: <input type="text" ng-model="event.product.sku"/><br/>
+        Price: <input type="text" ng-model="event.product.price"/><br/>
+        <input type="submit" ng-click="send(event)" value="Save"/>
+    </form>
+    <pre>event = {{event | json}}</pre>
+</div>
+<div ng-controller="OrderController">
+    <form novalidate class="simple-form">
+        <H2>Order</H2>
+        <H3>Products</H3>
+        ID: <input type="text" ng-model="event.products[0].id"/><br/>
+        Category: <input type="text" ng-model="event.products[0].category"/><br/>
+        Collection: <input type="text" ng-model="event.products[0].collection"/><br/>
+        Title: <input type="text" ng-model="event.products[0].title"/><br/>
+        SKU: <input type="text" ng-model="event.products[0].sku"/><br/>
+        Price: <input type="text" ng-model="event.products[0].price"/><br/>
+        <input type="submit" ng-click="send(event)" value="Save"/>
+    </form>
+    <pre>event = {{event | json}}</pre>
+</div>
+<div ng-controller="SearchController">
+    <form novalidate class="simple-form">
+        <H3>Search</H3>
+        Total Record Count: <input type="text" ng-model="event.search.totalRecordCount"/><br/>
+        Record End: <input type="text" ng-model="event.search.recordEnd"/><br/>
+        Record Start: <input type="text" ng-model="event.search.recordStart"/><br/>
+        Search Response: <input type="text" ng-model="event.search.searchResponse"/><br/>
+        Search Term: <input type="text" ng-model="event.search.searchTerm"/><br/>
+        <input type="submit" ng-click="send(event)" value="Save"/>
+    </form>
+    <pre>event = {{event | json}}</pre>
+</div>
+<div ng-controller="ViewProductController">
+    <form novalidate class="simple-form">
+        <H2>View Product</H2>
+        <H3>Product</H3>
+        ID: <input type="text" ng-model="event.product.id"/><br/>
+        Category: <input type="text" ng-model="event.product.category"/><br/>
+        Collection: <input type="text" ng-model="event.product.collection"/><br/>
+        Title: <input type="text" ng-model="event.product.title"/><br/>
+        SKU: <input type="text" ng-model="event.product.sku"/><br/>
+        Price: <input type="text" ng-model="event.product.price"/><br/>
+        <input type="submit" ng-click="send(event)" value="Save"/>
+    </form>
+    <pre>event = {{event | json}}</pre>
+</div>
+
+
+<script>
+
+</script>
+</body>
+</html>

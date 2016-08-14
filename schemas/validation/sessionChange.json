@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "properties": {
+    "eventType": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string",
+          "optional": false
+        }
+      },
+      "strict": true
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "previousSessionId": {
+          "type": "string",
+          "optional": true
+        },
+        "newSessionId": {
+          "type": "string"
+        },
+        "previousVisitorId": {
+          "type": "string",
+          "optional": true
+        },
+        "newVisitorId": {
+          "type": "string"
+        }
+      },
+      "strict": true
+    },
+    "visit": {
+      "type": "object",
+      "properties": {
+        "customerData": {
+          "type": "object",
+          "properties": {
+            "visitorId": {
+              "type": "string",
+              "optional": true
+            },
+            "sessionId": {
+              "type": "string",
+              "optional": true
+            }
+          },
+          "strict": true
+        }
+      },
+      "strict": true
+    },
+    "additionalMetadata": {
+      "optional": true,
+      "strict": true,
+      "properties": {
+        "*": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "strict": true
+}

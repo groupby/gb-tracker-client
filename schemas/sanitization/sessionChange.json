@@ -1,0 +1,44 @@
+{
+  "properties": {
+    "eventType": {},
+    "customer": {
+      "properties": {
+        "id": {},
+        "area": {
+          "optional": false,
+          "def": "default"
+        }
+      },
+      "strict": true
+    },
+    "session": {
+      "properties": {
+        "previousSessionId": {
+          "optional": true
+        },
+        "newSessionId": {},
+        "previousVisitorId": {
+          "optional": true
+        },
+        "newVisitorId": {}
+      },
+      "strict": true
+    },
+    "visit": {
+      "properties": {
+        "customerData": {
+          "properties": {
+            "visitorId": {},
+            "sessionId": {}
+          },
+          "strict": true
+        }
+      },
+      "strict": true
+    },
+    "additionalMetadata": {
+      "optional": true
+    }
+  },
+  "strict": true
+}

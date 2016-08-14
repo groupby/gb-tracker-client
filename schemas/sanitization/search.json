@@ -1,0 +1,364 @@
+{
+  "properties": {
+    "eventType": {},
+    "customer": {
+      "properties": {
+        "id": {},
+        "area": {
+          "optional": false,
+          "def": "default"
+        }
+      },
+      "strict": true
+    },
+    "search": {
+      "properties": {
+        "searchUuid": {},
+        "totalRecordCount": {
+          "type": "integer"
+        },
+        "pageInfo": {
+          "properties": {
+            "recordStart": {
+              "type": "integer"
+            },
+            "recordEnd": {
+              "type": "integer"
+            }
+          },
+          "strict": true
+        },
+        "origin": {
+          "properties": {
+            "sayt": {
+              "optional": false,
+              "def": false
+            },
+            "dym": {
+              "optional": false,
+              "def": false
+            },
+            "search": {
+              "optional": false,
+              "def": false
+            },
+            "wisdom": {
+              "optional": false,
+              "def": false
+            }
+          },
+          "strict": true
+        },
+        "selectedRefinements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "optional": true
+              },
+              "displayName": {},
+              "range": {
+                "optional": true
+              },
+              "or": {
+                "optional": false,
+                "def": false
+              },
+              "refinements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "optional": true
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "type": {},
+                    "low": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "high": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  },
+                  "strict": true
+                }
+              }
+            },
+            "strict": true
+          }
+        },
+        "searchTerm": {},
+        "rawSearchResults": {
+          "properties": {
+            "totalRecordCount": {
+              "type": "integer"
+            },
+            "area": {},
+            "biasingProfile": {},
+            "query": {},
+            "originalQuery": {},
+            "template": {
+              "properties": {
+                "name": {}
+              },
+              "strict": true
+            },
+            "pageInfo": {
+              "properties": {
+                "recordStart": {
+                  "type": "integer"
+                },
+                "recordEnd": {
+                  "type": "integer"
+                }
+              },
+              "strict": true
+            },
+            "matchStrategy": {
+              "properties": {
+                "rules": {
+                  "properties": {
+                    "termsGreaterThan": {
+                      "type": "integer"
+                    },
+                    "mustMatch": {
+                      "type": "integer"
+                    },
+                    "percentage": {}
+                  },
+                  "strict": true
+                }
+              },
+              "strict": true
+            },
+            "availableNavigation": {
+              "properties": {
+                "name": {},
+                "displayName": {},
+                "range": {},
+                "or": {},
+                "metadata": {
+                  "properties": {
+                    "key": {},
+                    "name": {}
+                  },
+                  "strict": true
+                },
+                "refinements": {
+                  "properties": {
+                    "type": {},
+                    "count": {
+                      "type": "integer"
+                    },
+                    "value": {},
+                    "high": {},
+                    "low": {}
+                  },
+                  "strict": true
+                }
+              },
+              "strict": true
+            },
+            "selectedNavigation": {
+              "properties": {
+                "name": {},
+                "displayName": {},
+                "range": {},
+                "or": {},
+                "metadata": {
+                  "properties": {
+                    "key": {},
+                    "name": {}
+                  },
+                  "strict": true
+                },
+                "refinements": {
+                  "properties": {
+                    "name": {},
+                    "count": {
+                      "type": "integer"
+                    },
+                    "value": {}
+                  },
+                  "strict": true
+                }
+              },
+              "strict": true
+            },
+            "records": {
+              "properties": {
+                "allMeta": {},
+                "_id": {},
+                "_u": {},
+                "_t": {}
+              },
+              "strict": true
+            },
+            "didYouMean": {}
+          },
+          "strict": true,
+          "optional": true
+        }
+      },
+      "strict": true
+    },
+    "visit": {
+      "properties": {
+        "customerData": {
+          "properties": {
+            "visitorId": {},
+            "sessionId": {}
+          },
+          "strict": true
+        }
+      },
+      "strict": true
+    },
+    "additionalMetadata": {
+      "optional": true
+    },
+    "rawSearchResults": {
+      "properties": {
+        "totalRecordCount": {
+          "type": "integer"
+        },
+        "area": {},
+        "biasingProfile": {},
+        "query": {},
+        "originalQuery": {},
+        "template": {
+          "properties": {
+            "name": {}
+          },
+          "strict": true
+        },
+        "pageInfo": {
+          "properties": {
+            "recordStart": {
+              "type": "integer"
+            },
+            "recordEnd": {
+              "type": "integer"
+            }
+          },
+          "strict": true
+        },
+        "matchStrategy": {
+          "properties": {
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "termsGreaterThan": {
+                    "type": "integer"
+                  },
+                  "mustMatch": {
+                    "type": "integer"
+                  },
+                  "percentage": {}
+                },
+                "strict": true
+              }
+            }
+          },
+          "strict": true
+        },
+        "availableNavigation": {
+          "properties": {
+            "name": {},
+            "displayName": {},
+            "range": {},
+            "or": {},
+            "metadata": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {},
+                  "name": {}
+                },
+                "strict": true
+              }
+            },
+            "refinements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {},
+                  "count": {
+                    "type": "integer"
+                  },
+                  "value": {},
+                  "high": {},
+                  "low": {}
+                },
+                "strict": true
+              }
+            }
+          },
+          "strict": true
+        },
+        "selectedNavigation": {
+          "properties": {
+            "name": {},
+            "displayName": {},
+            "range": {},
+            "or": {},
+            "metadata": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {},
+                  "name": {}
+                },
+                "strict": true
+              }
+            },
+            "refinements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {},
+                  "count": {
+                    "type": "integer"
+                  },
+                  "value": {}
+                },
+                "strict": true
+              }
+            }
+          },
+          "strict": true
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "allMeta": {
+                "strict": false
+              },
+              "_id": {},
+              "_u": {},
+              "_t": {}
+            },
+            "strict": true
+          }
+        },
+        "didYouMean": {}
+      },
+      "strict": true
+    }
+  },
+  "strict": true
+}

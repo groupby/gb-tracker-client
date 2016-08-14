@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "eventType": {},
+    "eventString": {},
+    "customer": {
+      "properties": {
+        "id": {},
+        "area": {}
+      }
+    }
+  }
+}
