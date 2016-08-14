@@ -1,4 +1,5 @@
 ## GroupBy Tracking Client
+[![CircleCI](https://circleci.com/gh/groupby/gb-tracker-client.svg?style=svg)](https://circleci.com/gh/groupby/gb-tracker-client) [![Coverage Status](https://coveralls.io/repos/github/groupby/gb-tracker-client/badge.svg?branch=master)](https://coveralls.io/github/groupby/gb-tracker-client?branch=master)
 
 This can be installed via npm with `npm install --save gb-tracker-client`
 

@@ -102,19 +102,18 @@ gulp.task('lint', () => {
 
 gulp.task('test', ['test:lint']);
 
-// Cannot use coveralls until this is a public repo or we pay for private ones
-// gulp.task('coveralls', ['test'], () => {
-//   if (!process.env.CI) {
-//     return;
-//   }
-//
-//   return gulp.src(path.join(__dirname, 'coverage/lcov.info'))
-//     .pipe(coveralls())
-//     .once('error', () => {
-//       console.error('coveralls failed');
-//       process.exit(1);
-//     })
-//     .once('end', () => {
-//       process.exit();
-//     });
-// });
+gulp.task('coveralls', ['test'], () => {
+  if (!process.env.CI) {
+    return;
+  }
+
+  return gulp.src(path.join(__dirname, 'coverage/lcov.info'))
+    .pipe(coveralls())
+    .once('error', () => {
+      console.error('coveralls failed');
+      process.exit(1);
+    })
+    .once('end', () => {
+      process.exit();
+    });
+});
