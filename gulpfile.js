@@ -4,6 +4,7 @@ const eslint    = require('gulp-eslint');
 const istanbul  = require('gulp-istanbul');
 const gulpIf    = require('gulp-if');
 const coveralls = require('gulp-coveralls');
+const gulpUtil  = require('gulp-util');
 
 const webpack       = require('webpack');
 const webpackStream = require('webpack-stream');
@@ -82,9 +83,6 @@ const lint = () => {
       console.error('lint failed');
       process.exit(1);
     })
-    .once('end', () => {
-      process.exit();
-    });
 };
 
 gulp.task('test:lint', ['test:coverage'], () => {
@@ -99,7 +97,7 @@ gulp.task('test', ['test:lint']);
 
 gulp.task('coveralls', ['test'], () => {
   if (!process.env.CI) {
-    console.warn('Skipping coverage upload');
+    gulpUtil.log('Skipping coverage upload');
     return;
   }
 
@@ -110,7 +108,7 @@ gulp.task('coveralls', ['test'], () => {
       process.exit(1);
     })
     .once('end', () => {
-      console.log('Coverage uploaded');
+      gulpUtil.log('Coverage uploaded');
       process.exit();
     });
 });
