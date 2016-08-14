@@ -13,7 +13,6 @@
     },
     "search": {
       "properties": {
-        "searchUuid": {},
         "totalRecordCount": {
           "type": "integer"
         },
@@ -93,118 +92,7 @@
             "strict": true
           }
         },
-        "searchTerm": {},
-        "rawSearchResults": {
-          "properties": {
-            "totalRecordCount": {
-              "type": "integer"
-            },
-            "area": {},
-            "biasingProfile": {},
-            "query": {},
-            "originalQuery": {},
-            "template": {
-              "properties": {
-                "name": {}
-              },
-              "strict": true
-            },
-            "pageInfo": {
-              "properties": {
-                "recordStart": {
-                  "type": "integer"
-                },
-                "recordEnd": {
-                  "type": "integer"
-                }
-              },
-              "strict": true
-            },
-            "matchStrategy": {
-              "properties": {
-                "rules": {
-                  "properties": {
-                    "termsGreaterThan": {
-                      "type": "integer"
-                    },
-                    "mustMatch": {
-                      "type": "integer"
-                    },
-                    "percentage": {}
-                  },
-                  "strict": true
-                }
-              },
-              "strict": true
-            },
-            "availableNavigation": {
-              "properties": {
-                "name": {},
-                "displayName": {},
-                "range": {},
-                "or": {},
-                "metadata": {
-                  "properties": {
-                    "key": {},
-                    "name": {}
-                  },
-                  "strict": true
-                },
-                "refinements": {
-                  "properties": {
-                    "type": {},
-                    "count": {
-                      "type": "integer"
-                    },
-                    "value": {},
-                    "high": {},
-                    "low": {}
-                  },
-                  "strict": true
-                }
-              },
-              "strict": true
-            },
-            "selectedNavigation": {
-              "properties": {
-                "name": {},
-                "displayName": {},
-                "range": {},
-                "or": {},
-                "metadata": {
-                  "properties": {
-                    "key": {},
-                    "name": {}
-                  },
-                  "strict": true
-                },
-                "refinements": {
-                  "properties": {
-                    "name": {},
-                    "count": {
-                      "type": "integer"
-                    },
-                    "value": {}
-                  },
-                  "strict": true
-                }
-              },
-              "strict": true
-            },
-            "records": {
-              "properties": {
-                "allMeta": {},
-                "_id": {},
-                "_u": {},
-                "_t": {}
-              },
-              "strict": true
-            },
-            "didYouMean": {}
-          },
-          "strict": true,
-          "optional": true
-        }
+        "searchTerm": {}
       },
       "strict": true
     },
