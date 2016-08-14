@@ -9,7 +9,6 @@ const webpack       = require('webpack');
 const webpackStream = require('webpack-stream');
 const packageJson   = require('./package.json');
 const webpackConfig = require('./webpack.config');
-const buildSchemas  = require('./lib/buildSchemas');
 const exec          = require('gulp-exec');
 
 gulp.task('build:minify', () => {
