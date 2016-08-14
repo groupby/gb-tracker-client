@@ -1,6 +1,6 @@
 const chai   = require('chai');
 const expect = chai.expect;
-var diff     = require('deep-diff').diff;
+const diff   = require('deep-diff').diff;
 
 window                = false;
 document              = false;
@@ -13,7 +13,7 @@ const GbTrackerCore = require('../lib/gb-tracker-core');
 describe('gb-tracker-core tests', ()=> {
 
   it('should return the fields not present on the sanitised object', ()=> {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
@@ -82,10 +82,12 @@ describe('gb-tracker-core tests', ()=> {
       if (firstCall) {
         firstCall = false;
 
-        expect(event).to.eql({session: {
-          newVisitorId: sessionChangeEvent.previousVisitorId,
-          newSessionId: sessionChangeEvent.previousSessionId
-        }});
+        expect(event).to.eql({
+          session: {
+            newVisitorId: sessionChangeEvent.previousVisitorId,
+            newSessionId: sessionChangeEvent.previousSessionId
+          }
+        });
 
         gbTrackerCore.setVisitor(sessionChangeEvent.newVisitorId, sessionChangeEvent.newSessionId);
       } else {
@@ -113,10 +115,12 @@ describe('gb-tracker-core tests', ()=> {
       if (firstCall) {
         firstCall = false;
 
-        expect(event).to.eql({session: {
-          newVisitorId: sessionChangeEvent.previousVisitorId,
-          newSessionId: sessionChangeEvent.previousSessionId
-        }});
+        expect(event).to.eql({
+          session: {
+            newVisitorId: sessionChangeEvent.previousVisitorId,
+            newSessionId: sessionChangeEvent.previousSessionId
+          }
+        });
 
         gbTrackerCore.setVisitor(sessionChangeEvent.newVisitorId, sessionChangeEvent.newSessionId);
       } else {
@@ -131,7 +135,7 @@ describe('gb-tracker-core tests', ()=> {
   });
 
   it('should allow visitor or session IDs as numbers and coerce to strings', () => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
 
     gbTrackerCore.setVisitor(7, 5);
@@ -141,7 +145,7 @@ describe('gb-tracker-core tests', ()=> {
   });
 
   it('should validate valid event', () => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
@@ -181,14 +185,14 @@ describe('gb-tracker-core tests', ()=> {
 
     const validated = gbTrackerCore.__private.validateEvent(event, schemas);
 
-    expect(validated.thing).to.eql('yo');
-    expect(validated.anotherThing).to.eql(190);
-    expect(validated.additionalMetadata).to.be.undefined;
-    expect(validated.visit.generated.timezoneOffset).to.not.be.undefined;
+    expect(validated.event.thing).to.eql('yo');
+    expect(validated.event.anotherThing).to.eql(190);
+    expect(validated.event.additionalMetadata).to.be.undefined;
+    expect(validated.event.visit.generated.timezoneOffset).to.not.be.undefined;
   });
 
   it('should drop an invalid event', ()=> {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
@@ -230,34 +234,35 @@ describe('gb-tracker-core tests', ()=> {
 
     const invalidated = gbTrackerCore.__private.validateEvent(event, schemas);
 
-    expect(invalidated).to.eql(null);
+    expect(invalidated.event).to.eql(null);
+    expect(invalidated.error).to.eql('Property @.thing: must be string, but is object');
   });
 
   it('should accept valid addToBasket event', (done) => {
     const expectedEvent = {
-      product: {
-        id: 'asdfasd',
-        category: 'boats',
+      product:   {
+        id:         'asdfasd',
+        category:   'boats',
         collection: 'kayaksrus',
-        title: 'kayak',
-        sku: 'asdfasf98',
-        qty: 10,
-        price: 100.21
+        title:      'kayak',
+        sku:        'asdfasf98',
+        qty:        10,
+        price:      100.21
       },
       eventType: 'addToBasket',
-      customer: {
-        id: 'testcustomer',
+      customer:  {
+        id:   'testcustomer',
         area: 'area'
       },
-      visit: {
+      visit:     {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated: {
-          uri: '',
+        generated:    {
+          uri:            '',
           timezoneOffset: 240,
-          localTime: '2016-08-14T14:05:26.872Z'
+          localTime:      '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -305,13 +310,13 @@ describe('gb-tracker-core tests', ()=> {
     const sendNotNested = () => {
       gbTrackerCore.setInvalidEventCallback(sendNoProductId);
       gbTrackerCore.sendAddToBasketEvent({
-        id: 'asdfasd',
-        category: 'boats',
+        id:         'asdfasd',
+        category:   'boats',
         collection: 'kayaksrus',
-        title: 'kayak',
-        sku: 'asdfasf98',
-        qty: 10,
-        price: 100.21
+        title:      'kayak',
+        sku:        'asdfasf98',
+        qty:        10,
+        price:      100.21
       });
     };
 
@@ -320,12 +325,12 @@ describe('gb-tracker-core tests', ()=> {
       gbTrackerCore.sendAddToBasketEvent({
         product: {
           // id: 'asdfasd',
-          category: 'boats',
+          category:   'boats',
           collection: 'kayaksrus',
-          title: 'kayak',
-          sku: 'asdfasf98',
-          qty: 10,
-          price: 100.21
+          title:      'kayak',
+          sku:        'asdfasf98',
+          qty:        10,
+          price:      100.21
         }
       });
     };
@@ -334,13 +339,12 @@ describe('gb-tracker-core tests', ()=> {
       gbTrackerCore.setInvalidEventCallback(sendNoPrice);
       gbTrackerCore.sendAddToBasketEvent({
         product: {
-          id: 'asdfasd',
-          category: 'boats',
+          id:         'asdfasd',
+          category:   'boats',
           collection: 'kayaksrus',
-          title: 'kayak',
-          sku: 'asdfasf98',
-          // qty: 10,
-          price: 100.21
+          title:      'kayak',
+          sku:        'asdfasf98', // qty: 10,
+          price:      100.21
         }
       });
     };
@@ -349,13 +353,12 @@ describe('gb-tracker-core tests', ()=> {
       gbTrackerCore.setInvalidEventCallback(sendNoTitle);
       gbTrackerCore.sendAddToBasketEvent({
         product: {
-          id: 'asdfasd',
-          category: 'boats',
+          id:         'asdfasd',
+          category:   'boats',
           collection: 'kayaksrus',
-          title: 'kayak',
-          sku: 'asdfasf98',
-          qty: 10,
-          // price: 100.21
+          title:      'kayak',
+          sku:        'asdfasf98',
+          qty:        10, // price: 100.21
         }
       });
     };
@@ -364,13 +367,12 @@ describe('gb-tracker-core tests', ()=> {
       gbTrackerCore.setInvalidEventCallback(sendNoCategory);
       gbTrackerCore.sendAddToBasketEvent({
         product: {
-          id: 'asdfasd',
-          category: 'boats',
-          collection: 'kayaksrus',
-          // title: 'kayak',
-          sku: 'asdfasf98',
-          qty: 10,
-          price: 100.21
+          id:         'asdfasd',
+          category:   'boats',
+          collection: 'kayaksrus', // title: 'kayak',
+          sku:        'asdfasf98',
+          qty:        10,
+          price:      100.21
         }
       });
     };
@@ -379,13 +381,12 @@ describe('gb-tracker-core tests', ()=> {
       gbTrackerCore.setInvalidEventCallback(() => done());
       gbTrackerCore.sendAddToBasketEvent({
         product: {
-          id: 'asdfasd',
-          // category: 'boats',
+          id:         'asdfasd', // category: 'boats',
           collection: 'kayaksrus',
-          title: 'kayak',
-          sku: 'asdfasf98',
-          qty: 10,
-          price: 100.21
+          title:      'kayak',
+          sku:        'asdfasf98',
+          qty:        10,
+          price:      100.21
         }
       });
     };

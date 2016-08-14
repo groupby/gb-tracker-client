@@ -1,6 +1,6 @@
 const chai   = require('chai');
 const expect = chai.expect;
-var diff     = require('deep-diff').diff;
+const diff   = require('deep-diff').diff;
 
 window                = false;
 document              = false;
@@ -8,32 +8,21 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTrackerCore = require('../lib/gb-tracker-core');
+const GbTrackerCore = require('../../lib/gb-tracker-core');
 
 describe('gb-tracker-core tests', ()=> {
-  it.only('should accept valid order event', (done) => {
+  it('should accept valid addToBasket event', (done) => {
     const expectedEvent = {
-      products:  [
-        {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          qty:        10,
-          price:      100.21
-        },
-        {
-          id:         'anotherId',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak2',
-          sku:        'asdfasf65',
-          qty:        5,
-          price:      200.21
-        }
-      ],
-      eventType: 'order',
+      product:   {
+        id:         'asdfasd',
+        category:   'boats',
+        collection: 'kayaksrus',
+        title:      'kayak',
+        sku:        'asdfasf98',
+        qty:        10,
+        price:      100.21
+      },
+      eventType: 'addToBasket',
       customer:  {
         id:   'testcustomer',
         area: 'area'
@@ -62,7 +51,7 @@ describe('gb-tracker-core tests', ()=> {
         return;
       }
 
-      expect(event.products).to.eql(expectedEvent.products);
+      expect(event.product).to.eql(expectedEvent.product);
       expect(event.eventType).to.eql(expectedEvent.eventType);
       expect(event.customer).to.eql(expectedEvent.customer);
       expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
@@ -73,8 +62,8 @@ describe('gb-tracker-core tests', ()=> {
 
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
-    gbTrackerCore.sendOrderEvent({
-      products: expectedEvent.products
+    gbTrackerCore.sendAddToBasketEvent({
+      product: expectedEvent.product
     });
   });
 
@@ -92,7 +81,10 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor('visitor', 'session');
 
     const sendNotNested = () => {
-      gbTrackerCore.setInvalidEventCallback(sendNoProductId);
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/product: is missing/);
+        sendNoProductId();
+      });
       gbTrackerCore.sendAddToBasketEvent({
         id:         'asdfasd',
         category:   'boats',
@@ -105,7 +97,10 @@ describe('gb-tracker-core tests', ()=> {
     };
 
     const sendNoProductId = () => {
-      gbTrackerCore.setInvalidEventCallback(sendNoQty);
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/product\.id: is missing/);
+        sendNoQty();
+      });
       gbTrackerCore.sendAddToBasketEvent({
         product: {
           // id: 'asdfasd',
@@ -120,7 +115,10 @@ describe('gb-tracker-core tests', ()=> {
     };
 
     const sendNoQty = () => {
-      gbTrackerCore.setInvalidEventCallback(sendNoPrice);
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/product\.qty: is missing/);
+        sendNoPrice();
+      });
       gbTrackerCore.sendAddToBasketEvent({
         product: {
           id:         'asdfasd',
@@ -134,7 +132,10 @@ describe('gb-tracker-core tests', ()=> {
     };
 
     const sendNoPrice = () => {
-      gbTrackerCore.setInvalidEventCallback(sendNoTitle);
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/product\.price: is missing/);
+        sendNoTitle();
+      });
       gbTrackerCore.sendAddToBasketEvent({
         product: {
           id:         'asdfasd',
@@ -148,7 +149,10 @@ describe('gb-tracker-core tests', ()=> {
     };
 
     const sendNoTitle = () => {
-      gbTrackerCore.setInvalidEventCallback(sendNoCategory);
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/product\.title: is missing/);
+        sendNoCategory();
+      });
       gbTrackerCore.sendAddToBasketEvent({
         product: {
           id:         'asdfasd',
@@ -162,7 +166,10 @@ describe('gb-tracker-core tests', ()=> {
     };
 
     const sendNoCategory = () => {
-      gbTrackerCore.setInvalidEventCallback(() => done());
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/product\.category: is missing/);
+        done();
+      });
       gbTrackerCore.sendAddToBasketEvent({
         product: {
           id:         'asdfasd', // category: 'boats',
