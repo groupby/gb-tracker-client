@@ -99,6 +99,7 @@ gulp.task('test', ['test:lint']);
 
 gulp.task('coveralls', ['test'], () => {
   if (!process.env.CI) {
+    console.warn('Skipping coverage upload');
     return;
   }
 
@@ -109,6 +110,7 @@ gulp.task('coveralls', ['test'], () => {
       process.exit(1);
     })
     .once('end', () => {
+      console.log('Coverage uploaded');
       process.exit();
     });
 });
