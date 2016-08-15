@@ -51,7 +51,7 @@ gulp.task('test:dirty', () => {
 });
 
 gulp.task('pre-test', () => {
-  return gulp.src('lib/gb-tracker-core.js')
+  return gulp.src(['lib/gb-tracker-core.js', 'lib/utils.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
