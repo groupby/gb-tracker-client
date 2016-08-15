@@ -11,12 +11,37 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
 describe('gb-tracker-core tests', ()=> {
-  it('should accept valid search event containing only origin and uuid', (done) => {
+  it('should accept valid search event without search id', (done) => {
     const expectedEvent = {
-      search: {
-
+      search:    {
+        totalRecordCount:    10,
+        pageInfo:            {
+          recordEnd:   10,
+          recordStart: 5
+        },
+        selectedRefinements: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:              {
+          search: true,
+          dym:    false,
+          sayt:   false,
+          wisdom: false
+        },
+        searchTerm:          'searchy searchface'
       },
-      eventType: 'search',
+      eventType: 'searchWithoutId',
       customer:  {
         id:   'testcustomer',
         area: 'area'
@@ -45,7 +70,7 @@ describe('gb-tracker-core tests', ()=> {
         return;
       }
 
-      expect(event.products).to.eql(expectedEvent.products);
+      expect(event.search).to.eql(expectedEvent.search);
       expect(event.eventType).to.eql(expectedEvent.eventType);
       expect(event.customer).to.eql(expectedEvent.customer);
       expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
@@ -57,7 +82,7 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendSearchEvent({
-      products: expectedEvent.products
+      search: expectedEvent.search
     });
   });
 
@@ -76,164 +101,342 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNotNested = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products: is missing/);
-        sendNoProductId();
+        expect(error).to.match(/search: is missing/);
+        sendNoTotalRecordCount();
       });
 
       gbTrackerCore.sendSearchEvent({
-        id:         'asdfasd',
-        category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
-        sku:        'asdfasf98',
-        qty:        10,
-        price:      100.21
-      });
-    };
-
-    const sendNoProductId = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[0]\.id: is missing/);
-        sendNoQty()
-      });
-
-      gbTrackerCore.sendSearchEvent({
-        products: [
+        totalRecordCount:    10,
+        pageInfo:            {
+          recordEnd:   10,
+          recordStart: 5
+        },
+        selectedRefinements: [
           {
-            // id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
-          },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
           }
-        ]
+        ],
+        origin:              {
+          search: true,
+          dym:    false,
+          sayt:   false,
+          wisdom: false
+        },
+        searchTerm:          'searchy searchface'
       });
     };
 
-    const sendNoQty = () => {
+    const sendNoTotalRecordCount = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[1]\.qty: is missing/);
-        sendNoPrice();
+        expect(error).to.match(/search\.totalRecordCount: is missing/);
+        sendNoPageInfo();
       });
 
       gbTrackerCore.sendSearchEvent({
-        products: [
-          {
-            id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
+        search: {
+          // totalRecordCount:    10,
+          pageInfo:            {
+            recordEnd:   10,
+            recordStart: 5
           },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65', // qty:        5,
-            price:      200.21
-          }
-        ]
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              displayName: 'refined 1',
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: 'something',
+                  count: 9823
+                }
+              ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          searchTerm:          'searchy searchface'
+        }
       });
     };
 
-    const sendNoPrice = () => {
+    const sendNoPageInfo = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[0]\.price: is missing/);
-        sendNoTitle();
+        expect(error).to.match(/search\.pageInfo: is missing/);
+        sendNoRecordEnd()
       });
 
       gbTrackerCore.sendSearchEvent({
-        products: [
-          {
-            id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10, // price:      100.21
+        search: {
+          totalRecordCount:    10,
+          // pageInfo:            {
+          //   recordEnd:   10,
+          //   recordStart: 5
+          // },
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              displayName: 'refined 1',
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: 'something',
+                  count: 9823
+                }
+              ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
           },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+          searchTerm:          'searchy searchface'
+        }
       });
     };
 
-    const sendNoTitle = () => {
+    const sendNoRecordEnd = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[1]\.title: is missing/);
-        sendNoCategory();
+        expect(error).to.match(/search\.pageInfo\.recordEnd: is missing/);
+        sendNoRecordStart();
       });
 
       gbTrackerCore.sendSearchEvent({
-        products: [
-          {
-            id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
+        search: {
+          totalRecordCount:    10,
+          pageInfo:            {
+          //   recordEnd:   10,
+            recordStart: 5
           },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus', // title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              displayName: 'refined 1',
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: 'something',
+                  count: 9823
+                }
+              ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          searchTerm:          'searchy searchface'
+        }
       });
     };
 
-    const sendNoCategory = (event, error) => {
+    const sendNoRecordStart = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[0]\.category: is missing/);
+        expect(error).to.match(/search\.pageInfo\.recordStart: is missing/);
+        sendNoSeletedRefinements();
+      });
+
+      gbTrackerCore.sendSearchEvent({
+        search: {
+          totalRecordCount:    10,
+          pageInfo:            {
+              recordEnd:   10,
+            // recordStart: 5
+          },
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              displayName: 'refined 1',
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: 'something',
+                  count: 9823
+                }
+              ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          searchTerm:          'searchy searchface'
+        }
+      });
+    };
+
+    const sendNoSeletedRefinements = () => {
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/search\.selectedRefinements: is missing/);
+        sendNoDisplayName();
+      });
+
+      gbTrackerCore.sendSearchEvent({
+        search: {
+          totalRecordCount:    10,
+          pageInfo:            {
+            recordEnd:   10,
+            recordStart: 5
+          },
+          // selectedRefinements: [
+          //   {
+          //     name:        'refined 1',
+          //     displayName: 'refined 1',
+          //     or:          false,
+          //     refinements: [
+          //       {
+          //         type:  'value',
+          //         value: 'something',
+          //         count: 9823
+          //       }
+          //     ]
+          //   }
+          // ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          searchTerm:          'searchy searchface'
+        }
+      });
+    };
+
+    const sendNoDisplayName = () => {
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/search\.selectedRefinements\[0].displayName: is missing/);
+        sendNoRefinements();
+      });
+
+      gbTrackerCore.sendSearchEvent({
+        search: {
+          totalRecordCount:    10,
+          pageInfo:            {
+            recordEnd:   10,
+            recordStart: 5
+          },
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              // displayName: 'refined 1',
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: 'something',
+                  count: 9823
+                }
+              ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          searchTerm:          'searchy searchface'
+        }
+      });
+    };
+
+    const sendNoRefinements = () => {
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/search\.selectedRefinements\[0].refinements: is missing/);
+        sendNoSearchTerm();
+      });
+
+      gbTrackerCore.sendSearchEvent({
+        search: {
+          totalRecordCount:    10,
+          pageInfo:            {
+            recordEnd:   10,
+            recordStart: 5
+          },
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              displayName: 'refined 1',
+              or:          false,
+              // refinements: [
+              //   {
+              //     type:  'value',
+              //     value: 'something',
+              //     count: 9823
+              //   }
+              // ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          searchTerm:          'searchy searchface'
+        }
+      });
+    };
+
+
+    const sendNoSearchTerm = () => {
+      gbTrackerCore.setInvalidEventCallback((event, error) => {
+        expect(error).to.match(/search\.searchTerm: is missing/);
         done();
       });
 
       gbTrackerCore.sendSearchEvent({
-        products: [
-          {
-            id:         'asdfasd', // category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
+        search: {
+          totalRecordCount:    10,
+          pageInfo:            {
+            recordEnd:   10,
+            recordStart: 5
           },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+          selectedRefinements: [
+            {
+              name:        'refined 1',
+              displayName: 'refined 1',
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: 'something',
+                  count: 9823
+                }
+              ]
+            }
+          ],
+          origin:              {
+            search: true,
+            dym:    false,
+            sayt:   false,
+            wisdom: false
+          },
+          // searchTerm:          'searchy searchface'
+        }
       });
     };
 
