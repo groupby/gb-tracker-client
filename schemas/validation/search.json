@@ -1,0 +1,576 @@
+{
+  "type": "object",
+  "properties": {
+    "eventType": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string",
+          "optional": false
+        }
+      },
+      "strict": true
+    },
+    "search": {
+      "type": "object",
+      "properties": {
+        "totalRecordCount": {
+          "type": "integer"
+        },
+        "pageInfo": {
+          "type": "object",
+          "properties": {
+            "recordStart": {
+              "type": "integer"
+            },
+            "recordEnd": {
+              "type": "integer"
+            }
+          },
+          "strict": true
+        },
+        "origin": {
+          "type": "object",
+          "properties": {
+            "sayt": {
+              "type": "boolean",
+              "optional": false
+            },
+            "dym": {
+              "type": "boolean",
+              "optional": false
+            },
+            "search": {
+              "type": "boolean",
+              "optional": false
+            },
+            "wisdom": {
+              "type": "boolean",
+              "optional": false
+            }
+          },
+          "strict": true
+        },
+        "selectedRefinements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "optional": true
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "range": {
+                "type": "boolean",
+                "optional": true
+              },
+              "or": {
+                "type": "boolean",
+                "optional": false
+              },
+              "refinements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "optional": true
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "low": {
+                      "type": "number",
+                      "optional": true
+                    },
+                    "high": {
+                      "type": "number",
+                      "optional": true
+                    }
+                  },
+                  "strict": true
+                }
+              }
+            },
+            "strict": true
+          }
+        },
+        "searchTerm": {
+          "type": "string"
+        },
+        "rawSearchResults": {
+          "type": "object",
+          "properties": {
+            "totalRecordCount": {
+              "type": "integer"
+            },
+            "area": {
+              "type": "string"
+            },
+            "biasingProfile": {
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "originalQuery": {
+              "type": "string"
+            },
+            "template": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "strict": true
+            },
+            "pageInfo": {
+              "type": "object",
+              "properties": {
+                "recordStart": {
+                  "type": "integer"
+                },
+                "recordEnd": {
+                  "type": "integer"
+                }
+              },
+              "strict": true
+            },
+            "matchStrategy": {
+              "type": "object",
+              "properties": {
+                "rules": {
+                  "type": "object",
+                  "properties": {
+                    "termsGreaterThan": {
+                      "type": "integer"
+                    },
+                    "mustMatch": {
+                      "type": "integer"
+                    },
+                    "percentage": {
+                      "type": "boolean"
+                    }
+                  },
+                  "strict": true
+                }
+              },
+              "strict": true
+            },
+            "availableNavigation": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "range": {
+                  "type": "boolean"
+                },
+                "or": {
+                  "type": "boolean"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "strict": true
+                },
+                "refinements": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "high": {
+                      "type": "string"
+                    },
+                    "low": {
+                      "type": "string"
+                    }
+                  },
+                  "strict": true
+                }
+              },
+              "strict": true
+            },
+            "selectedNavigation": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "range": {
+                  "type": "boolean"
+                },
+                "or": {
+                  "type": "boolean"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "strict": true
+                },
+                "refinements": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "strict": true
+                }
+              },
+              "strict": true
+            },
+            "records": {
+              "type": "object",
+              "properties": {
+                "allMeta": {
+                  "type": "object"
+                },
+                "_id": {
+                  "type": "string"
+                },
+                "_u": {
+                  "type": "string"
+                },
+                "_t": {
+                  "type": "string"
+                }
+              },
+              "strict": true
+            },
+            "didYouMean": {
+              "type": "string"
+            }
+          },
+          "strict": true,
+          "optional": true
+        }
+      },
+      "strict": true
+    },
+    "visit": {
+      "type": "object",
+      "properties": {
+        "customerData": {
+          "type": "object",
+          "properties": {
+            "visitorId": {
+              "type": "string",
+              "optional": true
+            },
+            "sessionId": {
+              "type": "string",
+              "optional": true
+            }
+          },
+          "strict": true
+        }
+      },
+      "strict": true
+    },
+    "additionalMetadata": {
+      "optional": true,
+      "strict": true,
+      "properties": {
+        "*": {
+          "type": "string"
+        }
+      }
+    },
+    "rawSearchResults": {
+      "type": "object",
+      "properties": {
+        "totalRecordCount": {
+          "type": "integer",
+          "optional": true
+        },
+        "area": {
+          "type": "string",
+          "optional": true
+        },
+        "biasingProfile": {
+          "type": "string",
+          "optional": true
+        },
+        "query": {
+          "type": "string",
+          "optional": true
+        },
+        "originalQuery": {
+          "type": "string",
+          "optional": true
+        },
+        "template": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "optional": true
+            }
+          },
+          "strict": true,
+          "optional": true
+        },
+        "pageInfo": {
+          "type": "object",
+          "properties": {
+            "recordStart": {
+              "type": "integer",
+              "optional": true
+            },
+            "recordEnd": {
+              "type": "integer",
+              "optional": true
+            }
+          },
+          "strict": true,
+          "optional": true
+        },
+        "matchStrategy": {
+          "type": "object",
+          "properties": {
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "termsGreaterThan": {
+                    "type": "integer",
+                    "optional": true
+                  },
+                  "mustMatch": {
+                    "type": "integer",
+                    "optional": true
+                  },
+                  "percentage": {
+                    "type": "boolean",
+                    "optional": true
+                  }
+                },
+                "strict": true
+              },
+              "optional": true
+            }
+          },
+          "strict": true,
+          "optional": true
+        },
+        "availableNavigation": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "optional": true
+            },
+            "displayName": {
+              "type": "string",
+              "optional": true
+            },
+            "range": {
+              "type": "boolean",
+              "optional": true
+            },
+            "or": {
+              "type": "boolean",
+              "optional": true
+            },
+            "metadata": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "optional": true
+                  }
+                },
+                "strict": true
+              },
+              "optional": true
+            },
+            "refinements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "count": {
+                    "type": "integer",
+                    "optional": true
+                  },
+                  "value": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "high": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "low": {
+                    "type": "string",
+                    "optional": true
+                  }
+                },
+                "strict": true
+              },
+              "optional": true
+            }
+          },
+          "strict": true,
+          "optional": true
+        },
+        "selectedNavigation": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "optional": true
+            },
+            "displayName": {
+              "type": "string",
+              "optional": true
+            },
+            "range": {
+              "type": "boolean",
+              "optional": true
+            },
+            "or": {
+              "type": "boolean",
+              "optional": true
+            },
+            "metadata": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "optional": true
+                  }
+                },
+                "strict": true
+              },
+              "optional": true
+            },
+            "refinements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "count": {
+                    "type": "integer",
+                    "optional": true
+                  },
+                  "value": {
+                    "type": "string",
+                    "optional": true
+                  }
+                },
+                "strict": true
+              },
+              "optional": true
+            }
+          },
+          "strict": true,
+          "optional": true
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "allMeta": {
+                "type": "object",
+                "optional": true,
+                "strict": false
+              },
+              "_id": {
+                "type": "string",
+                "optional": true
+              },
+              "_u": {
+                "type": "string",
+                "optional": true
+              },
+              "_t": {
+                "type": "string",
+                "optional": true
+              }
+            },
+            "strict": true
+          },
+          "optional": true
+        },
+        "didYouMean": {
+          "type": "string",
+          "optional": true
+        }
+      },
+      "strict": true,
+      "optional": true
+    }
+  },
+  "strict": true
+}

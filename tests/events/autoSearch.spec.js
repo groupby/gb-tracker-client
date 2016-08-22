@@ -13,9 +13,9 @@ const GbTrackerCore = require('../../lib/gb-tracker-core');
 describe('gb-tracker-core tests', ()=> {
   it('should accept valid search event containing only origin and id', (done) => {
     const expectedEvent = {
+      autoId:    'asdfasdf',
       search:    {
-        searchId: 'asdfasdf',
-        origin:   {
+        origin: {
           sayt: true
         }
       },
@@ -67,6 +67,7 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendSearchEvent({
+      autoId: expectedEvent.autoId,
       search: expectedEvent.search
     });
   });
@@ -108,7 +109,7 @@ describe('gb-tracker-core tests', ()=> {
       gbTrackerCore.sendSearchEvent({
         search: {
           // searchId: 'asdfasdf',
-          origin:   {
+          origin: {
             sayt: true
           }
         }
@@ -123,8 +124,7 @@ describe('gb-tracker-core tests', ()=> {
 
       gbTrackerCore.sendSearchEvent({
         search: {
-          searchId: 'asdfasdf',
-          // origin:   {
+          searchId: 'asdfasdf', // origin:   {
           //   sayt: true
           // }
         }
