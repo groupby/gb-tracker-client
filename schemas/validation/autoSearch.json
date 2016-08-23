@@ -52,12 +52,10 @@
           "type": "object",
           "properties": {
             "visitorId": {
-              "type": "string",
-              "optional": true
+              "type": "string"
             },
             "sessionId": {
-              "type": "string",
-              "optional": true
+              "type": "string"
             }
           },
           "strict": true
