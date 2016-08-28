@@ -11,18 +11,22 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
 describe('gb-tracker-core tests', ()=> {
-  it('should accept valid addToBasket event', (done) => {
+  it('should accept valid addToCart event', (done) => {
     const expectedEvent = {
-      product:   {
-        id:         'asdfasd',
-        category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
-        sku:        'asdfasf98',
-        qty:        10,
-        price:      100.21
+      cart:      {
+        items: [
+          {
+            id:         'asdfasd',
+            category:   'boats',
+            collection: 'kayaksrus',
+            title:      'kayak',
+            sku:        'asdfasf98',
+            quantity:   10,
+            price:      100.21
+          }
+        ]
       },
-      eventType: 'addToBasket',
+      eventType: 'addToCart',
       customer:  {
         id:   'testcustomer',
         area: 'area'
@@ -62,12 +66,12 @@ describe('gb-tracker-core tests', ()=> {
 
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
-    gbTrackerCore.sendAddToBasketEvent({
-      product: expectedEvent.product
+    gbTrackerCore.sendAddToCartEvent({
+      cart: expectedEvent.cart
     });
   });
 
-  it('should reject invalid addToBasket event', (done) => {
+  it('should reject invalid addToCart event', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -82,102 +86,126 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNotNested = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product: is missing/);
+        expect(error).to.match(/cart: is missing/);
         sendNoProductId();
       });
-      gbTrackerCore.sendAddToBasketEvent({
-        id:         'asdfasd',
-        category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
-        sku:        'asdfasf98',
-        qty:        10,
-        price:      100.21
+      gbTrackerCore.sendAddToCartEvent({
+        items: [
+          {
+            id:         'asdfasd',
+            category:   'boats',
+            collection: 'kayaksrus',
+            title:      'kayak',
+            sku:        'asdfasf98',
+            quantity:   10,
+            price:      100.21
+          }
+        ]
       });
     };
 
     const sendNoProductId = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.id: is missing/);
+        expect(error).to.match(/id: is missing/);
         sendNoQty();
       });
-      gbTrackerCore.sendAddToBasketEvent({
-        product: {
-          // id: 'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          qty:        10,
-          price:      100.21
+      gbTrackerCore.sendAddToCartEvent({
+        cart: {
+          items: [
+            {
+              // id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            }
+          ]
         }
       });
     };
 
     const sendNoQty = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.qty: is missing/);
+        expect(error).to.match(/quantity: is missing/);
         sendNoPrice();
       });
-      gbTrackerCore.sendAddToBasketEvent({
-        product: {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98', // qty: 10,
-          price:      100.21
+      gbTrackerCore.sendAddToCartEvent({
+        cart: {
+          items: [
+            {
+              id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98', // quantity:        10,
+              price:      100.21
+            }
+          ]
         }
       });
     };
 
     const sendNoPrice = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.price: is missing/);
+        expect(error).to.match(/price: is missing/);
         sendNoTitle();
       });
-      gbTrackerCore.sendAddToBasketEvent({
-        product: {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          qty:        10, // price: 100.21
+      gbTrackerCore.sendAddToCartEvent({
+        cart: {
+          items: [
+            {
+              id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10, // price:      100.21
+            }
+          ]
         }
       });
     };
 
     const sendNoTitle = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.title: is missing/);
+        expect(error).to.match(/title: is missing/);
         sendNoCategory();
       });
-      gbTrackerCore.sendAddToBasketEvent({
-        product: {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus', // title: 'kayak',
-          sku:        'asdfasf98',
-          qty:        10,
-          price:      100.21
+      gbTrackerCore.sendAddToCartEvent({
+        cart: {
+          items: [
+            {
+              id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus', // title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            }
+          ]
         }
       });
     };
 
     const sendNoCategory = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.category: is missing/);
+        expect(error).to.match(/category: is missing/);
         done();
       });
-      gbTrackerCore.sendAddToBasketEvent({
-        product: {
-          id:         'asdfasd', // category: 'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          qty:        10,
-          price:      100.21
+      gbTrackerCore.sendAddToCartEvent({
+        cart: {
+          items: [
+            {
+              id:         'asdfasd', // category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            }
+          ]
         }
       });
     };

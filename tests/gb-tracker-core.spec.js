@@ -59,7 +59,7 @@ describe('gb-tracker-core tests', ()=> {
   it('should require that visitor information is set before events are sent', () => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
-    expect(() => gbTrackerCore.sendAddToBasketEvent({})).to.throw(/visitor/);
+    expect(() => gbTrackerCore.sendAddToCartEvent({})).to.throw(/visitor/);
   });
 
   it('should validate input to setVisitor', () => {

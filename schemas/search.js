@@ -3,6 +3,10 @@ module.exports={
   validation: {
     type: 'object',
     properties: {
+      responseId: {
+        type: 'string',
+        optional: true
+      },
       eventType: {
         type: 'string'
       },
@@ -116,7 +120,7 @@ module.exports={
           rawSearchResults: {
             type: 'object',
             properties: {
-              autoId: {
+              responseId: {
                 type: 'string'
               },
               totalRecordCount: {
@@ -318,7 +322,7 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
+      metadata: {
         optional: true,
         strict: true,
         properties: {
@@ -330,7 +334,7 @@ module.exports={
       rawSearchResults: {
         type: 'object',
         properties: {
-          autoId: {
+          responseId: {
             type: 'string',
             optional: true
           },
@@ -580,6 +584,9 @@ module.exports={
   },
   sanitization: {
     properties: {
+      responseId: {
+        optional: true
+      },
       eventType: {},
       customer: {
         properties: {
@@ -691,7 +698,7 @@ module.exports={
           },
           rawSearchResults: {
             properties: {
-              autoId: {},
+              responseId: {},
               totalRecordCount: {
                 type: 'integer'
               },
@@ -816,12 +823,10 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
-        optional: true
-      },
+      metadata: {},
       rawSearchResults: {
         properties: {
-          autoId: {},
+          responseId: {},
           totalRecordCount: {
             type: 'integer'
           },

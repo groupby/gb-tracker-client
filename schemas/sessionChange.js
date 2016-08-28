@@ -57,7 +57,7 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
+      metadata: {
         optional: true,
         strict: true,
         properties: {
@@ -107,9 +107,7 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
-        optional: true
-      }
+      metadata: {}
     },
     strict: true
   }

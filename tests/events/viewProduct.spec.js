@@ -13,7 +13,7 @@ const GbTrackerCore = require('../../lib/gb-tracker-core');
 describe('gb-tracker-core tests', ()=> {
   it('should accept valid viewProduct event', (done) => {
     const expectedEvent = {
-      product:   {
+      item:   {
         id:         'asdfasd',
         category:   'boats',
         collection: 'kayaksrus',
@@ -62,7 +62,7 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendViewProductEvent({
-      product: expectedEvent.product
+      item: expectedEvent.item
     });
   });
 
@@ -81,7 +81,7 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNotNested = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product: is missing/);
+        expect(error).to.match(/item: is missing/);
         sendNoProductId();
       });
       gbTrackerCore.sendViewProductEvent({
@@ -96,11 +96,11 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNoProductId = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.id: is missing/);
+        expect(error).to.match(/item\.id: is missing/);
         sendNoPrice();
       });
       gbTrackerCore.sendViewProductEvent({
-        product: {
+        item: {
           // id: 'asdfasd',
           category:   'boats',
           collection: 'kayaksrus',
@@ -113,11 +113,11 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNoPrice = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.price: is missing/);
+        expect(error).to.match(/item\.price: is missing/);
         sendNoTitle();
       });
       gbTrackerCore.sendViewProductEvent({
-        product: {
+        item: {
           id:         'asdfasd',
           category:   'boats',
           collection: 'kayaksrus',
@@ -130,11 +130,11 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNoTitle = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.title: is missing/);
+        expect(error).to.match(/item\.title: is missing/);
         sendNoCategory();
       });
       gbTrackerCore.sendViewProductEvent({
-        product: {
+        item: {
           id:         'asdfasd',
           category:   'boats',
           collection: 'kayaksrus', // title: 'kayak',
@@ -146,11 +146,11 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNoCategory = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/product\.category: is missing/);
+        expect(error).to.match(/item\.category: is missing/);
         done();
       });
       gbTrackerCore.sendViewProductEvent({
-        product: {
+        item: {
           id:         'asdfasd', // category: 'boats',
           collection: 'kayaksrus',
           title:      'kayak',

@@ -13,26 +13,28 @@ const GbTrackerCore = require('../../lib/gb-tracker-core');
 describe('gb-tracker-core tests', ()=> {
   it('should accept valid order event', (done) => {
     const expectedEvent = {
-      products:  [
-        {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          qty:        10,
-          price:      100.21
-        },
-        {
-          id:         'anotherId',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak2',
-          sku:        'asdfasf65',
-          qty:        5,
-          price:      200.21
-        }
-      ],
+      cart:      {
+        items: [
+          {
+            id:         'asdfasd',
+            category:   'boats',
+            collection: 'kayaksrus',
+            title:      'kayak',
+            sku:        'asdfasf98',
+            quantity:   10,
+            price:      100.21
+          },
+          {
+            id:         'anotherId',
+            category:   'boats',
+            collection: 'kayaksrus',
+            title:      'kayak2',
+            sku:        'asdfasf65',
+            quantity:   5,
+            price:      200.21
+          }
+        ]
+      },
       eventType: 'order',
       customer:  {
         id:   'testcustomer',
@@ -74,11 +76,11 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendOrderEvent({
-      products: expectedEvent.products
+      cart: expectedEvent.cart
     });
   });
 
-  it('should reject invalid addToBasket event', (done) => {
+  it('should reject invalid order event', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -93,164 +95,178 @@ describe('gb-tracker-core tests', ()=> {
 
     const sendNotNested = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products: is missing/);
+        expect(error).to.match(/cart: is missing/);
         sendNoProductId();
       });
 
       gbTrackerCore.sendOrderEvent({
-        id:         'asdfasd',
-        category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
-        sku:        'asdfasf98',
-        qty:        10,
-        price:      100.21
+        items: [
+          {
+            id:         'asdfasd',
+            category:   'boats',
+            collection: 'kayaksrus',
+            title:      'kayak',
+            sku:        'asdfasf98',
+            quantity:   10,
+            price:      100.21
+          }
+        ]
       });
     };
 
     const sendNoProductId = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[0]\.id: is missing/);
+        expect(error).to.match(/id: is missing/);
         sendNoQty()
       });
 
       gbTrackerCore.sendOrderEvent({
-        products: [
-          {
-            // id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
-          },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+        cart: {
+          items: [
+            {
+              // id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            },
+            {
+              id:         'anotherId',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak2',
+              sku:        'asdfasf65',
+              quantity:   5,
+              price:      200.21
+            }
+          ]
+        }
       });
     };
 
     const sendNoQty = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[1]\.qty: is missing/);
+        expect(error).to.match(/quantity: is missing/);
         sendNoPrice();
       });
 
       gbTrackerCore.sendOrderEvent({
-        products: [
-          {
-            id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
-          },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65', // qty:        5,
-            price:      200.21
-          }
-        ]
+        cart: {
+          items: [
+            {
+              id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            },
+            {
+              id:         'anotherId',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak2',
+              sku:        'asdfasf65', // quantity:        5,
+              price:      200.21
+            }
+          ]
+        }
       });
     };
 
     const sendNoPrice = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[0]\.price: is missing/);
+        expect(error).to.match(/price: is missing/);
         sendNoTitle();
       });
 
       gbTrackerCore.sendOrderEvent({
-        products: [
-          {
-            id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10, // price:      100.21
-          },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+        cart: {
+          items: [
+            {
+              id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10, // price:      100.21
+            },
+            {
+              id:         'anotherId',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak2',
+              sku:        'asdfasf65',
+              quantity:   5,
+              price:      200.21
+            }
+          ]
+        }
       });
     };
 
     const sendNoTitle = () => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[1]\.title: is missing/);
+        expect(error).to.match(/title: is missing/);
         sendNoCategory();
       });
 
       gbTrackerCore.sendOrderEvent({
-        products: [
-          {
-            id:         'asdfasd',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
-          },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus', // title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+        cart: {
+          items: [
+            {
+              id:         'asdfasd',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            },
+            {
+              id:         'anotherId',
+              category:   'boats',
+              collection: 'kayaksrus', // title:      'kayak2',
+              sku:        'asdfasf65',
+              quantity:   5,
+              price:      200.21
+            }
+          ]
+        }
       });
     };
 
     const sendNoCategory = (event, error) => {
       gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/products\[0]\.category: is missing/);
+        expect(error).to.match(/category: is missing/);
         done();
       });
 
       gbTrackerCore.sendOrderEvent({
-        products: [
-          {
-            id:         'asdfasd', // category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
-            sku:        'asdfasf98',
-            qty:        10,
-            price:      100.21
-          },
-          {
-            id:         'anotherId',
-            category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak2',
-            sku:        'asdfasf65',
-            qty:        5,
-            price:      200.21
-          }
-        ]
+        cart: {
+          items: [
+            {
+              id:         'asdfasd', // category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak',
+              sku:        'asdfasf98',
+              quantity:   10,
+              price:      100.21
+            },
+            {
+              id:         'anotherId',
+              category:   'boats',
+              collection: 'kayaksrus',
+              title:      'kayak2',
+              sku:        'asdfasf65',
+              quantity:   5,
+              price:      200.21
+            }
+          ]
+        }
       });
     };
 

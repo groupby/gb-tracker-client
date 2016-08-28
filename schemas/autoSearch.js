@@ -3,6 +3,11 @@ module.exports={
   validation: {
     type: 'object',
     properties: {
+      responseId: {
+        type: 'string',
+        pattern: /^[0-9a-f]{40}$/,
+        error: 'must be SHA1 hex'
+      },
       eventType: {
         type: 'string'
       },
@@ -65,7 +70,7 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
+      metadata: {
         optional: true,
         strict: true,
         properties: {
@@ -77,7 +82,7 @@ module.exports={
       rawSearchResults: {
         type: 'object',
         properties: {
-          autoId: {
+          responseId: {
             type: 'string',
             optional: true
           },
@@ -321,17 +326,13 @@ module.exports={
           }
         },
         optional: true
-      },
-      autoId: {
-        type: 'string',
-        pattern: /^[0-9a-f]{40}$/,
-        error: 'must be SHA1 hex'
       }
     },
     strict: true
   },
   sanitization: {
     properties: {
+      responseId: {},
       eventType: {},
       customer: {
         properties: {
@@ -381,12 +382,10 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
-        optional: true
-      },
+      metadata: {},
       rawSearchResults: {
         properties: {
-          autoId: {},
+          responseId: {},
           totalRecordCount: {
             type: 'integer'
           },
@@ -521,8 +520,7 @@ module.exports={
             }
           }
         }
-      },
-      autoId: {}
+      }
     },
     strict: true
   }

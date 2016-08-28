@@ -41,7 +41,7 @@ describe('gb-tracker-core tests', ()=> {
         },
         searchTerm:          'searchy searchface'
       },
-      eventType: 'searchWithoutId',
+      eventType: 'search',
       customer:  {
         id:   'testcustomer',
         area: 'area'
@@ -86,7 +86,7 @@ describe('gb-tracker-core tests', ()=> {
     });
   });
 
-  it('should reject invalid addToBasket event', (done) => {
+  it('should reject invalid addToCart event', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {

@@ -13,18 +13,18 @@ const GbTrackerCore = require('../../lib/gb-tracker-core');
 describe('gb-tracker-core tests', ()=> {
   it('should accept valid search event containing only origin and id', (done) => {
     const expectedEvent = {
-      autoId:    'asdfasdf',
-      search:    {
-        origin: {
+      responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      search:     {
+        origin:              {
           sayt: true
         }
       },
-      eventType: 'searchWithId',
-      customer:  {
+      eventType:  'autoSearch',
+      customer:   {
         id:   'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit:      {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
@@ -67,8 +67,8 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendSearchEvent({
-      autoId: expectedEvent.autoId,
-      search: expectedEvent.search
+      responseId: expectedEvent.responseId,
+      search:     expectedEvent.search
     });
   });
 

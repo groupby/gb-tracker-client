@@ -19,7 +19,7 @@ module.exports={
         },
         strict: true
       },
-      product: {
+      item: {
         type: 'object',
         properties: {
           category: {
@@ -49,6 +49,10 @@ module.exports={
           },
           price: {
             type: 'number'
+          },
+          metadata: {
+            type: 'object',
+            optional: true
           }
         },
         strict: true
@@ -71,7 +75,7 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
+      metadata: {
         optional: true,
         strict: true,
         properties: {
@@ -96,7 +100,7 @@ module.exports={
         },
         strict: true
       },
-      product: {
+      item: {
         properties: {
           category: {},
           collection: {
@@ -117,6 +121,9 @@ module.exports={
           },
           price: {
             type: 'number'
+          },
+          metadata: {
+            optional: true
           }
         },
         strict: true
@@ -133,9 +140,7 @@ module.exports={
         },
         strict: true
       },
-      additionalMetadata: {
-        optional: true
-      }
+      metadata: {}
     },
     strict: true
   }
