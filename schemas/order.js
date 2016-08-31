@@ -61,7 +61,7 @@ module.exports={
                   type: 'string',
                   optional: true
                 },
-                id: {
+                productId: {
                   type: 'string'
                 },
                 parentId: {
@@ -79,7 +79,19 @@ module.exports={
                   type: 'integer'
                 },
                 metadata: {
-                  type: 'object',
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      key: {
+                        type: 'string'
+                      },
+                      value: {
+                        type: 'string'
+                      }
+                    },
+                    strict: true
+                  },
                   optional: true
                 }
               },
@@ -87,13 +99,20 @@ module.exports={
             }
           },
           metadata: {
-            optional: true,
-            strict: true,
-            properties: {
-              '*': {
-                type: 'string'
-              }
-            }
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                key: {
+                  type: 'string'
+                },
+                value: {
+                  type: 'string'
+                }
+              },
+              strict: true
+            },
+            optional: true
           }
         },
         strict: true
@@ -117,24 +136,43 @@ module.exports={
         strict: true
       },
       metadata: {
-        optional: true,
-        strict: true,
-        properties: {
-          '*': {
-            type: 'string'
-          }
-        }
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            key: {
+              type: 'string'
+            },
+            value: {
+              type: 'string'
+            }
+          },
+          strict: true
+        },
+        optional: true
       }
     },
     strict: true
   },
   sanitization: {
     properties: {
-      eventType: {},
+      eventType: {
+        rules: [
+          'trim'
+        ]
+      },
       customer: {
         properties: {
-          id: {},
+          id: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
           area: {
+            rules: [
+              'trim'
+            ],
             optional: false,
             def: 'default'
           }
@@ -144,6 +182,10 @@ module.exports={
       cart: {
         properties: {
           id: {
+            rules: [
+              'trim',
+              'lower'
+            ],
             optional: true
           },
           totalItems: {
@@ -165,19 +207,45 @@ module.exports={
           items: {
             type: 'array',
             items: {
-              type: undefined,
               properties: {
-                category: {},
+                category: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
                 collection: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ],
                   optional: false,
                   def: 'Production'
                 },
-                title: {},
+                title: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
                 sku: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ],
                   optional: true
                 },
-                id: {},
+                productId: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
                 parentId: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ],
                   optional: true
                 },
                 margin: {
@@ -191,13 +259,51 @@ module.exports={
                   type: 'integer'
                 },
                 metadata: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      key: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      value: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      }
+                    },
+                    strict: true
+                  },
                   optional: true
                 }
               },
               strict: true
             }
           },
-          metadata: {}
+          metadata: {
+            type: 'array',
+            items: {
+              properties: {
+                key: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
+                value: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                }
+              },
+              strict: true
+            },
+            optional: true
+          }
         },
         strict: true
       },
@@ -205,15 +311,45 @@ module.exports={
         properties: {
           customerData: {
             properties: {
-              visitorId: {},
-              sessionId: {}
+              visitorId: {
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
+              sessionId: {
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              }
             },
             strict: true
           }
         },
         strict: true
       },
-      metadata: {}
+      metadata: {
+        type: 'array',
+        items: {
+          properties: {
+            key: {
+              rules: [
+                'trim',
+                'lower'
+              ]
+            },
+            value: {
+              rules: [
+                'trim',
+                'lower'
+              ]
+            }
+          },
+          strict: true
+        },
+        optional: true
+      }
     },
     strict: true
   }

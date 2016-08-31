@@ -24,23 +24,7 @@ module.exports={
         strict: true
       },
       search: {
-        type: 'object',
         properties: {
-          totalRecordCount: {
-            type: 'integer'
-          },
-          pageInfo: {
-            type: 'object',
-            properties: {
-              recordStart: {
-                type: 'integer'
-              },
-              recordEnd: {
-                type: 'integer'
-              }
-            },
-            strict: true
-          },
           origin: {
             type: 'object',
             properties: {
@@ -56,291 +40,16 @@ module.exports={
                 type: 'boolean',
                 optional: false
               },
-              wisdom: {
+              recommendations: {
                 type: 'boolean',
                 optional: false
               }
             },
             strict: true
           },
-          selectedRefinements: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
-                  optional: true
-                },
-                displayName: {
-                  type: 'string'
-                },
-                range: {
-                  type: 'boolean',
-                  optional: true
-                },
-                or: {
-                  type: 'boolean',
-                  optional: false
-                },
-                refinements: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      value: {
-                        type: 'string',
-                        optional: true
-                      },
-                      count: {
-                        type: 'integer'
-                      },
-                      type: {
-                        type: 'string'
-                      },
-                      low: {
-                        type: 'number',
-                        optional: true
-                      },
-                      high: {
-                        type: 'number',
-                        optional: true
-                      }
-                    },
-                    strict: true
-                  }
-                }
-              },
-              strict: true
-            }
-          },
-          searchTerm: {
-            type: 'string'
-          },
-          rawSearchResults: {
-            type: 'object',
-            properties: {
-              responseId: {
-                type: 'string'
-              },
-              totalRecordCount: {
-                type: 'integer'
-              },
-              area: {
-                type: 'string'
-              },
-              biasingProfile: {
-                type: 'string'
-              },
-              query: {
-                type: 'string'
-              },
-              originalQuery: {
-                type: 'string'
-              },
-              template: {
-                type: 'object',
-                properties: {
-                  name: {
-                    type: 'string'
-                  }
-                },
-                strict: true
-              },
-              pageInfo: {
-                type: 'object',
-                properties: {
-                  recordStart: {
-                    type: 'integer'
-                  },
-                  recordEnd: {
-                    type: 'integer'
-                  }
-                },
-                strict: true
-              },
-              matchStrategy: {
-                type: 'object',
-                properties: {
-                  rules: {
-                    type: 'object',
-                    properties: {
-                      termsGreaterThan: {
-                        type: 'integer'
-                      },
-                      mustMatch: {
-                        type: 'integer'
-                      },
-                      percentage: {
-                        type: 'boolean'
-                      }
-                    },
-                    strict: true
-                  }
-                },
-                strict: true
-              },
-              availableNavigation: {
-                type: 'object',
-                properties: {
-                  name: {
-                    type: 'string'
-                  },
-                  displayName: {
-                    type: 'string'
-                  },
-                  range: {
-                    type: 'boolean'
-                  },
-                  or: {
-                    type: 'boolean'
-                  },
-                  metadata: {
-                    type: 'object',
-                    properties: {
-                      key: {
-                        type: 'string'
-                      },
-                      value: {
-                        type: 'string'
-                      }
-                    },
-                    strict: true
-                  },
-                  refinements: {
-                    type: 'object',
-                    properties: {
-                      type: {
-                        type: 'string'
-                      },
-                      count: {
-                        type: 'integer'
-                      },
-                      value: {
-                        type: 'string'
-                      },
-                      high: {
-                        type: 'string'
-                      },
-                      low: {
-                        type: 'string'
-                      }
-                    },
-                    strict: true
-                  }
-                },
-                strict: true
-              },
-              selectedNavigation: {
-                type: 'object',
-                properties: {
-                  name: {
-                    type: 'string'
-                  },
-                  displayName: {
-                    type: 'string'
-                  },
-                  range: {
-                    type: 'boolean'
-                  },
-                  or: {
-                    type: 'boolean'
-                  },
-                  metadata: {
-                    type: 'object',
-                    properties: {
-                      key: {
-                        type: 'string'
-                      },
-                      name: {
-                        type: 'string'
-                      }
-                    },
-                    strict: true
-                  },
-                  refinements: {
-                    type: 'object',
-                    properties: {
-                      name: {
-                        type: 'string'
-                      },
-                      count: {
-                        type: 'integer'
-                      },
-                      value: {
-                        type: 'string'
-                      }
-                    },
-                    strict: true
-                  }
-                },
-                strict: true
-              },
-              records: {
-                type: 'object',
-                properties: {
-                  allMeta: {
-                    type: 'object'
-                  },
-                  _id: {
-                    type: 'string'
-                  },
-                  _u: {
-                    type: 'string'
-                  },
-                  _t: {
-                    type: 'string'
-                  }
-                },
-                strict: true
-              },
-              didYouMean: {
-                type: 'string'
-              }
-            },
-            strict: true,
-            optional: true
-          }
-        },
-        strict: true
-      },
-      visit: {
-        type: 'object',
-        properties: {
-          customerData: {
-            type: 'object',
-            properties: {
-              visitorId: {
-                type: 'string'
-              },
-              sessionId: {
-                type: 'string'
-              }
-            },
-            strict: true
-          }
-        },
-        strict: true
-      },
-      metadata: {
-        optional: true,
-        strict: true,
-        properties: {
-          '*': {
-            type: 'string'
-          }
-        }
-      },
-      rawSearchResults: {
-        type: 'object',
-        properties: {
-          responseId: {
-            type: 'string',
-            optional: true
-          },
           totalRecordCount: {
             type: 'integer',
-            optional: true
+            optional: false
           },
           area: {
             type: 'string',
@@ -352,7 +61,7 @@ module.exports={
           },
           query: {
             type: 'string',
-            optional: true
+            optional: false
           },
           originalQuery: {
             type: 'string',
@@ -360,12 +69,6 @@ module.exports={
           },
           template: {
             type: 'object',
-            properties: {
-              name: {
-                type: 'string',
-                optional: true
-              }
-            },
             optional: true
           },
           pageInfo: {
@@ -373,14 +76,14 @@ module.exports={
             properties: {
               recordStart: {
                 type: 'integer',
-                optional: true
+                optional: false
               },
               recordEnd: {
                 type: 'integer',
-                optional: true
+                optional: false
               }
             },
-            optional: true
+            optional: false
           },
           matchStrategy: {
             type: 'object',
@@ -390,6 +93,10 @@ module.exports={
                 items: {
                   type: 'object',
                   properties: {
+                    terms: {
+                      type: 'integer',
+                      optional: true
+                    },
                     termsGreaterThan: {
                       type: 'integer',
                       optional: true
@@ -416,7 +123,7 @@ module.exports={
               properties: {
                 name: {
                   type: 'string',
-                  optional: true
+                  optional: false
                 },
                 displayName: {
                   type: 'string',
@@ -437,11 +144,11 @@ module.exports={
                     properties: {
                       key: {
                         type: 'string',
-                        optional: true
+                        optional: false
                       },
                       value: {
                         type: 'string',
-                        optional: true
+                        optional: false
                       }
                     }
                   },
@@ -454,7 +161,7 @@ module.exports={
                     properties: {
                       type: {
                         type: 'string',
-                        optional: true
+                        optional: false
                       },
                       count: {
                         type: 'integer',
@@ -474,7 +181,7 @@ module.exports={
                       }
                     }
                   },
-                  optional: true
+                  optional: false
                 }
               }
             },
@@ -487,7 +194,7 @@ module.exports={
               properties: {
                 name: {
                   type: 'string',
-                  optional: true
+                  optional: false
                 },
                 displayName: {
                   type: 'string',
@@ -508,11 +215,11 @@ module.exports={
                     properties: {
                       key: {
                         type: 'string',
-                        optional: true
+                        optional: false
                       },
-                      name: {
+                      value: {
                         type: 'string',
-                        optional: true
+                        optional: false
                       }
                     }
                   },
@@ -523,9 +230,9 @@ module.exports={
                   items: {
                     type: 'object',
                     properties: {
-                      name: {
+                      type: {
                         type: 'string',
-                        optional: true
+                        optional: false
                       },
                       count: {
                         type: 'integer',
@@ -534,10 +241,18 @@ module.exports={
                       value: {
                         type: 'string',
                         optional: true
+                      },
+                      high: {
+                        type: 'string',
+                        optional: true
+                      },
+                      low: {
+                        type: 'string',
+                        optional: true
                       }
                     }
                   },
-                  optional: true
+                  optional: false
                 }
               }
             },
@@ -577,6 +292,41 @@ module.exports={
             optional: true
           }
         },
+        type: 'object',
+        optional: false
+      },
+      visit: {
+        type: 'object',
+        properties: {
+          customerData: {
+            type: 'object',
+            properties: {
+              visitorId: {
+                type: 'string'
+              },
+              sessionId: {
+                type: 'string'
+              }
+            },
+            strict: true
+          }
+        },
+        strict: true
+      },
+      metadata: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            key: {
+              type: 'string'
+            },
+            value: {
+              type: 'string'
+            }
+          },
+          strict: true
+        },
         optional: true
       }
     },
@@ -585,13 +335,29 @@ module.exports={
   sanitization: {
     properties: {
       responseId: {
+        rules: [
+          'trim',
+          'lower'
+        ],
         optional: true
       },
-      eventType: {},
+      eventType: {
+        rules: [
+          'trim'
+        ]
+      },
       customer: {
         properties: {
-          id: {},
+          id: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
           area: {
+            rules: [
+              'trim'
+            ],
             optional: false,
             def: 'default'
           }
@@ -600,20 +366,6 @@ module.exports={
       },
       search: {
         properties: {
-          totalRecordCount: {
-            type: 'integer'
-          },
-          pageInfo: {
-            properties: {
-              recordStart: {
-                type: 'integer'
-              },
-              recordEnd: {
-                type: 'integer'
-              }
-            },
-            strict: true
-          },
           origin: {
             properties: {
               sayt: {
@@ -628,48 +380,144 @@ module.exports={
                 optional: false,
                 def: false
               },
-              wisdom: {
+              recommendations: {
                 optional: false,
                 def: false
               }
             },
             strict: true
           },
-          selectedRefinements: {
+          totalRecordCount: {
+            type: 'integer'
+          },
+          area: {
+            rules: [
+              'trim'
+            ]
+          },
+          biasingProfile: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
+          query: {
+            rules: [
+              'trim',
+              'lower'
+            ],
+            exec: {}
+          },
+          originalQuery: {
+            rules: [
+              'trim',
+              'lower'
+            ],
+            exec: {}
+          },
+          template: {},
+          pageInfo: {
+            properties: {
+              recordStart: {
+                type: 'integer'
+              },
+              recordEnd: {
+                type: 'integer'
+              }
+            },
+            strict: true
+          },
+          matchStrategy: {
+            properties: {
+              rules: {
+                type: 'array',
+                items: {
+                  properties: {
+                    terms: {
+                      type: 'integer'
+                    },
+                    termsGreaterThan: {
+                      type: 'integer'
+                    },
+                    mustMatch: {
+                      type: 'integer'
+                    },
+                    percentage: {}
+                  },
+                  strict: true
+                }
+              }
+            },
+            strict: true
+          },
+          availableNavigation: {
             type: 'array',
             items: {
-              type: undefined,
               properties: {
                 name: {
-                  optional: true
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
                 },
-                displayName: {},
-                range: {
-                  optional: true
+                displayName: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
                 },
-                or: {
-                  optional: false,
-                  def: false
+                range: {},
+                or: {},
+                metadata: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      key: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      value: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      }
+                    },
+                    strict: true
+                  }
                 },
                 refinements: {
                   type: 'array',
                   items: {
-                    type: undefined,
                     properties: {
-                      value: {
-                        optional: true
+                      type: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
                       },
                       count: {
                         type: 'integer'
                       },
-                      type: {},
-                      low: {
-                        type: 'number',
-                        optional: true
+                      value: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
                       },
                       high: {
-                        type: 'number',
-                        optional: true
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      low: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
                       }
                     },
                     strict: true
@@ -679,134 +527,119 @@ module.exports={
               strict: true
             }
           },
-          searchTerm: {
-            exec: (schema, post) => {
-    if (typeof post === 'string') {
-      // Strip using blacklist
-      post = post.replace(utils.regex.BLACKLIST_STRIPING_REGEX, ' ');
-
-      // Replace all whitespace combinations with a single space
-      post = post.replace(/\s\s+/g, ' ');
-
-      post = post.trim();
-
-      return post;
-    } else {
-      return post;
-    }
-  }
+          selectedNavigation: {
+            type: 'array',
+            items: {
+              properties: {
+                name: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
+                displayName: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
+                range: {},
+                or: {},
+                metadata: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      key: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      value: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      }
+                    },
+                    strict: true
+                  }
+                },
+                refinements: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      type: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      count: {
+                        type: 'integer'
+                      },
+                      value: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      high: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      low: {
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      }
+                    },
+                    strict: true
+                  }
+                }
+              },
+              strict: true
+            }
           },
-          rawSearchResults: {
-            properties: {
-              responseId: {},
-              totalRecordCount: {
-                type: 'integer'
-              },
-              area: {},
-              biasingProfile: {},
-              query: {},
-              originalQuery: {},
-              template: {
-                properties: {
-                  name: {}
+          records: {
+            type: 'array',
+            items: {
+              properties: {
+                allMeta: {
+                  strict: false
                 },
-                strict: true
-              },
-              pageInfo: {
-                properties: {
-                  recordStart: {
-                    type: 'integer'
-                  },
-                  recordEnd: {
-                    type: 'integer'
-                  }
+                _id: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
                 },
-                strict: true
-              },
-              matchStrategy: {
-                properties: {
-                  rules: {
-                    properties: {
-                      termsGreaterThan: {
-                        type: 'integer'
-                      },
-                      mustMatch: {
-                        type: 'integer'
-                      },
-                      percentage: {}
-                    },
-                    strict: true
-                  }
+                _u: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
                 },
-                strict: true
+                _t: {
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                }
               },
-              availableNavigation: {
-                properties: {
-                  name: {},
-                  displayName: {},
-                  range: {},
-                  or: {},
-                  metadata: {
-                    properties: {
-                      key: {},
-                      value: {}
-                    },
-                    strict: true
-                  },
-                  refinements: {
-                    properties: {
-                      type: {},
-                      count: {
-                        type: 'integer'
-                      },
-                      value: {},
-                      high: {},
-                      low: {}
-                    },
-                    strict: true
-                  }
-                },
-                strict: true
-              },
-              selectedNavigation: {
-                properties: {
-                  name: {},
-                  displayName: {},
-                  range: {},
-                  or: {},
-                  metadata: {
-                    properties: {
-                      key: {},
-                      name: {}
-                    },
-                    strict: true
-                  },
-                  refinements: {
-                    properties: {
-                      name: {},
-                      count: {
-                        type: 'integer'
-                      },
-                      value: {}
-                    },
-                    strict: true
-                  }
-                },
-                strict: true
-              },
-              records: {
-                properties: {
-                  allMeta: {},
-                  _id: {},
-                  _u: {},
-                  _t: {}
-                },
-                strict: true
-              },
-              didYouMean: {}
-            },
-            strict: true,
-            optional: true
+              strict: true
+            }
+          },
+          didYouMean: {
+            type: 'array',
+            rules: [
+              'trim',
+              'lower'
+            ],
+            items: {}
           }
         },
         strict: true
@@ -815,152 +648,44 @@ module.exports={
         properties: {
           customerData: {
             properties: {
-              visitorId: {},
-              sessionId: {}
+              visitorId: {
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
+              sessionId: {
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              }
             },
             strict: true
           }
         },
         strict: true
       },
-      metadata: {},
-      rawSearchResults: {
-        properties: {
-          responseId: {},
-          totalRecordCount: {
-            type: 'integer'
-          },
-          area: {},
-          biasingProfile: {},
-          query: {},
-          originalQuery: {},
-          template: {
-            properties: {
-              name: {}
+      metadata: {
+        type: 'array',
+        items: {
+          properties: {
+            key: {
+              rules: [
+                'trim',
+                'lower'
+              ]
+            },
+            value: {
+              rules: [
+                'trim',
+                'lower'
+              ]
             }
           },
-          pageInfo: {
-            properties: {
-              recordStart: {
-                type: 'integer'
-              },
-              recordEnd: {
-                type: 'integer'
-              }
-            }
-          },
-          matchStrategy: {
-            properties: {
-              rules: {
-                type: 'array',
-                items: {
-                  type: undefined,
-                  properties: {
-                    termsGreaterThan: {
-                      type: 'integer'
-                    },
-                    mustMatch: {
-                      type: 'integer'
-                    },
-                    percentage: {}
-                  }
-                }
-              }
-            }
-          },
-          availableNavigation: {
-            type: 'array',
-            items: {
-              type: undefined,
-              properties: {
-                name: {},
-                displayName: {},
-                range: {},
-                or: {},
-                metadata: {
-                  type: 'array',
-                  items: {
-                    type: undefined,
-                    properties: {
-                      key: {},
-                      value: {}
-                    }
-                  }
-                },
-                refinements: {
-                  type: 'array',
-                  items: {
-                    type: undefined,
-                    properties: {
-                      type: {},
-                      count: {
-                        type: 'integer'
-                      },
-                      value: {},
-                      high: {},
-                      low: {}
-                    }
-                  }
-                }
-              }
-            }
-          },
-          selectedNavigation: {
-            type: 'array',
-            items: {
-              type: undefined,
-              properties: {
-                name: {},
-                displayName: {},
-                range: {},
-                or: {},
-                metadata: {
-                  type: 'array',
-                  items: {
-                    type: undefined,
-                    properties: {
-                      key: {},
-                      name: {}
-                    }
-                  }
-                },
-                refinements: {
-                  type: 'array',
-                  items: {
-                    type: undefined,
-                    properties: {
-                      name: {},
-                      count: {
-                        type: 'integer'
-                      },
-                      value: {}
-                    }
-                  }
-                }
-              }
-            }
-          },
-          records: {
-            type: 'array',
-            items: {
-              type: undefined,
-              properties: {
-                allMeta: {
-                  strict: false
-                },
-                _id: {},
-                _u: {},
-                _t: {}
-              }
-            }
-          },
-          didYouMean: {
-            type: 'array',
-            items: {
-              type: undefined
-            }
-          }
-        }
+          strict: true
+        },
+        optional: true
       }
     },
     strict: true

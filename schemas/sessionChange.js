@@ -58,24 +58,43 @@ module.exports={
         strict: true
       },
       metadata: {
-        optional: true,
-        strict: true,
-        properties: {
-          '*': {
-            type: 'string'
-          }
-        }
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            key: {
+              type: 'string'
+            },
+            value: {
+              type: 'string'
+            }
+          },
+          strict: true
+        },
+        optional: true
       }
     },
     strict: true
   },
   sanitization: {
     properties: {
-      eventType: {},
+      eventType: {
+        rules: [
+          'trim'
+        ]
+      },
       customer: {
         properties: {
-          id: {},
+          id: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
           area: {
+            rules: [
+              'trim'
+            ],
             optional: false,
             def: 'default'
           }
@@ -85,13 +104,31 @@ module.exports={
       session: {
         properties: {
           previousSessionId: {
+            rules: [
+              'trim',
+              'lower'
+            ],
             optional: true
           },
-          newSessionId: {},
+          newSessionId: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
           previousVisitorId: {
+            rules: [
+              'trim',
+              'lower'
+            ],
             optional: true
           },
-          newVisitorId: {}
+          newVisitorId: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          }
         },
         strict: true
       },
@@ -99,15 +136,45 @@ module.exports={
         properties: {
           customerData: {
             properties: {
-              visitorId: {},
-              sessionId: {}
+              visitorId: {
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
+              sessionId: {
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              }
             },
             strict: true
           }
         },
         strict: true
       },
-      metadata: {}
+      metadata: {
+        type: 'array',
+        items: {
+          properties: {
+            key: {
+              rules: [
+                'trim',
+                'lower'
+              ]
+            },
+            value: {
+              rules: [
+                'trim',
+                'lower'
+              ]
+            }
+          },
+          strict: true
+        },
+        optional: true
+      }
     },
     strict: true
   }

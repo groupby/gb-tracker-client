@@ -13,8 +13,8 @@ const GbTrackerCore = require('../../lib/gb-tracker-core');
 describe('gb-tracker-core tests', ()=> {
   it('should accept valid viewProduct event', (done) => {
     const expectedEvent = {
-      item:   {
-        id:         'asdfasd',
+      product:   {
+        productId:  'asdfasd',
         category:   'boats',
         collection: 'kayaksrus',
         title:      'kayak',
@@ -62,11 +62,11 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendViewProductEvent({
-      item: expectedEvent.item
+      product: expectedEvent.product
     });
   });
 
-  it('should reject invalid viewProduct event', (done) => {
+  it('should reject invalid viewProduct event not nested in product', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -79,87 +79,133 @@ describe('gb-tracker-core tests', ()=> {
 
     gbTrackerCore.setVisitor('visitor', 'session');
 
-    const sendNotNested = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/item: is missing/);
-        sendNoProductId();
-      });
-      gbTrackerCore.sendViewProductEvent({
-        id:         'asdfasd',
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/product: is missing/);
+      done();
+    });
+    gbTrackerCore.sendViewProductEvent({
+      productId:  'asdfasd',
+      category:   'boats',
+      collection: 'kayaksrus',
+      title:      'kayak',
+      sku:        'asdfasf98',
+      price:      100.21
+    });
+  });
+
+  it('should reject invalid viewProduct event missing product ID', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
+    };
+
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/productId: is missing/);
+      done();
+    });
+    gbTrackerCore.sendViewProductEvent({
+      product: {
+        // productId:  'asdfasd',
         category:   'boats',
         collection: 'kayaksrus',
         title:      'kayak',
         sku:        'asdfasf98',
         price:      100.21
-      });
+      }
+    });
+  });
+
+  it('should reject invalid viewProduct event missing price', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoProductId = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/item\.id: is missing/);
-        sendNoPrice();
-      });
-      gbTrackerCore.sendViewProductEvent({
-        item: {
-          // id: 'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          price:      100.21
-        }
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/price: is missing/);
+      done();
+    });
+    gbTrackerCore.sendViewProductEvent({
+      product: {
+        productId:  'asdfasd',
+        category:   'boats',
+        collection: 'kayaksrus',
+        title:      'kayak',
+        sku:        'asdfasf98',
+        // price:      100.21
+      }
+    });
+  });
+
+  it('should reject invalid viewProduct event missing title', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoPrice = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/item\.price: is missing/);
-        sendNoTitle();
-      });
-      gbTrackerCore.sendViewProductEvent({
-        item: {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          // price: 100.21
-        }
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/title: is missing/);
+      done();
+    });
+    gbTrackerCore.sendViewProductEvent({
+      product: {
+        productId:  'asdfasd',
+        category:   'boats',
+        collection: 'kayaksrus',
+        // title:      'kayak',
+        sku:        'asdfasf98',
+        price:      100.21
+      }
+    });
+  });
+
+  it('should reject invalid viewProduct event missing category', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoTitle = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/item\.title: is missing/);
-        sendNoCategory();
-      });
-      gbTrackerCore.sendViewProductEvent({
-        item: {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus', // title: 'kayak',
-          sku:        'asdfasf98',
-          price:      100.21
-        }
-      });
-    };
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-    const sendNoCategory = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/item\.category: is missing/);
-        done();
-      });
-      gbTrackerCore.sendViewProductEvent({
-        item: {
-          id:         'asdfasd', // category: 'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          price:      100.21
-        }
-      });
-    };
-
-    sendNotNested();
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/category: is missing/);
+      done();
+    });
+    gbTrackerCore.sendViewProductEvent({
+      product: {
+        productId:  'asdfasd',
+        // category:   'boats',
+        collection: 'kayaksrus',
+        title:      'kayak',
+        sku:        'asdfasf98',
+        price:      100.21
+      }
+    });
   });
 });

@@ -10,12 +10,12 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
-describe('gb-tracker-core tests', ()=> {
+describe('autoSearch tests', ()=> {
   it('should accept valid search event containing only origin and id', (done) => {
     const expectedEvent = {
       responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       search:     {
-        origin:              {
+        origin: {
           sayt: true
         }
       },
@@ -50,10 +50,10 @@ describe('gb-tracker-core tests', ()=> {
 
       expect(event.search).to.eql(Object.assign({}, expectedEvent.search, {
         origin: {
-          dym:    false,
-          sayt:   true,
-          search: false,
-          wisdom: false
+          dym:             false,
+          sayt:            true,
+          search:          false,
+          recommendations: false
         }
       }));
       expect(event.eventType).to.eql(expectedEvent.eventType);
@@ -66,13 +66,13 @@ describe('gb-tracker-core tests', ()=> {
 
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
-    gbTrackerCore.sendSearchEvent({
+    gbTrackerCore.sendAutoSearchEvent({
       responseId: expectedEvent.responseId,
       search:     expectedEvent.search
     });
   });
 
-  it('should reject invalid searchWithId event', (done) => {
+  it('should reject invalid autoSearch event that is not nested in search', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -85,52 +85,72 @@ describe('gb-tracker-core tests', ()=> {
 
     gbTrackerCore.setVisitor('visitor', 'session');
 
-    const sendNotNested = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search: is missing/);
-        sendNoSearchId();
-      });
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/search: is missing/);
+      done();
+    });
 
-      gbTrackerCore.sendSearchEvent({
-        searchId: 'asdfasdf',
-        origin:   {
+    gbTrackerCore.sendAutoSearchEvent({
+      responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      origin:     {
+        sayt: true
+      }
+    });
+  });
+
+  it('should reject invalid autoSearch event that has no response id', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
+    };
+
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/responseId: must be SHA1 hex/);
+      done();
+    });
+
+    gbTrackerCore.sendAutoSearchEvent({
+      // responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      search: {
+        origin: {
           sayt: true
         }
-      });
+      }
+    });
+  });
+
+  it('should reject invalid autoSearch event that has no origin', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoSearchId = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        // If the searchId field is missing, it thinks it's a searchWithoutId event
-        expect(error).to.match(/search.totalRecordCount: is missing/);
-        sendNoOrigin()
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          // searchId: 'asdfasdf',
-          origin: {
-            sayt: true
-          }
-        }
-      });
-    };
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/origin: is missing/);
+      done();
+    });
 
-    const sendNoOrigin = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search.origin: is missing/);
-        done();
-      });
-
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          searchId: 'asdfasdf', // origin:   {
-          //   sayt: true
-          // }
-        }
-      });
-    };
-
-    sendNotNested();
+    gbTrackerCore.sendAutoSearchEvent({
+      responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      search: {
+        // origin: {
+        //   sayt: true
+        // }
+      }
+    });
   });
 });

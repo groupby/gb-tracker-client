@@ -14,12 +14,12 @@ describe('gb-tracker-core tests', ()=> {
   it('should accept valid search event without search id', (done) => {
     const expectedEvent = {
       search:    {
-        totalRecordCount:    10,
-        pageInfo:            {
+        totalRecordCount:   10,
+        pageInfo:           {
           recordEnd:   10,
           recordStart: 5
         },
-        selectedRefinements: [
+        selectedNavigation: [
           {
             name:        'refined 1',
             displayName: 'refined 1',
@@ -33,13 +33,13 @@ describe('gb-tracker-core tests', ()=> {
             ]
           }
         ],
-        origin:              {
-          search: true,
-          dym:    false,
-          sayt:   false,
-          wisdom: false
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
         },
-        searchTerm:          'searchy searchface'
+        query:              'searchy searchface'
       },
       eventType: 'search',
       customer:  {
@@ -86,7 +86,7 @@ describe('gb-tracker-core tests', ()=> {
     });
   });
 
-  it('should reject invalid addToCart event', (done) => {
+  it('should reject invalid addToCart event that is not nested in search', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -99,19 +99,67 @@ describe('gb-tracker-core tests', ()=> {
 
     gbTrackerCore.setVisitor('visitor', 'session');
 
-    const sendNotNested = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search: is missing/);
-        sendNoTotalRecordCount();
-      });
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/search: is missing/);
+      done();
+    });
 
-      gbTrackerCore.sendSearchEvent({
-        totalRecordCount:    10,
-        pageInfo:            {
+    gbTrackerCore.sendSearchEvent({
+      totalRecordCount:   10,
+      pageInfo:           {
+        recordEnd:   10,
+        recordStart: 5
+      },
+      selectedNavigation: [
+        {
+          name:        'refined 1',
+          displayName: 'refined 1',
+          or:          false,
+          refinements: [
+            {
+              type:  'value',
+              value: 'something',
+              count: 9823
+            }
+          ]
+        }
+      ],
+      origin:             {
+        search:          true,
+        dym:             false,
+        sayt:            false,
+        recommendations: false
+      },
+      query:              'searchy searchface'
+    });
+  });
+
+  it('should reject invalid addToCart event missing totalRecordCount', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
+    };
+
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/totalRecordCount: is missing/);
+      done();
+    });
+
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        // totalRecordCount:   10,
+        pageInfo:           {
           recordEnd:   10,
           recordStart: 5
         },
-        selectedRefinements: [
+        selectedNavigation: [
           {
             name:        'refined 1',
             displayName: 'refined 1',
@@ -125,321 +173,312 @@ describe('gb-tracker-core tests', ()=> {
             ]
           }
         ],
-        origin:              {
-          search: true,
-          dym:    false,
-          sayt:   false,
-          wisdom: false
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
         },
-        searchTerm:          'searchy searchface'
-      });
+        query:              'searchy searchface'
+      }
+    });
+  });
+
+  it('should reject invalid addToCart event missing pageInfo', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoTotalRecordCount = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.totalRecordCount: is missing/);
-        sendNoPageInfo();
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          // totalRecordCount:    10,
-          pageInfo:            {
-            recordEnd:   10,
-            recordStart: 5
-          },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              displayName: 'refined 1',
-              or:          false,
-              refinements: [
-                {
-                  type:  'value',
-                  value: 'something',
-                  count: 9823
-                }
-              ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/pageInfo: is missing/);
+      done();
+    });
+
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        totalRecordCount:   10, // pageInfo:           {
+        //   recordEnd:   10,
+        //   recordStart: 5
+        // },
+        selectedNavigation: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
+        },
+        query:              'searchy searchface'
+      }
+    });
+  });
+
+  it('should reject invalid addToCart event missing recordEnd', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoPageInfo = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.pageInfo: is missing/);
-        sendNoRecordEnd()
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          // pageInfo:            {
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/recordEnd: is missing/);
+      done();
+    });
+
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        totalRecordCount:   10,
+        pageInfo:           {
           //   recordEnd:   10,
-          //   recordStart: 5
-          // },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              displayName: 'refined 1',
-              or:          false,
-              refinements: [
-                {
-                  type:  'value',
-                  value: 'something',
-                  count: 9823
-                }
-              ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
+          recordStart: 5
+        },
+        selectedNavigation: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
+        },
+        query:              'searchy searchface'
+      }
+    });
+  });
+
+  it('should reject invalid addToCart event missing recordStart', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoRecordEnd = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.pageInfo\.recordEnd: is missing/);
-        sendNoRecordStart();
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          pageInfo:            {
-          //   recordEnd:   10,
-            recordStart: 5
-          },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              displayName: 'refined 1',
-              or:          false,
-              refinements: [
-                {
-                  type:  'value',
-                  value: 'something',
-                  count: 9823
-                }
-              ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/recordStart: is missing/);
+      done();
+    });
+
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        totalRecordCount:   10,
+        pageInfo:           {
+          recordEnd: 10, // recordStart: 5
+        },
+        selectedNavigation: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
+        },
+        query:              'searchy searchface'
+      }
+    });
+  });
+
+  it('should reject invalid addToCart event missing selectedNavigation.name', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoRecordStart = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.pageInfo\.recordStart: is missing/);
-        sendNoSeletedRefinements();
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          pageInfo:            {
-              recordEnd:   10,
-            // recordStart: 5
-          },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              displayName: 'refined 1',
-              or:          false,
-              refinements: [
-                {
-                  type:  'value',
-                  value: 'something',
-                  count: 9823
-                }
-              ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/name: is missing/);
+      done();
+    });
+
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        totalRecordCount:   10,
+        pageInfo:           {
+          recordEnd: 10,
+          recordStart: 5
+        },
+        selectedNavigation: [
+          {
+            // name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
+        },
+        query:              'searchy searchface'
+      }
+    });
+  });
+
+  it('should reject invalid addToCart event missing selectedNavigation.refinements', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoSeletedRefinements = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.selectedRefinements: is missing/);
-        sendNoDisplayName();
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          pageInfo:            {
-            recordEnd:   10,
-            recordStart: 5
-          },
-          // selectedRefinements: [
-          //   {
-          //     name:        'refined 1',
-          //     displayName: 'refined 1',
-          //     or:          false,
-          //     refinements: [
-          //       {
-          //         type:  'value',
-          //         value: 'something',
-          //         count: 9823
-          //       }
-          //     ]
-          //   }
-          // ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/refinements: is missing/);
+      done();
+    });
+
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        totalRecordCount:   10,
+        pageInfo:           {
+          recordEnd: 10,
+          recordStart: 5
+        },
+        selectedNavigation: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            // refinements: [
+            //   {
+            //     type:  'value',
+            //     value: 'something',
+            //     count: 9823
+            //   }
+            // ]
+          }
+        ],
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
+        },
+        query:              'searchy searchface'
+      }
+    });
+  });
+
+  it('should reject invalid addToCart event missing query', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done('fail');
     };
 
-    const sendNoDisplayName = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.selectedRefinements\[0].displayName: is missing/);
-        sendNoRefinements();
-      });
+    gbTrackerCore.setVisitor('visitor', 'session');
 
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          pageInfo:            {
-            recordEnd:   10,
-            recordStart: 5
-          },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              // displayName: 'refined 1',
-              or:          false,
-              refinements: [
-                {
-                  type:  'value',
-                  value: 'something',
-                  count: 9823
-                }
-              ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
-    };
+    gbTrackerCore.setInvalidEventCallback((event, error) => {
+      expect(error).to.match(/query: is missing/);
+      done();
+    });
 
-    const sendNoRefinements = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.selectedRefinements\[0].refinements: is missing/);
-        sendNoSearchTerm();
-      });
-
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          pageInfo:            {
-            recordEnd:   10,
-            recordStart: 5
-          },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              displayName: 'refined 1',
-              or:          false,
-              // refinements: [
-              //   {
-              //     type:  'value',
-              //     value: 'something',
-              //     count: 9823
-              //   }
-              // ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          searchTerm:          'searchy searchface'
-        }
-      });
-    };
-
-
-    const sendNoSearchTerm = () => {
-      gbTrackerCore.setInvalidEventCallback((event, error) => {
-        expect(error).to.match(/search\.searchTerm: is missing/);
-        done();
-      });
-
-      gbTrackerCore.sendSearchEvent({
-        search: {
-          totalRecordCount:    10,
-          pageInfo:            {
-            recordEnd:   10,
-            recordStart: 5
-          },
-          selectedRefinements: [
-            {
-              name:        'refined 1',
-              displayName: 'refined 1',
-              or:          false,
-              refinements: [
-                {
-                  type:  'value',
-                  value: 'something',
-                  count: 9823
-                }
-              ]
-            }
-          ],
-          origin:              {
-            search: true,
-            dym:    false,
-            sayt:   false,
-            wisdom: false
-          },
-          // searchTerm:          'searchy searchface'
-        }
-      });
-    };
-
-    sendNotNested();
+    gbTrackerCore.sendSearchEvent({
+      search: {
+        totalRecordCount:   10,
+        pageInfo:           {
+          recordEnd: 10,
+          recordStart: 5
+        },
+        selectedNavigation: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:             {
+          search:          true,
+          dym:             false,
+          sayt:            false,
+          recommendations: false
+        },
+        // query:              'searchy searchface'
+      }
+    });
   });
 });

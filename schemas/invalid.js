@@ -28,12 +28,32 @@ module.exports={
   },
   sanitization: {
     properties: {
-      eventType: {},
-      eventString: {},
+      eventType: {
+        rules: [
+          'trim',
+          'lower'
+        ]
+      },
+      eventString: {
+        rules: [
+          'trim',
+          'lower'
+        ]
+      },
       customer: {
         properties: {
-          id: {},
-          area: {}
+          id: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
+          area: {
+            rules: [
+              'trim',
+              'lower'
+            ]
+          }
         }
       }
     }
