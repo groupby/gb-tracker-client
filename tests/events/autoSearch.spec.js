@@ -56,6 +56,8 @@ describe('autoSearch tests', ()=> {
           recommendations: false
         }
       }));
+
+      expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.eventType).to.eql(expectedEvent.eventType);
       expect(event.customer).to.eql(expectedEvent.customer);
       expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);

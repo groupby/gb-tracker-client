@@ -64,6 +64,7 @@ describe('gb-tracker-core tests', ()=> {
         return;
       }
 
+      expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.products).to.eql(expectedEvent.products);
       expect(event.eventType).to.eql(expectedEvent.eventType);
       expect(event.customer).to.eql(expectedEvent.customer);
