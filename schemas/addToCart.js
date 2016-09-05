@@ -3,6 +3,45 @@ module.exports={
   validation: {
     type: 'object',
     properties: {
+      clientVersion: {
+        type: 'object',
+        properties: {
+          raw: {
+            type: 'string'
+          },
+          major: {
+            type: 'integer',
+            optional: true
+          },
+          minor: {
+            type: 'integer',
+            optional: true
+          },
+          patch: {
+            type: 'integer',
+            optional: true
+          },
+          prerelease: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            optional: true
+          },
+          build: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            optional: true
+          },
+          version: {
+            type: 'string',
+            optional: true
+          }
+        },
+        strict: true
+      },
       eventType: {
         type: 'string'
       },
@@ -140,7 +179,60 @@ module.exports={
   },
   sanitization: {
     properties: {
+      clientVersion: {
+        properties: {
+          raw: {
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ]
+          },
+          major: {
+            type: 'integer',
+            optional: true
+          },
+          minor: {
+            type: 'integer',
+            optional: true
+          },
+          patch: {
+            type: 'integer',
+            optional: true
+          },
+          prerelease: {
+            type: 'array',
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ],
+            items: {},
+            optional: true
+          },
+          build: {
+            type: 'array',
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ],
+            items: {},
+            optional: true
+          },
+          version: {
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ],
+            optional: true
+          }
+        },
+        strict: true
+      },
       eventType: {
+        maxLength: 10000,
         rules: [
           'trim'
         ]
@@ -148,12 +240,14 @@ module.exports={
       customer: {
         properties: {
           id: {
+            maxLength: 10000,
             rules: [
               'trim',
               'lower'
             ]
           },
           area: {
+            maxLength: 10000,
             rules: [
               'trim'
             ],
@@ -166,6 +260,7 @@ module.exports={
       cart: {
         properties: {
           id: {
+            maxLength: 10000,
             rules: [
               'trim',
               'lower'
@@ -177,26 +272,29 @@ module.exports={
             items: {
               properties: {
                 category: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
                   ]
                 },
                 collection: {
+                  maxLength: 10000,
                   rules: [
-                    'trim',
-                    'lower'
+                    'trim'
                   ],
                   optional: false,
                   def: 'Production'
                 },
                 title: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
                   ]
                 },
                 sku: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
@@ -204,12 +302,14 @@ module.exports={
                   optional: true
                 },
                 productId: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
                   ]
                 },
                 parentId: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
@@ -231,12 +331,14 @@ module.exports={
                   items: {
                     properties: {
                       key: {
+                        maxLength: 10000,
                         rules: [
                           'trim',
                           'lower'
                         ]
                       },
                       value: {
+                        maxLength: 10000,
                         rules: [
                           'trim',
                           'lower'
@@ -256,12 +358,14 @@ module.exports={
             items: {
               properties: {
                 key: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
                   ]
                 },
                 value: {
+                  maxLength: 10000,
                   rules: [
                     'trim',
                     'lower'
@@ -280,12 +384,14 @@ module.exports={
           customerData: {
             properties: {
               visitorId: {
+                maxLength: 10000,
                 rules: [
                   'trim',
                   'lower'
                 ]
               },
               sessionId: {
+                maxLength: 10000,
                 rules: [
                   'trim',
                   'lower'
@@ -302,12 +408,14 @@ module.exports={
         items: {
           properties: {
             key: {
+              maxLength: 10000,
               rules: [
                 'trim',
                 'lower'
               ]
             },
             value: {
+              maxLength: 10000,
               rules: [
                 'trim',
                 'lower'
