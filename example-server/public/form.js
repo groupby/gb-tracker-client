@@ -1,44 +1,172 @@
-window._gb_tracker = new window._GbTracker('testcustomer', 'testarea');
-window._gb_tracker.setVisitor('visitor', 'session');
+window._gb_tracker = new window._GbTracker('eric', 'testarea');
 
 var app = angular.module('formExample', []);
 
-app.controller('SetPathController', [
+var chance = new Chance();
+
+var getUuid = function () {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
+app.service('tracker', function () {
+  var tracker = null;
+  var apiKey  = null;
+
+  this.initialize = function (customerId, area, key) {
+    tracker = new new window._GbTracker(customerId, area);
+    apiKey  = key;
+  };
+
+  this.isInitialized = function () {
+    return !!tracker;
+  };
+
+  this.setVisitor = function (visitorId, sessionId) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.setVisitor(visitorId, sessionId);
+  };
+
+  this.sendAddToCartEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendAddToCartEvent(event);
+  };
+
+  this.sendOrderEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendOrderEvent(event);
+  };
+
+  this.sendSearchEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendSearchEvent(event);
+  };
+
+  this.sendViewProductEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendViewProductEvent(event);
+  };
+});
+
+app.controller('SetCustomerController', [
   '$scope',
-  function (scope) {
-    scope.path   = 'http://localhost:8001/pixel/';
-    window._GbTracker.__overridePixelPath(scope.path);
-    scope.update = function () {
-      window._GbTracker.__overridePixelPath(scope.path);
+  'tracker',
+  function (scope, tracker) {
+    scope.customerId = '';
+    scope.area       = 'Default';
+    scope.key        = '';
+
+    scope.init = function () {
+      tracker.initialize(scope.customerId, scope.area, scope.key);
     }
   }
 ]);
 
-app.controller('AddToBasketController', [
+app.controller('SetVisitorController', [
   '$scope',
-  function (scope) {
-    scope.event = {
-      product:  {
-        id:         'asdfasd',
-        category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
-        sku:        'asdfasf98',
-        price:      100.21,
-        qty: 2
-      }
+  'tracker',
+  function (scope, tracker) {
+    scope.visitorId = getUuid();
+    scope.sessionId = getUuid();
+
+    scope.isReady = tracker.isInitialized;
+
+    scope.show = false;
+
+    scope.toggle = function () {
+      scope.show = !scope.show;
     };
 
     scope.send = function () {
+      console.log('setting visitorID: ' + scope.visitorId + ' sessionId: ' + scope.sessionId);
+      tracker.setVisitor(scope.visitorId, scope.sessionId);
+    };
+  }
+]);
+
+app.controller('AddToCartController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+
+    scope.randomize = function () {
+      scope.event = {
+        product: {
+          id:         getUuid(),
+          category:   chance.word(),
+          collection: chance.word(),
+          title:      chance.word(),
+          sku:        getUuid(),
+          price:      chance.floating({
+            min:   0,
+            max:   100,
+            fixed: 2
+          }),
+          quantity:   chance.integer({
+            min: 1,
+            max: 20
+          })
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+
+    scope.isReady = tracker.isInitialized;
+
+    scope.show = false;
+
+    scope.toggle = function () {
+      scope.show = !scope.show;
+    };
+
+    scope.error = '';
+
+    scope.send = function () {
+      try {
+        scope.event = JSON.parse(scope.eventString);
+      } catch (error) {
+        console.error(error.message);
+        scope.error = error.message;
+        return;
+      }
+
+      scope.eventString = JSON.stringify(scope.event, null, 2);
+
       console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      window._gb_tracker.sendAddToBasketEvent(scope.event);
+      tracker.sendAddToCartEvent(scope.event);
     };
   }
 ]);
 
 app.controller('OrderController', [
   '$scope',
-  function (scope) {
+  'tracker',
+  function (scope, tracker) {
     scope.event = {
       products: [
         {
@@ -48,7 +176,7 @@ app.controller('OrderController', [
           title:      'kayak',
           sku:        'asdfasf98',
           price:      100.21,
-          qty: 2
+          qty:        2
         },
         {
           id:         'rrr',
@@ -57,23 +185,32 @@ app.controller('OrderController', [
           title:      'kayak',
           sku:        'asdfasf98',
           price:      55.55,
-          qty: 2
+          qty:        2
         }
       ]
     };
 
+    scope.isReady = tracker.isInitialized;
+
+    scope.show = false;
+
+    scope.toggle = function () {
+      scope.show = !scope.show;
+    };
+
     scope.send = function () {
       console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      window._gb_tracker.sendOrderEvent(scope.event);
+      tracker.sendOrderEvent(scope.event);
     };
   }
 ]);
 
 app.controller('SearchController', [
   '$scope',
-  function (scope) {
+  'tracker',
+  function (scope, tracker) {
     scope.event = {
-      search:   {
+      search: {
         totalRecordCount: 10,
         recordEnd:        10,
         recordStart:      5,
@@ -91,18 +228,27 @@ app.controller('SearchController', [
       }
     };
 
+    scope.isReady = tracker.isInitialized;
+
+    scope.show = false;
+
+    scope.toggle = function () {
+      scope.show = !scope.show;
+    };
+
     scope.send = function () {
       console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      window._gb_tracker.sendSearchEvent(scope.event);
+      tracker.sendSearchEvent(scope.event);
     };
   }
 ]);
 
 app.controller('ViewProductController', [
   '$scope',
-  function (scope) {
+  'tracker',
+  function (scope, tracker) {
     scope.event = {
-      product:   {
+      product: {
         id:         'asdfasd',
         category:   'boats',
         collection: 'kayaksrus',
@@ -112,9 +258,17 @@ app.controller('ViewProductController', [
       }
     };
 
+    scope.isReady = tracker.isInitialized;
+
+    scope.show = false;
+
+    scope.toggle = function () {
+      scope.show = !scope.show;
+    };
+
     scope.send = function () {
       console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      window._gb_tracker.sendViewProductEvent(scope.event);
+      tracker.sendViewProductEvent(scope.event);
     };
   }
 ]);
