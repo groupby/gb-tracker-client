@@ -14,6 +14,12 @@ test:
   override:
     - gulp test
 deployment:
+  hub:
+    tag: /v[0-9]+(\.[0-9]+)*/
+    owner: groupby
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - cd example-server/app && ./build-and-push.sh
   npm:
     tag: /v[0-9]+(\.[0-9]+)*/
     owner: groupby

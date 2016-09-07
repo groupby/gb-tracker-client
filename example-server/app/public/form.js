@@ -43,16 +43,22 @@ var sendEvent = function (scope, sentTimeout, tracker, eventName) {
 };
 
 app.service('tracker', function () {
-  var tracker = null;
-  var apiKey  = null;
+  var tracker  = null;
+  var customer = {};
 
   this.initialize = function (customerId, area, key) {
-    tracker = new window._GbTracker(customerId, area);
-    apiKey  = key;
+    tracker             = new window._GbTracker(customerId, area);
+    customer.customerId = customerId;
+    customer.area       = area;
+    customer.key        = key;
   };
 
   this.isInitialized = function () {
     return tracker !== null;
+  };
+
+  this.getCustomer = function () {
+    return customer;
   };
 
   this.setInvalidEventCallback = function (callback) {
@@ -118,7 +124,6 @@ app.controller('SelectEventController', [
   '$scope',
   function (scope) {
     scope.eventTypes    = [
-      'setVisitor',
       'addToCart',
       'order',
       'autoSearch',
@@ -159,16 +164,12 @@ app.controller('SetVisitorController', [
     scope.sessionId = 'testvisitor';
 
     scope.isReady = tracker.isInitialized;
-
-    scope.show = false;
-
-    scope.toggle = function () {
-      scope.show = !scope.show;
-    };
+    scope.visitorSet = false;
 
     scope.send = function () {
       console.log('setting visitorID: ' + scope.visitorId + ' sessionId: ' + scope.sessionId);
       tracker.setVisitor(scope.visitorId, scope.sessionId);
+      scope.visitorSet = true;
     };
   }
 ]);
@@ -182,7 +183,7 @@ app.controller('AddToCartController', [
     scope.randomize = function () {
       scope.event = {
         cart: {
-          id: getUuid(),
+          id:    getUuid(),
           items: [
             {
               productId:  getUuid(),
@@ -224,9 +225,9 @@ app.controller('AddToCartController', [
     scope.randomize();
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
-    scope.error = '';
+    scope.error       = '';
 
-    scope.send = function() {
+    scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendAddToCartEvent');
     }
   }
@@ -241,7 +242,7 @@ app.controller('OrderController', [
     scope.randomize = function () {
       scope.event = {
         cart: {
-          id: getUuid(),
+          id:    getUuid(),
           items: [
             {
               productId:  getUuid(),
@@ -283,9 +284,9 @@ app.controller('OrderController', [
     scope.randomize();
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
-    scope.error = '';
+    scope.error       = '';
 
-    scope.send = function() {
+    scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendOrderEvent');
     }
   }
@@ -299,12 +300,12 @@ app.controller('SearchController', [
 
     scope.randomize = function () {
       scope.event = {
-        search:    {
-          totalRecordCount:   chance.integer({
+        search: {
+          totalRecordCount:    chance.integer({
             min: 1,
             max: 20
           }),
-          pageInfo:           {
+          pageInfo:            {
             recordEnd:   chance.integer({
               min: 1,
               max: 20
@@ -314,7 +315,7 @@ app.controller('SearchController', [
               max: 20
             })
           },
-          selectedNavigation: [
+          selectedNavigation:  [
             {
               name:        chance.word(),
               displayName: chance.word() + ' ' + chance.word(),
@@ -378,13 +379,13 @@ app.controller('SearchController', [
               ]
             }
           ],
-          origin:             {
+          origin:              {
             search:          true,
             dym:             false,
             sayt:            false,
             recommendations: false
           },
-          query:              chance.word() + ' ' + chance.word() + ' ' + chance.word() + ' ' + chance.word()
+          query:               chance.word() + ' ' + chance.word() + ' ' + chance.word() + ' ' + chance.word()
         }
       };
     };
@@ -392,9 +393,9 @@ app.controller('SearchController', [
     scope.randomize();
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
-    scope.error = '';
+    scope.error       = '';
 
-    scope.send = function() {
+    scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendSearchEvent');
     }
   }
@@ -409,8 +410,8 @@ app.controller('AutoSearchController', [
     scope.randomize = function () {
       scope.event = {
         responseId: getUuid(),
-        search:    {
-          origin:             {
+        search:     {
+          origin: {
             search:          true,
             dym:             false,
             sayt:            false,
@@ -423,9 +424,9 @@ app.controller('AutoSearchController', [
     scope.randomize();
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
-    scope.error = '';
+    scope.error       = '';
 
-    scope.send = function() {
+    scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
     }
   }
@@ -461,9 +462,9 @@ app.controller('ViewProductController', [
     scope.randomize();
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
-    scope.error = '';
+    scope.error       = '';
 
-    scope.send = function() {
+    scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendViewProductEvent');
     }
   }
