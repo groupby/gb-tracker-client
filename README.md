@@ -163,7 +163,7 @@ gbTracker.sendSearchEvent({
     selectedNavigation: [],  // Optional: Array of selectedNavigations returned by searchandiser
     records:            [],  // Optional: Array of records returned by searchandiser
     didYouMean: [
-      'nike running shoe'
+      'I should have searched for this'
     ]
   }
 });
