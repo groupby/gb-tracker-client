@@ -6,5 +6,6 @@ spec:
   selector:
     name: recommendations-ref-ui
   ports:
-    - port: 80
-      targetPort: 3000
+  - port: 80
+    targetPort: 3000
+  type: LoadBalancer

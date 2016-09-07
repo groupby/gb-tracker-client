@@ -3,11 +3,8 @@ var express = require('express');
 var app = express();
 
 const publicPath = path.join(__dirname, './public');
-const distPath = path.join(__dirname, '../dist');
 
-app.use('/public', express.static(publicPath));
-app.use('/other', express.static(publicPath));
-app.use('/dist', express.static(distPath));
+app.use('/', express.static(publicPath));
 
 const PORT = 3000;
 

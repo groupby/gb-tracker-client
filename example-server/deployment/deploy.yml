@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: recommendations-ref-ui
-        image: groupbyinc/recommendations-ref-ui:latest
+        image: groupbyinc/recommendations-ref-ui:1.4.3
         imagePullPolicy: Always
         ports:
           - containerPort: 3000
