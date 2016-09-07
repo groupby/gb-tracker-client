@@ -16,7 +16,7 @@ test:
   override:
     - gulp test
 deployment:
-  npm:
+  hub-and-npm:
     tag: /v[0-9]+(\.[0-9]+)*/
     owner: groupby
     commands:
@@ -24,9 +24,5 @@ deployment:
       - ./shipit.sh
       - echo "//registry.npmjs.org/:_authToken=${NPM_API_KEY}" > ~/.npmrc
       - npm publish
-  hub:
-    tag: /v[0-9]+(\.[0-9]+)*/
-    owner: groupby
-    commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - cd example-server/app && ./build-and-push.sh
