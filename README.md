@@ -5,7 +5,7 @@ This can be installed via npm with `npm install --save gb-tracker-client`
 
 Or it can be directly included from our CDN using:
 ```
-<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-1.4.3.min.js"></scipt>
+<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-1.4.4.min.js"></scipt>
 ```
 
 Including it directly from the CDN will create the global variable 
