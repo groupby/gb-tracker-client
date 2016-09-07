@@ -1,4 +1,4 @@
-window._gb_tracker = new window._GbTracker('eric', 'testarea');
+var SENT_TIMEOUT = 5000;
 
 var app = angular.module('formExample', []);
 
@@ -11,17 +11,52 @@ var getUuid = function () {
   });
 };
 
+var sendEvent = function (scope, sentTimeout, tracker, eventName) {
+  scope.sent = false;
+  sentTimeout && clearTimeout(sentTimeout);
+
+  try {
+    scope.event = JSON.parse(scope.eventString);
+  } catch (error) {
+    console.error(error.message);
+    scope.error = error.message;
+    return;
+  }
+
+  scope.eventString = JSON.stringify(scope.event, null, 2);
+  scope.error       = '';
+  scope.sent        = true;
+
+  tracker.setInvalidEventCallback(function (event, error) {
+    sentTimeout && clearTimeout(sentTimeout);
+    scope.error = error;
+  });
+
+  sentTimeout = setTimeout(function () {
+    scope.$apply(function () {
+      scope.sent  = false;
+      sentTimeout = null;
+    });
+  }, SENT_TIMEOUT);
+
+  tracker[eventName](scope.event);
+};
+
 app.service('tracker', function () {
   var tracker = null;
   var apiKey  = null;
 
   this.initialize = function (customerId, area, key) {
-    tracker = new new window._GbTracker(customerId, area);
+    tracker = new window._GbTracker(customerId, area);
     apiKey  = key;
   };
 
   this.isInitialized = function () {
-    return !!tracker;
+    return tracker !== null;
+  };
+
+  this.setInvalidEventCallback = function (callback) {
+    tracker.setInvalidEventCallback(callback);
   };
 
   this.setVisitor = function (visitorId, sessionId) {
@@ -60,6 +95,15 @@ app.service('tracker', function () {
     tracker.sendSearchEvent(event);
   };
 
+  this.sendAutoSearchEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendAutoSearchEvent(event);
+  };
+
   this.sendViewProductEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
@@ -69,6 +113,21 @@ app.service('tracker', function () {
     tracker.sendViewProductEvent(event);
   };
 });
+
+app.controller('SelectEventController', [
+  '$scope',
+  function (scope) {
+    scope.eventTypes    = [
+      'setVisitor',
+      'addToCart',
+      'order',
+      'autoSearch',
+      'search',
+      'viewProduct'
+    ];
+    scope.selectedEvent = scope.eventTypes[0];
+  }
+]);
 
 app.controller('SetCustomerController', [
   '$scope',
@@ -80,7 +139,9 @@ app.controller('SetCustomerController', [
 
     scope.init = function () {
       tracker.initialize(scope.customerId, scope.area, scope.key);
-    }
+    };
+
+    scope.isReady = tracker.isInitialized;
   }
 ]);
 
@@ -88,8 +149,14 @@ app.controller('SetVisitorController', [
   '$scope',
   'tracker',
   function (scope, tracker) {
-    scope.visitorId = getUuid();
-    scope.sessionId = getUuid();
+
+    scope.randomize = function () {
+      scope.visitorId = getUuid();
+      scope.sessionId = getUuid();
+    };
+
+    scope.visitorId = 'testvisitor';
+    scope.sessionId = 'testvisitor';
 
     scope.isReady = tracker.isInitialized;
 
@@ -110,11 +177,270 @@ app.controller('AddToCartController', [
   '$scope',
   'tracker',
   function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        cart: {
+          id: getUuid(),
+          items: [
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            },
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            }
+          ]
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error = '';
+
+    scope.send = function() {
+      sendEvent(scope, sentTimeout, tracker, 'sendAddToCartEvent');
+    }
+  }
+]);
+
+app.controller('OrderController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        cart: {
+          id: getUuid(),
+          items: [
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            },
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            }
+          ]
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error = '';
+
+    scope.send = function() {
+      sendEvent(scope, sentTimeout, tracker, 'sendOrderEvent');
+    }
+  }
+]);
+
+app.controller('SearchController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        search:    {
+          totalRecordCount:   chance.integer({
+            min: 1,
+            max: 20
+          }),
+          pageInfo:           {
+            recordEnd:   chance.integer({
+              min: 1,
+              max: 20
+            }),
+            recordStart: chance.integer({
+              min: 1,
+              max: 20
+            })
+          },
+          selectedNavigation: [
+            {
+              name:        chance.word(),
+              displayName: chance.word() + ' ' + chance.word(),
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: chance.word(),
+                  count: chance.integer({
+                    min: 1,
+                    max: 500
+                  })
+                }
+              ]
+            },
+            {
+              name:        chance.word(),
+              displayName: chance.word() + ' ' + chance.word(),
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: chance.word(),
+                  count: chance.integer({
+                    min: 1,
+                    max: 500
+                  })
+                }
+              ]
+            }
+          ],
+          availableNavigation: [
+            {
+              name:        chance.word(),
+              displayName: chance.word() + ' ' + chance.word(),
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: chance.word(),
+                  count: chance.integer({
+                    min: 1,
+                    max: 500
+                  })
+                }
+              ]
+            },
+            {
+              name:        chance.word(),
+              displayName: chance.word() + ' ' + chance.word(),
+              or:          false,
+              refinements: [
+                {
+                  type:  'value',
+                  value: chance.word(),
+                  count: chance.integer({
+                    min: 1,
+                    max: 500
+                  })
+                }
+              ]
+            }
+          ],
+          origin:             {
+            search:          true,
+            dym:             false,
+            sayt:            false,
+            recommendations: false
+          },
+          query:              chance.word() + ' ' + chance.word() + ' ' + chance.word() + ' ' + chance.word()
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error = '';
+
+    scope.send = function() {
+      sendEvent(scope, sentTimeout, tracker, 'sendSearchEvent');
+    }
+  }
+]);
+
+app.controller('AutoSearchController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        responseId: getUuid(),
+        search:    {
+          origin:             {
+            search:          true,
+            dym:             false,
+            sayt:            false,
+            recommendations: false
+          }
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error = '';
+
+    scope.send = function() {
+      sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
+    }
+  }
+]);
+
+app.controller('ViewProductController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
 
     scope.randomize = function () {
       scope.event = {
         product: {
-          id:         getUuid(),
+          productId:  getUuid(),
           category:   chance.word(),
           collection: chance.word(),
           title:      chance.word(),
@@ -135,140 +461,10 @@ app.controller('AddToCartController', [
     scope.randomize();
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
-
-    scope.isReady = tracker.isInitialized;
-
-    scope.show = false;
-
-    scope.toggle = function () {
-      scope.show = !scope.show;
-    };
-
     scope.error = '';
 
-    scope.send = function () {
-      try {
-        scope.event = JSON.parse(scope.eventString);
-      } catch (error) {
-        console.error(error.message);
-        scope.error = error.message;
-        return;
-      }
-
-      scope.eventString = JSON.stringify(scope.event, null, 2);
-
-      console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      tracker.sendAddToCartEvent(scope.event);
-    };
-  }
-]);
-
-app.controller('OrderController', [
-  '$scope',
-  'tracker',
-  function (scope, tracker) {
-    scope.event = {
-      products: [
-        {
-          id:         'asdfasd',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          price:      100.21,
-          qty:        2
-        },
-        {
-          id:         'rrr',
-          category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
-          sku:        'asdfasf98',
-          price:      55.55,
-          qty:        2
-        }
-      ]
-    };
-
-    scope.isReady = tracker.isInitialized;
-
-    scope.show = false;
-
-    scope.toggle = function () {
-      scope.show = !scope.show;
-    };
-
-    scope.send = function () {
-      console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      tracker.sendOrderEvent(scope.event);
-    };
-  }
-]);
-
-app.controller('SearchController', [
-  '$scope',
-  'tracker',
-  function (scope, tracker) {
-    scope.event = {
-      search: {
-        totalRecordCount: 10,
-        recordEnd:        10,
-        recordStart:      5,
-        refinements:      [
-          {
-            refinement: {
-              name:  'refined 1',
-              value: 'refinedValue'
-            }
-          }
-        ],
-        origin:           {},
-        searchResponse:   'asdfasdf',
-        searchTerm:       'searchy searchface'
-      }
-    };
-
-    scope.isReady = tracker.isInitialized;
-
-    scope.show = false;
-
-    scope.toggle = function () {
-      scope.show = !scope.show;
-    };
-
-    scope.send = function () {
-      console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      tracker.sendSearchEvent(scope.event);
-    };
-  }
-]);
-
-app.controller('ViewProductController', [
-  '$scope',
-  'tracker',
-  function (scope, tracker) {
-    scope.event = {
-      product: {
-        id:         'asdfasd',
-        category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
-        sku:        'asdfasf98',
-        price:      100.21
-      }
-    };
-
-    scope.isReady = tracker.isInitialized;
-
-    scope.show = false;
-
-    scope.toggle = function () {
-      scope.show = !scope.show;
-    };
-
-    scope.send = function () {
-      console.log('sending: ', JSON.stringify(scope.event, null, 2));
-      tracker.sendViewProductEvent(scope.event);
-    };
+    scope.send = function() {
+      sendEvent(scope, sentTimeout, tracker, 'sendViewProductEvent');
+    }
   }
 ]);
