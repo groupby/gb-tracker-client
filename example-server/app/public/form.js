@@ -161,7 +161,7 @@ app.controller('SetVisitorController', [
     };
 
     scope.visitorId = 'testvisitor';
-    scope.sessionId = 'testvisitor';
+    scope.sessionId = 'testsession';
 
     scope.isReady = tracker.isInitialized;
     scope.visitorSet = false;
