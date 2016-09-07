@@ -16,8 +16,8 @@ describe('gb-tracker-core tests', ()=> {
       product:   {
         productId:  'asdfasd',
         category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
+        collection: 'boatssrus',
+        title:      'boats',
         sku:        'asdfasf98',
         price:      100.21
       },
@@ -87,8 +87,8 @@ describe('gb-tracker-core tests', ()=> {
     gbTrackerCore.sendViewProductEvent({
       productId:  'asdfasd',
       category:   'boats',
-      collection: 'kayaksrus',
-      title:      'kayak',
+      collection: 'boatssrus',
+      title:      'boats',
       sku:        'asdfasf98',
       price:      100.21
     });
@@ -115,8 +115,8 @@ describe('gb-tracker-core tests', ()=> {
       product: {
         // productId:  'asdfasd',
         category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
+        collection: 'boatssrus',
+        title:      'boats',
         sku:        'asdfasf98',
         price:      100.21
       }
@@ -144,8 +144,8 @@ describe('gb-tracker-core tests', ()=> {
       product: {
         productId:  'asdfasd',
         category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
+        collection: 'boatssrus',
+        title:      'boats',
         sku:        'asdfasf98',
         // price:      100.21
       }
@@ -173,8 +173,8 @@ describe('gb-tracker-core tests', ()=> {
       product: {
         productId:  'asdfasd',
         category:   'boats',
-        collection: 'kayaksrus',
-        // title:      'kayak',
+        collection: 'boatssrus',
+        // title:      'boats',
         sku:        'asdfasf98',
         price:      100.21
       }
@@ -202,8 +202,8 @@ describe('gb-tracker-core tests', ()=> {
       product: {
         productId:  'asdfasd',
         // category:   'boats',
-        collection: 'kayaksrus',
-        title:      'kayak',
+        collection: 'boatssrus',
+        title:      'boats',
         sku:        'asdfasf98',
         price:      100.21
       }

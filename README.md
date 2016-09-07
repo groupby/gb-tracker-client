@@ -20,75 +20,191 @@ const gbTracker = new _GbTracker('customerId', 'area');
 // Should be called on login/logout or any time the visitorId/sessionId change
 gbTracker.setVisitor('visitorId', 'sessionId');
 
-// There are four event API's.
+// There are five event API's.
 
 // AddToBasket events
-gbTracker.sendAddToBasketEvent({
- product:  {
-   id:         'asdfasd',
-   title:      'super boat',
-   price:      100.21,
-   qty:        20,
-   collection: 'testcollection',  // Optional: Defaults to 'Default'
-   category:   'boats',           // Optional
-   sku:        'asdfasf98',       // Optional
-   margin:     0.81               // Optional
- }
+gbTracker.sendAddToCartEvent({
+ cart: {
+   id: 'asfasdf',                     // Optional
+   items:[  
+     {
+        productId:  'asdfasd',
+        title:      'super boat',
+        price:      100.21,
+        quantity:   20,
+        collection: 'testcollection',  // Optional: Defaults to 'Default'
+        category:   'boats',           // Optional
+        sku:        'asdfasf98',       // Optional
+        margin:     0.81,              // Optional
+        metadata: [                    // Optional
+           {
+             key: 'some key',
+             value: 'some value'
+           }
+         ]
+      }
+   ],
+   metadata: [                          // Optional
+      {
+        key: 'some key',
+        value: 'some value'
+      }
+    ]
+ },
+ metadata: [                            // Optional
+   {
+     key: 'some key',
+     value: 'some value'
+   }
+ ]
 });
 
 // Order events
 gbTracker.sendOrderEvent({
- products:  [
+ cart: {
+   id: 'asfasdf',                     // Optional
+   totalItems: 1,                     // Optional
+   totalQuantity: 20,                 // Optional
+   totalPrice: 1039.90,               // Optional
+   items:[  
+     {
+        productId:  'asdfasd',
+        title:      'super boat',
+        price:      100.21,
+        quantity:   20,
+        collection: 'testcollection',  // Optional: Defaults to 'Default'
+        category:   'boats',           // Optional
+        sku:        'asdfasf98',       // Optional
+        margin:     0.81,              // Optional
+        metadata: [                    // Optional
+           {
+             key: 'some key',
+             value: 'some value'
+           }
+         ]
+      }
+   ],
+   metadata: [                          // Optional
+      {
+        key: 'some key',
+        value: 'some value'
+      }
+    ]
+ },
+ metadata: [                            // Optional
    {
-     id:         'asdfasd',
-     title:      'super boat',
-     price:      100.21,
-     qty:        20,
-     collection: 'testcollection',  // Optional: Defaults to 'Default'
-     category:   'boats',           // Optional
-     sku:        'asdfasf98',       // Optional
-     margin:     0.81               // Optional
-   },
-   {
-     id:         'asdfasd',
-     title:      'super boat',
-     price:      100.21,
-     qty:        20,
-     collection: 'testcollection',  // Optional: Defaults to 'Default'
-     category:   'boats',           // Optional
-     sku:        'asdfasf98',       // Optional
-     margin:     0.123              // Optional
+     key: 'some key',
+     value: 'some value'
    }
  ]
 });
 
 // Search events
 gbTracker.sendSearchEvent({
- search:   {
-   origin:           {              // Optional  
-     recommendations: false,
-     dym:             false,
-     sayt:            false,
-     search:          true
-   },
-   searchTerm:       'searchy searchface',
-   
-   // Provided in search response from API
-   searchUuid:       'e30a4611-64b0-49a1-ad56-ab8fa2ffcc10'    
+  search:   {
+    origin:           {                       // Optional: Search defaults to true
+      recommendations: false,
+      dym:             false,
+      sayt:            false,
+      search:          true
+    },
+    totalRecordCount: 122,
+    area:             'Default',
+    biasingProfile:   'ThisBiasingProfile',   // Optional
+    query:            'i searched for this',
+    pageInfo: {           
+      recordStart: 1,
+      recordEnd:   24
+    },
+    matchStrategy: {                          // Optional: matchStrategy returned by searchandiser
+      rules: [
+        {
+          termsGreaterThan: 1,
+          mustMatch:        100,
+          percentage:       true
+        }
+      ]
+    },
+    availableNavigation: [                    // Optional: Array of selectedNavigations returned by searchandiser
+      {
+        name:        'reg_price',
+        displayName: 'Price',
+        refinements: [
+          {
+            type:  'Range',
+            count: 3,
+            high:  '50',
+            low:   '20'
+          },
+          {
+            type:  'Range',
+            count: 25,
+            high:  '100',
+            low:   '50'
+          },
+          {
+            type:  'Range',
+            count: 84,
+            high:  '150',
+            low:   '100'
+          },
+          {
+            type:  'Range',
+            count: 10,
+            high:  '200',
+            low:   '150'
+          }
+        ],
+        metadata: [],
+        range:    true,
+        or:       false
+      }
+    ],
+    selectedNavigation: [],  // Optional: Array of selectedNavigations returned by searchandiser
+    records:            [],  // Optional: Array of records returned by searchandiser
+    didYouMean: [
+      'I should have searched for this'
+    ]
+  }
+});
+
+// Auto Search events
+gbTracker.sendAutoSearchEvent({
+  // Provided in search response from API
+  responseId: 'e30a4611-64b0-49a1-ad56-ab8fa2ffcc10',   
+  search:   {
+    origin:           {              // Optional: Search defaults to true  
+      recommendations: false,
+      dym:             false,
+      sayt:            false,
+      search:          true
+    }    
  }
 });
 
 // ViewProduct events
 gbTracker.sendViewProductEvent({
  product:  {
-   id:         'asdfasd',
+   productId:  'asdfasd',
    title:      'super boat',
    price:      100.21,
    collection: 'testcollection',  // Optional: Defaults to 'Default'
    category:   'boats',           // Optional
    sku:        'asdfasf98',       // Optional
-   margin:     0.81               // Optional
- }
+   margin:     0.81,              // Optional
+   metadata: [                    // Optional
+      {
+        key: 'some key',
+        value: 'some value'
+      }
+    ]
+ },
+ metadata: [                            // Optional
+   {
+     key: 'some key',
+     value: 'some value'
+   }
+ ]
 });
 
 // There are also navigation events, which are sent silently when page or URL changes
