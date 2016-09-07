@@ -23,6 +23,12 @@ in the following format:
   },
   filters: {            // Optional: restrict results with exact matches or exclusions against these fields
     must: {
+      area: string,
+      excludeBots: boolean,   // Defaults to true. Excludes bot-related traffic from results
+      metadata: {
+        key: string,
+        value: string
+      },
       product: {
         title: string,
         category: string,
@@ -91,7 +97,7 @@ Or an `exact` can be used for an exact match.
   gte: 0,
   lt: 100,
   lte: 100,
-  exact: 100
+  is: 100
 }
 ```
 
