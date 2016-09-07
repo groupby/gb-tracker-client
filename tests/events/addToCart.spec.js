@@ -18,8 +18,8 @@ describe('gb-tracker-core tests', ()=> {
           {
             productId:  'asdfasd',
             category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
+            collection: 'boatssrus',
+            title:      'boats',
             sku:        'asdfasf98',
             quantity:   10,
             price:      100.21
@@ -96,8 +96,8 @@ describe('gb-tracker-core tests', ()=> {
         {
           productId:  'asdfasd',
           category:   'boats',
-          collection: 'kayaksrus',
-          title:      'kayak',
+          collection: 'boatssrus',
+          title:      'boats',
           sku:        'asdfasf98',
           quantity:   10,
           price:      100.21
@@ -131,8 +131,8 @@ describe('gb-tracker-core tests', ()=> {
           {
             // productId:  'asdfasd',
             category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
+            collection: 'boatssrus',
+            title:      'boats',
             sku:        'asdfasf98',
             quantity:   10,
             price:      100.21
@@ -167,8 +167,8 @@ describe('gb-tracker-core tests', ()=> {
           {
             productId:  'asdfasd',
             category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
+            collection: 'boatssrus',
+            title:      'boats',
             sku:        'asdfasf98',
             // quantity:   10,
             price:      100.21
@@ -203,8 +203,8 @@ describe('gb-tracker-core tests', ()=> {
           {
             productId:  'asdfasd',
             category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
+            collection: 'boatssrus',
+            title:      'boats',
             sku:        'asdfasf98',
             quantity:   10,
             // price:      100.21
@@ -239,8 +239,8 @@ describe('gb-tracker-core tests', ()=> {
           {
             productId:  'asdfasd',
             category:   'boats',
-            collection: 'kayaksrus',
-            // title:      'kayak',
+            collection: 'boatssrus',
+            // title:      'boats',
             sku:        'asdfasf98',
             quantity:   10,
             price:      100.21
@@ -275,8 +275,8 @@ describe('gb-tracker-core tests', ()=> {
           {
             productId:  'asdfasd',
             // category:   'boats',
-            collection: 'kayaksrus',
-            title:      'kayak',
+            collection: 'boatssrus',
+            title:      'boats',
             sku:        'asdfasf98',
             quantity:   10,
             price:      100.21
