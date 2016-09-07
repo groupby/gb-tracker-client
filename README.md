@@ -11,7 +11,7 @@ Or it can be directly included from our CDN using:
 Including it directly from the CDN will create the global variable 
 `_GbTracker` with the same API as below.
 
-### API
+### gb-tracker-client API
 ```javascript
 const _GbTracker = require('gb-tracker-client');
 const gbTracker = new _GbTracker('customerId', 'area');
