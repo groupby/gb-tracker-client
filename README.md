@@ -15,8 +15,8 @@ Recommendations API can be found [here](https://github.com/groupby/gb-tracker-cl
 
 ### gb-tracker-client API
 ```javascript
-const _GbTracker = require('gb-tracker-client');
-const gbTracker = new _GbTracker('customerId', 'area');
+var _GbTracker = require('gb-tracker-client');
+var gbTracker = new GbTracker('customerId', 'area');
 
 // Must set the visitor at least once before any events are sent
 // Should be called on login/logout or any time the visitorId/sessionId change

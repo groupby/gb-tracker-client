@@ -139,7 +139,7 @@ app.controller('SetCustomerController', [
   'tracker',
   function (scope, tracker) {
     scope.customerId = '';
-    scope.area       = 'Default';
+    scope.area       = 'RecommendationsSandbox';
     scope.key        = '';
 
     scope.init = function () {
