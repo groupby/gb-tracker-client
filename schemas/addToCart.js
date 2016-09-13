@@ -252,7 +252,7 @@ module.exports={
               'trim'
             ],
             optional: false,
-            def: 'default'
+            def: 'Production'
           }
         },
         strict: true
@@ -284,7 +284,7 @@ module.exports={
                     'trim'
                   ],
                   optional: false,
-                  def: 'Production'
+                  def: 'default'
                 },
                 title: {
                   maxLength: 10000,

@@ -190,7 +190,7 @@ module.exports={
               'trim'
             ],
             optional: false,
-            def: 'default'
+            def: 'Production'
           }
         },
         strict: true

@@ -333,6 +333,31 @@ module.exports={
               type: 'string'
             },
             optional: true
+          },
+          originalRequest: {
+            type: 'object',
+            properties: {
+              collection: {
+                type: 'string',
+                optional: true
+              },
+              skip: {
+                type: 'integer',
+                optional: true
+              },
+              pageSize: {
+                type: 'integer',
+                optional: true
+              },
+              fields: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                },
+                optional: true
+              }
+            },
+            optional: true
           }
         },
         type: 'object',
@@ -458,7 +483,7 @@ module.exports={
               'trim'
             ],
             optional: false,
-            def: 'default'
+            def: 'Production'
           }
         },
         strict: true
@@ -763,6 +788,33 @@ module.exports={
               'lower'
             ],
             items: {}
+          },
+          originalRequest: {
+            properties: {
+              collection: {
+                maxLength: 10000,
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
+              skip: {
+                type: 'integer'
+              },
+              pageSize: {
+                type: 'integer'
+              },
+              fields: {
+                type: 'array',
+                maxLength: 10000,
+                rules: [
+                  'trim',
+                  'lower'
+                ],
+                items: {}
+              }
+            },
+            strict: true
           }
         },
         strict: true
