@@ -47,7 +47,7 @@ app.service('tracker', function () {
   var customer = {};
 
   this.initialize = function (customerId, area, key) {
-    tracker             = new window._GbTracker(customerId, area);
+    tracker             = new window.GbTracker(customerId, area);
     customer.customerId = customerId;
     customer.area       = area;
     customer.key        = key;
