@@ -7,7 +7,7 @@ git clone https://github.com/groupby/cdn.git cdn/
 git clone -b gh-pages https://github.com/groupby/api-javascript.git api-javascript/
 
 name=gb-tracker-client
-currentVersion=`cat package.json | jq -r .version`
+currentVersion=$(cat package.json | jq -r .version)
 
 ## Create current version
 cp dist/${name}-${currentVersion}.js cdn/static/javascript/${name}-${currentVersion}.js

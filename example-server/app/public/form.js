@@ -68,7 +68,7 @@ app.service('tracker', function () {
   this.setVisitor = function (visitorId, sessionId) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
-      return
+      return;
     }
 
     tracker.setVisitor(visitorId, sessionId);
@@ -163,7 +163,7 @@ app.controller('SetVisitorController', [
     scope.visitorId = 'testvisitor';
     scope.sessionId = 'testsession';
 
-    scope.isReady = tracker.isInitialized;
+    scope.isReady    = tracker.isInitialized;
     scope.visitorSet = false;
 
     scope.send = function () {

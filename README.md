@@ -1,5 +1,5 @@
 ## GroupBy Tracking Client
-[![CircleCI](https://circleci.com/gh/groupby/gb-tracker-client.svg?style=svg)](https://circleci.com/gh/groupby/gb-tracker-client) [![Coverage Status](https://coveralls.io/repos/github/groupby/gb-tracker-client/badge.svg?branch=master)](https://coveralls.io/github/groupby/gb-tracker-client?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/75c724f290884b72b305fc4b748bef95)](https://www.codacy.com/app/GroupByInc/gb-tracker-client?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=groupby/gb-tracker-client&amp;utm_campaign=Badge_Grade) [![CircleCI](https://circleci.com/gh/groupby/gb-tracker-client.svg?style=svg)](https://circleci.com/gh/groupby/gb-tracker-client) [![Coverage Status](https://coveralls.io/repos/github/groupby/gb-tracker-client/badge.svg?branch=master)](https://coveralls.io/github/groupby/gb-tracker-client?branch=master)
 
 This can be installed via npm with `npm install --save gb-tracker-client`
 
