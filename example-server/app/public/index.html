@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-    <script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-canary.min.js"></script>
+    <!--<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-canary.min.js"></script>-->
+    <script src="/dist/gb-tracker-client-2.0.1.js"></script>
     <script src="http://chancejs.com/chance.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="/form.js"></script>
@@ -20,22 +21,13 @@
     <form novalidate class="simple-form">
         Customer ID: <input type="text" ng-model="customerId"/><br/>
         Area: <input type="text" ng-model="area"/><br/>
+        <input type="button" ng-click="override()" value="Override Pixel Path"/>
+        <div ng-show="allowOverride">Override Pixel Path: <input type="text" ng-model="pixelPath" size="100"/><br/></div>
         <input type="submit" ng-click="init()" value="Initialize"/>
     </form>
 
     <p ng-hide="isReady()">Set customer info before continuing</p>
     <div ng-controller="SetVisitorController">
-        <div ng-show="isReady() && !visitorSet">
-            <H2>Set Visitor</H2>
-            <form novalidate class="simple-form">
-                <H3>Session</H3>
-                New Visitor ID: <input type="text" ng-model="visitorId"/><br/>
-                New Session ID: <input type="text" ng-model="sessionId"/><br/>
-                <input type="submit" ng-click="send(event)" value="Save"/>
-                <input type="button" ng-click="randomize()" value="Randomize"/>
-            </form>
-        </div>
-
         <div ng-controller="SelectEventController" ng-show="isReady() && visitorSet">
             <select ng-model="selectedEvent" ng-options="x for x in eventTypes">
             </select>

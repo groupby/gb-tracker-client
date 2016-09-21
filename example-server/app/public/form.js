@@ -46,11 +46,13 @@ app.service('tracker', function () {
   var tracker  = null;
   var customer = {};
 
-  this.initialize = function (customerId, area, key) {
-    tracker             = new window.GbTracker(customerId, area);
+  this.initialize = function (customerId, area, key, pixelPath) {
+    tracker             = new window.GbTracker(customerId, area, pixelPath);
     customer.customerId = customerId;
     customer.area       = area;
     customer.key        = key;
+
+    tracker.setVisitor('testvisitor', 'testsession');
   };
 
   this.isInitialized = function () {
@@ -138,12 +140,18 @@ app.controller('SetCustomerController', [
   '$scope',
   'tracker',
   function (scope, tracker) {
-    scope.customerId = '';
-    scope.area       = 'RecommendationsSandbox';
-    scope.key        = '';
+    scope.customerId    = '';
+    scope.area          = 'RecommendationsSandbox';
+    scope.key           = '';
+    scope.pixelPath     = '';
+    scope.allowOverride = false;
 
     scope.init = function () {
-      tracker.initialize(scope.customerId, scope.area, scope.key);
+      tracker.initialize(scope.customerId, scope.area, scope.key, scope.pixelPath);
+    };
+
+    scope.override = function () {
+      scope.allowOverride = !scope.allowOverride;
     };
 
     scope.isReady = tracker.isInitialized;
@@ -155,22 +163,8 @@ app.controller('SetVisitorController', [
   'tracker',
   function (scope, tracker) {
 
-    scope.randomize = function () {
-      scope.visitorId = getUuid();
-      scope.sessionId = getUuid();
-    };
-
-    scope.visitorId = 'testvisitor';
-    scope.sessionId = 'testsession';
-
     scope.isReady    = tracker.isInitialized;
-    scope.visitorSet = false;
-
-    scope.send = function () {
-      console.log('setting visitorID: ' + scope.visitorId + ' sessionId: ' + scope.sessionId);
-      tracker.setVisitor(scope.visitorId, scope.sessionId);
-      scope.visitorSet = true;
-    };
+    scope.visitorSet = true;
   }
 ]);
 
