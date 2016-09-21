@@ -170,20 +170,6 @@ gbTracker.sendSearchEvent({
   }
 });
 
-// Auto Search events
-gbTracker.sendAutoSearchEvent({
-  // Provided in search response from API
-  responseId: 'e30a4611-64b0-49a1-ad56-ab8fa2ffcc10',   
-  search:   {
-    origin:           {              // Optional: Search defaults to true  
-      recommendations: false,
-      dym:             false,
-      sayt:            false,
-      search:          true
-    }    
- }
-});
-
 // ViewProduct events
 gbTracker.sendViewProductEvent({
  product:  {
