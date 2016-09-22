@@ -3,8 +3,6 @@ const mocha     = require('gulp-mocha');
 const eslint    = require('gulp-eslint');
 const istanbul  = require('gulp-istanbul');
 const gulpIf    = require('gulp-if');
-const coveralls = require('gulp-coveralls');
-const gulpUtil  = require('gulp-util');
 
 const path          = require('path');
 const webpack       = require('webpack');
@@ -95,21 +93,3 @@ gulp.task('lint', () => {
 });
 
 gulp.task('test', ['test:lint']);
-
-gulp.task('coveralls', ['test'], () => {
-  if (!process.env.CI) {
-    gulpUtil.log('Skipping coverage upload');
-    return;
-  }
-
-  return gulp.src(path.join(__dirname, 'coverage/lcov.info'))
-    .pipe(coveralls())
-    .once('error', () => {
-      console.error('coveralls failed');
-      process.exit(1);
-    })
-    .once('end', () => {
-      gulpUtil.log('Coverage uploaded');
-      process.exit();
-    });
-});
