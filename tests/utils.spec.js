@@ -10,6 +10,17 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 const utils = require('../lib/utils');
 
 describe('utils tests', ()=> {
+  it('should divide escaped string without splitting escape sequences', () => {
+    const target = '%7B%22search';
+
+    const chunked = utils.chunkEscapedString(target, 4);
+    expect(chunked.join('')).to.eql(target);
+    expect(chunked[0]).to.eql('%7B');
+    expect(chunked[1]).to.eql('%22s');
+    expect(chunked[2]).to.eql('earc');
+    expect(chunked[3]).to.eql('h');
+  });
+
   it('should merge two objects', () => {
     const first = {
       something: 'yo',

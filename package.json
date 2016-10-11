@@ -40,6 +40,7 @@
   "dependencies": {
     "deep-diff": "^0.3.4",
     "json-loader": "^0.5.4",
+    "lz-string": "^1.4.4",
     "mocha": "^2.4.5",
     "schema-inspector": "^1.6.4",
     "uuid": "^2.0.2"

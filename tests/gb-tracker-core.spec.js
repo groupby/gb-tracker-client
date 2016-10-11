@@ -1,6 +1,7 @@
 const chai   = require('chai');
 const expect = chai.expect;
 const diff   = require('deep-diff').diff;
+var LZString  = require('lz-string/libs/lz-string.min.js');
 
 window                = false;
 document              = false;
@@ -252,9 +253,10 @@ describe('gb-tracker-core tests', ()=> {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     const sendSegment = (segment) => {
-      expect(segment.segment).to.eql(JSON.stringify(event));
+      expect(segment.segment).to.eql(LZString.compressToEncodedURIComponent(JSON.stringify(event)));
       expect(segment.id).to.eql(0);
       expect(segment.total).to.eql(1);
+      expect(segment.clientVersion).to.not.be.undefined;
       expect(segment.uuid).to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
       done();
     };
