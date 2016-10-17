@@ -82,6 +82,18 @@ module.exports={
               recommendations: {
                 type: 'boolean',
                 optional: false
+              },
+              autosearch: {
+                type: 'boolean',
+                optional: false
+              },
+              navigation: {
+                type: 'boolean',
+                optional: false
+              },
+              collectionSwitcher: {
+                type: 'boolean',
+                optional: false
               }
             },
             strict: true
@@ -124,9 +136,44 @@ module.exports={
             },
             optional: false
           },
+          relatedQueries: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            optional: true
+          },
+          rewrites: {
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            optional: true
+          },
+          siteParams: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                key: {
+                  type: 'string',
+                  optional: true
+                },
+                value: {
+                  type: 'string',
+                  optional: true
+                }
+              }
+            },
+            optional: true
+          },
           matchStrategy: {
             type: 'object',
             properties: {
+              name: {
+                type: 'string',
+                optional: true
+              },
               rules: {
                 type: 'array',
                 items: {
@@ -174,6 +221,14 @@ module.exports={
                 },
                 or: {
                   type: 'boolean',
+                  optional: true
+                },
+                moreRefinements: {
+                  type: 'boolean',
+                  optional: true
+                },
+                type: {
+                  type: 'string',
                   optional: true
                 },
                 metadata: {
@@ -249,6 +304,14 @@ module.exports={
                   type: 'boolean',
                   optional: true
                 },
+                moreRefinements: {
+                  type: 'boolean',
+                  optional: true
+                },
+                type: {
+                  type: 'string',
+                  optional: true
+                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -322,6 +385,10 @@ module.exports={
                 _t: {
                   type: 'string',
                   optional: true
+                },
+                collection: {
+                  type: 'string',
+                  optional: true
                 }
               }
             },
@@ -341,12 +408,37 @@ module.exports={
                 type: 'string',
                 optional: true
               },
+              area: {
+                type: 'string',
+                optional: true
+              },
+              query: {
+                type: 'string',
+                optional: true
+              },
               skip: {
                 type: 'integer',
                 optional: true
               },
               pageSize: {
                 type: 'integer',
+                optional: true
+              },
+              sort: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    field: {
+                      type: 'string',
+                      optional: true
+                    },
+                    order: {
+                      type: 'string',
+                      optional: true
+                    }
+                  }
+                },
                 optional: true
               },
               fields: {
@@ -507,6 +599,18 @@ module.exports={
               recommendations: {
                 optional: false,
                 def: false
+              },
+              autosearch: {
+                optional: false,
+                def: false
+              },
+              navigation: {
+                optional: false,
+                def: false
+              },
+              collectionSwitcher: {
+                optional: false,
+                def: false
               }
             },
             strict: true
@@ -555,8 +659,55 @@ module.exports={
             },
             strict: true
           },
+          relatedQueries: {
+            type: 'array',
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ],
+            items: {}
+          },
+          rewrites: {
+            type: 'array',
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ],
+            items: {}
+          },
+          siteParams: {
+            type: 'array',
+            items: {
+              properties: {
+                key: {
+                  maxLength: 10000,
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
+                value: {
+                  maxLength: 10000,
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                }
+              },
+              strict: true
+            }
+          },
           matchStrategy: {
             properties: {
+              name: {
+                maxLength: 10000,
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
               rules: {
                 type: 'array',
                 items: {
@@ -598,6 +749,14 @@ module.exports={
                 },
                 range: {},
                 or: {},
+                moreRefinements: {},
+                type: {
+                  maxLength: 10000,
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -683,6 +842,14 @@ module.exports={
                 },
                 range: {},
                 or: {},
+                moreRefinements: {},
+                type: {
+                  maxLength: 10000,
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
+                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -775,6 +942,13 @@ module.exports={
                     'trim',
                     'lower'
                   ]
+                },
+                collection: {
+                  maxLength: 10000,
+                  rules: [
+                    'trim',
+                    'lower'
+                  ]
                 }
               },
               strict: true
@@ -798,11 +972,47 @@ module.exports={
                   'lower'
                 ]
               },
+              area: {
+                maxLength: 10000,
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
+              query: {
+                maxLength: 10000,
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
               skip: {
                 type: 'integer'
               },
               pageSize: {
                 type: 'integer'
+              },
+              sort: {
+                type: 'array',
+                items: {
+                  properties: {
+                    field: {
+                      maxLength: 10000,
+                      rules: [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    order: {
+                      maxLength: 10000,
+                      rules: [
+                        'trim',
+                        'lower'
+                      ]
+                    }
+                  },
+                  strict: true
+                }
               },
               fields: {
                 type: 'array',

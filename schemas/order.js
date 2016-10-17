@@ -87,7 +87,8 @@ module.exports={
               type: 'object',
               properties: {
                 category: {
-                  type: 'string'
+                  type: 'string',
+                  optional: true
                 },
                 collection: {
                   type: 'string',
@@ -308,7 +309,8 @@ module.exports={
                   rules: [
                     'trim',
                     'lower'
-                  ]
+                  ],
+                  optional: true
                 },
                 collection: {
                   maxLength: 10000,

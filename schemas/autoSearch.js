@@ -83,6 +83,18 @@ module.exports={
               recommendations: {
                 type: 'boolean',
                 optional: false
+              },
+              autosearch: {
+                type: 'boolean',
+                optional: false
+              },
+              navigation: {
+                type: 'boolean',
+                optional: false
+              },
+              collectionSwitcher: {
+                type: 'boolean',
+                optional: false
               }
             },
             strict: true
@@ -226,6 +238,18 @@ module.exports={
                 def: false
               },
               recommendations: {
+                optional: false,
+                def: false
+              },
+              autosearch: {
+                optional: false,
+                def: false
+              },
+              navigation: {
+                optional: false,
+                def: false
+              },
+              collectionSwitcher: {
                 optional: false,
                 def: false
               }
