@@ -50,10 +50,13 @@ describe('autoSearch tests', ()=> {
 
       expect(event.search).to.eql(Object.assign({}, expectedEvent.search, {
         origin: {
-          dym:             false,
-          sayt:            true,
-          search:          false,
-          recommendations: false
+          dym:                false,
+          sayt:               true,
+          search:             false,
+          recommendations:    false,
+          autosearch:         false,
+          navigation:         false,
+          collectionSwitcher: false
         }
       }));
 
@@ -148,7 +151,7 @@ describe('autoSearch tests', ()=> {
 
     gbTrackerCore.sendAutoSearchEvent({
       responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      search: {
+      search:     {
         // origin: {
         //   sayt: true
         // }

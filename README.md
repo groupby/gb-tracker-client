@@ -110,6 +110,7 @@ gbTracker.sendSearchEvent({
       sayt:            false,
       search:          true
     },
+    id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', // Optional: 40-character search ID
     totalRecordCount: 122,
     area:             'Default',
     biasingProfile:   'ThisBiasingProfile',   // Optional
