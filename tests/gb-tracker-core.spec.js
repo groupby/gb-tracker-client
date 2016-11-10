@@ -203,7 +203,8 @@ describe('gb-tracker-core tests', ()=> {
   });
 
   it('throws during validation if strictMode is on and there are extra fields in event', () => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area', null, true);
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.setStrictMode(true);
 
     const validationSchema = {
       type:       'object',
