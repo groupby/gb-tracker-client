@@ -22,7 +22,7 @@ var gbTracker = new GbTracker('customerId', 'area');
 // Should be called on login/logout or any time the visitorId/sessionId change
 gbTracker.setVisitor('visitorId', 'sessionId');
 
-// There are five event API's.
+// There are four event API's.
 
 // AddToBasket events
 gbTracker.sendAddToCartEvent({
