@@ -1,5 +1,6 @@
 const chai   = require('chai');
 const expect = chai.expect;
+const _      = require('lodash');
 const diff   = require('deep-diff').diff;
 var LZString = require('lz-string/libs/lz-string.min.js');
 
@@ -35,10 +36,10 @@ describe('gb-tracker-core tests', ()=> {
           }
         ],
         origin:             {
-          search:          true,
-          dym:             false,
-          sayt:            false,
-          recommendations: false,
+          search:             true,
+          dym:                false,
+          sayt:               false,
+          recommendations:    false,
           autosearch:         false,
           navigation:         false,
           collectionSwitcher: false
@@ -76,6 +77,85 @@ describe('gb-tracker-core tests', ()=> {
 
       expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.search).to.eql(expectedEvent.search);
+      expect(event.eventType).to.eql(expectedEvent.eventType);
+      expect(event.customer).to.eql(expectedEvent.customer);
+      expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
+      expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
+      expect(event.visit.generated.localTime).to.not.be.undefined;
+      done();
+    };
+
+    gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
+
+    gbTrackerCore.sendSearchEvent({
+      search: expectedEvent.search
+    });
+  });
+
+  const lowercaseAllValues = (obj) => {
+    if (!_.isObject(obj)) {
+      return;
+    } else {
+      return _.mapValues(obj, (value) => {
+        if (_.isString(value)) {
+          return value.toLowerCase();
+        } else if (_.isObject(value)) {
+          return lowercaseAllValues(value);
+        } else {
+          return value;
+        }
+      })
+    }
+  };
+
+  it('should accept valid search event with records', (done) => {
+    const expectedEvent = {
+      search:    searchEvent.search,
+      eventType: 'search',
+      customer:  {
+        id:   'testcustomer',
+        area: 'area'
+      },
+      visit:     {
+        customerData: {
+          visitorId: 'visitor',
+          sessionId: 'session'
+        },
+        generated:    {
+          uri:            '',
+          timezoneOffset: 240,
+          localTime:      '2016-08-14T14:05:26.872Z'
+        }
+      }
+    };
+
+    expectedEvent.search.origin = {
+      autosearch:         false,
+      collectionSwitcher: false,
+      dym:                false,
+      navigation:         false,
+      recommendations:    false,
+      sayt:               false,
+      search:             false
+    };
+
+    // const lowercaseExpectedEvent = lowercaseAllValues(expectedEvent);
+
+    const gbTrackerCore = new GbTrackerCore(expectedEvent.customer.id, expectedEvent.customer.area);
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done('fail');
+    });
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      expect(event.clientVersion.raw).to.not.be.undefined;
+      // the 'lowercaseAllValues' function does somewhat mangle the object,
+      // but does it consistently for both cases and ensures case insensitivity on comparison
+      expect(lowercaseAllValues(event.search)).to.eql(lowercaseAllValues(expectedEvent.search));
       expect(event.eventType).to.eql(expectedEvent.eventType);
       expect(event.customer).to.eql(expectedEvent.customer);
       expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
@@ -161,10 +241,10 @@ describe('gb-tracker-core tests', ()=> {
         }
       ],
       origin:             {
-        search:          true,
-        dym:             false,
-        sayt:            false,
-        recommendations: false,
+        search:             true,
+        dym:                false,
+        sayt:               false,
+        recommendations:    false,
         autosearch:         false,
         navigation:         false,
         collectionSwitcher: false
@@ -1069,7 +1149,7 @@ const searchEvent = {
           {
             "type":  "Value",
             "count": 16,
-            "value": "Yellow "
+            "value": "Yellow"
           }
         ],
         "metadata":    [],
