@@ -1,7 +1,7 @@
 const chai   = require('chai');
 const expect = chai.expect;
 const diff   = require('deep-diff').diff;
-var LZString  = require('lz-string/libs/lz-string.min.js');
+var LZString = require('lz-string/libs/lz-string.min.js');
 
 window                = false;
 document              = false;
@@ -198,11 +198,57 @@ describe('gb-tracker-core tests', ()=> {
 
     expect(validated.event.thing).to.eql('yo');
     expect(validated.event.anotherThing).to.eql(190);
-    expect(validated.event.additionalMetadata).to.be.undefined;
+    expect(validated.event.extraThing).to.be.undefined;
     expect(validated.event.visit.generated.timezoneOffset).to.not.be.undefined;
   });
 
-  it('should drop an invalid event', ()=> {
+  it('throws during validation if strictMode is on and there are extra fields in event', () => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.setStrictMode(true);
+
+    const validationSchema = {
+      type:       'object',
+      strict:     true,
+      properties: {
+        eventType:    {
+          type: 'string'
+        },
+        thing:        {
+          type: 'string'
+        },
+        anotherThing: {
+          type: 'integer'
+        }
+      }
+    };
+
+    const sanitizationSchema = {
+      strict:     true,
+      properties: {
+        eventType:    {},
+        thing:        {},
+        anotherThing: {}
+      }
+    };
+
+    const schemas = {
+      validation:   validationSchema,
+      sanitization: sanitizationSchema
+    };
+
+    const event = {
+      eventType:    'eventType',
+      thing:        'string',
+      anotherThing: 190,
+      extraThing:   {
+        subExtra: 'fo sho'
+      }
+    };
+
+    expect(() => gbTrackerCore.__private.validateEvent(event, schemas)).to.throw('Unexpected fields ["extraThing"] in eventType: eventType');
+  });
+
+  it('should drop an invalid event', () => {
     const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
     gbTrackerCore.setVisitor('visitor', 'session');
