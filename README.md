@@ -11,7 +11,7 @@ Or it can be directly included from our CDN using:
 Including it directly from the CDN will create the global variable 
 `GbTracker` with the same API as below.
 
-Recommendations API can be found [here](https://github.com/groupby/gb-tracker-client/blob/master/API.md)
+Recommendations Request and API documentation can be found [here](http://docs.recommendations.groupbyinc.com/documentation.html?e=wisdom&topic=150_recommendations/01_RecommendationsRequests.md&cid=) (Requires your GroupBy documentation login)
 
 ### gb-tracker-client API
 ```javascript
