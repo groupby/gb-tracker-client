@@ -57,5 +57,6 @@ sed -i "s/Should be .\{5,10\}/Should be ${currentVersion}/g" src/main/webapp/WEB
 
 git add src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/100_EventTracking/00_Installation.md
 git add src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/100_EventTracking/03_TrackerDetails.md
+git add src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/200_adminInternal/02_VerifyingBeaconData.md
 git commit -m "Release ${name} v${currentVersion}"
 git push
