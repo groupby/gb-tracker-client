@@ -4,8 +4,12 @@
 This can be installed via npm with `npm install --save gb-tracker-client`
 
 Or it can be directly included from our CDN using:
-```
-<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-3.2.2.min.js"></scipt>
+```html
+<!-- Always the latest non-breaking changes -->
+<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-3.min.js"></script>
+
+<!-- Fixed to specific version -->
+<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-3.2.2.min.js"></script>
 ```
 
 Including it directly from the CDN will create the global variable 
@@ -168,7 +172,13 @@ gbTracker.sendSearchEvent({
     didYouMean: [
       'I should have searched for this'
     ]
-  }
+  },
+  metadata: [                            // Optional
+    {
+      key: 'some key',
+      value: 'some value'
+    }
+  ]
 });
 
 // ViewProduct events
@@ -195,7 +205,5 @@ gbTracker.sendViewProductEvent({
    }
  ]
 });
-
-// There are also navigation events, which are sent silently when page or URL changes
 
 ```
