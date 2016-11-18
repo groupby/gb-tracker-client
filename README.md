@@ -26,11 +26,6 @@ var gbTracker = new GbTracker('customerId', 'area');
 // Should be called on login/logout or any time the visitorId/sessionId change
 gbTracker.setVisitor('visitorId', 'sessionId');
 
-// If you want to disable or enable warnings regarding stripping fields, these functions are available:
-// PLEASE NOTE: If you disable warnings, you may not know when some data is being stripped from your events!!
-gbTracker.disableWarnings();
-gbTracker.enableWarnings();
-
 // There are four event API's.
 
 // AddToBasket events
