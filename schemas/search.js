@@ -637,7 +637,9 @@ module.exports={
               'trim',
               'lower'
             ],
-            exec: {}
+            exec: {
+              Symbol(Symbol.hasInstance): function [Symbol.hasInstance]() { [native code] }
+            }
           },
           originalQuery: {
             maxLength: 10000,
@@ -645,7 +647,9 @@ module.exports={
               'trim',
               'lower'
             ],
-            exec: {}
+            exec: {
+              Symbol(Symbol.hasInstance): function [Symbol.hasInstance]() { [native code] }
+            }
           },
           template: {},
           pageInfo: {
