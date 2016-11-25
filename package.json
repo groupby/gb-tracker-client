@@ -31,7 +31,7 @@
     "istanbul": "^0.4.3",
     "lodash": "^4.16.6",
     "stream-combiner2": "^1.1.1",
-    "stringify-object": "^3.0.0",
+    "stringify-object": "3.0.0",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.2",
     "webpack": "^1.13.3",
