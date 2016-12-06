@@ -48,10 +48,7 @@ git push
 cd ..
 cd documentation/
 sed -i "s/gb-tracker-client-.\{1,3\}\.min\.js/gb-tracker-client-${currentMajor}.min.js/g" src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/100_EventTracking/00_Installation.md
-sed -i "s/gb-tracker-client-.\{5,10\}\.min\.js/gb-tracker-client-${currentVersion}.min.js/g" src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/100_EventTracking/00_Installation.md
-
 sed -i "s/gb-tracker-client-.\{1,3\}\.min\.js/gb-tracker-client-${currentMajor}.min.js/g" src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/100_EventTracking/03_TrackerDetails.md
-sed -i "s/gb-tracker-client-.\{5,10\}\.min\.js/gb-tracker-client-${currentVersion}.min.js/g" src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/100_EventTracking/03_TrackerDetails.md
 
 sed -i "s/Should be .\{5,10\}/Should be ${currentVersion}/g" src/main/webapp/WEB-INF/jsp/wisdom/productv2.x.x/200_adminInternal/02_VerifyingBeaconData.md
 
