@@ -10,7 +10,7 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
-describe('gb-tracker-core tests', ()=> {
+describe('order tests', ()=> {
   it('should accept valid order event', (done) => {
     const expectedEvent = {
       cart:      {
