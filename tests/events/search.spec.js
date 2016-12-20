@@ -12,7 +12,7 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
-describe('gb-tracker-core tests', ()=> {
+describe('search tests', ()=> {
   it('should accept valid search event without search id', (done) => {
     const expectedEvent = {
       search:    {
@@ -189,8 +189,8 @@ describe('gb-tracker-core tests', ()=> {
       expect(segment.clientVersion).to.not.be.undefined;
       expect(LZString.decompressFromEncodedURIComponent(segment.segment)).to.not.eql(null);
 
-      // 1 segment for setVisitor, 6 for search
-      if (segmentCounter > 6) {
+      // 6 for search
+      if (segmentCounter > 5) {
         done();
       }
     };

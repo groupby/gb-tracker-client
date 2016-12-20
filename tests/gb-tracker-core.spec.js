@@ -13,9 +13,9 @@ const GbTrackerCore = require('../lib/gb-tracker-core');
 
 var thisDoc = document;
 
-describe('gb-tracker-core tests', ()=> {
+describe('gb-tracker-core tests', () => {
 
-  it('should return the fields not present on the sanitised object', ()=> {
+  it('should return the fields not present on the sanitised object', () => {
     const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
     gbTrackerCore.setVisitor('visitor', 'session');
@@ -64,20 +64,18 @@ describe('gb-tracker-core tests', ()=> {
   });
 
   it('should validate input to setVisitor', () => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor(null, 'session')).to.throw(/visitor/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor('', 'session')).to.throw(/visitor/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor({}, 'session')).to.throw(/visitor/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor([], 'session')).to.throw(/visitor/);
 
-    expect(() => gbTrackerCore.setVisitor(null, 'session')).to.throw(/visitor/);
-    expect(() => gbTrackerCore.setVisitor('', 'session')).to.throw(/visitor/);
-    expect(() => gbTrackerCore.setVisitor({}, 'session')).to.throw(/visitor/);
-    expect(() => gbTrackerCore.setVisitor([], 'session')).to.throw(/visitor/);
-
-    expect(() => gbTrackerCore.setVisitor('visitor', null)).to.throw(/session/);
-    expect(() => gbTrackerCore.setVisitor('visitor', '')).to.throw(/session/);
-    expect(() => gbTrackerCore.setVisitor('visitor', {})).to.throw(/session/);
-    expect(() => gbTrackerCore.setVisitor('visitor', [])).to.throw(/session/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor('visitor', null)).to.throw(/session/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor('visitor', '')).to.throw(/session/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor('visitor', {})).to.throw(/session/);
+    expect(() => new GbTrackerCore('testcustomer', 'area').setVisitor('visitor', [])).to.throw(/session/);
   });
 
-  it('should send visitor event when the visitor is set', (done) => {
+  it('should NOT send visitor event the first time setVisitor is called', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     const sessionChangeEvent = {
@@ -87,27 +85,48 @@ describe('gb-tracker-core tests', ()=> {
       newSessionId:      'newSession'
     };
 
-    let firstCall = true;
-
     gbTrackerCore.__private.sendSessionChangeEvent = (event) => {
-      if (firstCall) {
-        firstCall = false;
+      expect(event).to.eql({
+        session: {
+          newVisitorId:      sessionChangeEvent.newVisitorId,
+          newSessionId:      sessionChangeEvent.newSessionId,
+          previousVisitorId: sessionChangeEvent.previousVisitorId,
+          previousSessionId: sessionChangeEvent.previousSessionId
+        }
+      });
 
-        expect(event).to.eql({
-          session: {
-            newVisitorId: sessionChangeEvent.previousVisitorId,
-            newSessionId: sessionChangeEvent.previousSessionId
-          }
-        });
-
-        gbTrackerCore.setVisitor(sessionChangeEvent.newVisitorId, sessionChangeEvent.newSessionId);
-      } else {
-        expect(event).to.eql({session: sessionChangeEvent});
-        done();
-      }
+      done();
     };
 
     gbTrackerCore.setVisitor(sessionChangeEvent.previousVisitorId, sessionChangeEvent.previousSessionId);
+    gbTrackerCore.setVisitor(sessionChangeEvent.newVisitorId, sessionChangeEvent.newSessionId);
+  });
+
+  it('should send visitor event after the visitor is already set once', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    const sessionChangeEvent = {
+      previousVisitorId: 'prevVisitor',
+      previousSessionId: 'prevSession',
+      newVisitorId:      'newVisitor',
+      newSessionId:      'newSession'
+    };
+
+    gbTrackerCore.__private.sendSessionChangeEvent = (event) => {
+      expect(event).to.eql({
+        session: {
+          newVisitorId:      sessionChangeEvent.newVisitorId,
+          newSessionId:      sessionChangeEvent.newSessionId,
+          previousVisitorId: sessionChangeEvent.previousVisitorId,
+          previousSessionId: sessionChangeEvent.previousSessionId
+        }
+      });
+
+      done();
+    };
+
+    gbTrackerCore.setVisitor(sessionChangeEvent.previousVisitorId, sessionChangeEvent.previousSessionId);
+    gbTrackerCore.setVisitor(sessionChangeEvent.newVisitorId, sessionChangeEvent.newSessionId);
   });
 
   it('should NOT send visitor event when the visitor is set but not changed', (done) => {
