@@ -22,22 +22,45 @@ describe('gb-tracker-core tests', () => {
 
     const first = {
       thing:  'soomething',
-      ignore: 'not a thing'
+      ignore: 'not a thing',
+      deep:   {
+        other:      'banana',
+        arrayThing: [
+          {
+            included: 'other'
+          },
+          {
+            included: 'other2'
+          }
+        ]
+      }
     };
 
     const second = {
       thing:        'soomething',
       anExtraThing: 'yo',
       deep:         {
-        manyExtraThings: 'fo sho'
+        other:           'banana',
+        manyExtraThings: 'fo sho',
+        arrayThing:      [
+          {
+            included: 'other',
+            extra: 'yo'
+          },
+          {
+            included: 'other2',
+            extra: 'yo2'
+          }
+        ]
       }
     };
 
     const removedFields = gbTrackerCore.__private.getRemovedFields(first, second);
 
     expect(removedFields).to.eql([
-      'anExtraThing',
-      'deep'
+      'deep.arrayThing.[].extra',
+      'deep.manyExtraThings',
+      'anExtraThing'
     ]);
   });
 
@@ -265,6 +288,53 @@ describe('gb-tracker-core tests', () => {
     };
 
     expect(() => gbTrackerCore.__private.validateEvent(event, schemas)).to.throw('Unexpected fields ["extraThing"] in eventType: eventType');
+  });
+
+  it('appends warnings about stripped fields to metadata', () => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    const validationSchema = {
+      type:       'object',
+      strict:     true,
+      properties: {
+        eventType:    {
+          type: 'string'
+        },
+        thing:        {
+          type: 'string'
+        },
+        anotherThing: {
+          type: 'integer'
+        }
+      }
+    };
+
+    const sanitizationSchema = {
+      strict:     true,
+      properties: {
+        eventType:    {},
+        thing:        {},
+        anotherThing: {}
+      }
+    };
+
+    const schemas = {
+      validation:   validationSchema,
+      sanitization: sanitizationSchema
+    };
+
+    const event = {
+      eventType:    'eventType',
+      thing:        'string',
+      anotherThing: 190,
+      extraThing:   {
+        subExtra: 'fo sho'
+      }
+    };
+
+    const validated = gbTrackerCore.__private.validateEvent(event, schemas);
+
+    expect(validated.event.metadata).to.eql([{key: 'gbi-field-warning', value: 'extraThing'}]);
   });
 
   it('should drop an invalid event', () => {
