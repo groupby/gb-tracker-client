@@ -44,7 +44,7 @@ describe('search tests', () => {
           navigation:         false,
           collectionSwitcher: false
         },
-        query:              'searchy searchface'
+        query:              'searchy searchface < > no angles or trailing spaces    '
       },
       eventType: 'search',
       customer:  {
@@ -74,6 +74,8 @@ describe('search tests', () => {
       if (event.eventType === 'sessionChange') {
         return;
       }
+
+      expectedEvent.search.query = 'searchy searchface no angles or trailing spaces';
 
       expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.search).to.eql(expectedEvent.search);
