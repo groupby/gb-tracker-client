@@ -88,24 +88,22 @@ module.exports={
           },
           prerelease: {
             type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
             items: {
-              type: undefined
+              maxLength: 10000,
+              rules: [
+                'trim',
+                'lower'
+              ]
             }
           },
           build: {
             type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
             items: {
-              type: undefined
+              maxLength: 10000,
+              rules: [
+                'trim',
+                'lower'
+              ]
             }
           },
           version: {
