@@ -171,22 +171,24 @@ module.exports={
           },
           prerelease: {
             type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            items: {},
+            items: {
+              maxLength: 10000,
+              rules: [
+                'trim',
+                'lower'
+              ]
+            },
             optional: true
           },
           build: {
             type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            items: {},
+            items: {
+              maxLength: 10000,
+              rules: [
+                'trim',
+                'lower'
+              ]
+            },
             optional: true
           },
           version: {

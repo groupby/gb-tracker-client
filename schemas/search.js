@@ -1,198 +1,235 @@
-var utils = require('./utils');
-module.exports={
-  validation: {
-    type: 'object',
+var utils      = require('./utils');
+module.exports = {
+  validation:   {
+    type:       'object',
     properties: {
       clientVersion: {
-        type: 'object',
+        type:       'object',
         properties: {
-          raw: {
+          raw:        {
             type: 'string'
           },
-          major: {
-            type: 'integer',
+          major:      {
+            type:     'integer',
             optional: true
           },
-          minor: {
-            type: 'integer',
+          minor:      {
+            type:     'integer',
             optional: true
           },
-          patch: {
-            type: 'integer',
+          patch:      {
+            type:     'integer',
             optional: true
           },
           prerelease: {
-            type: 'array',
-            items: {
+            type:     'array',
+            items:    {
               type: 'string'
             },
             optional: true
           },
-          build: {
-            type: 'array',
-            items: {
+          build:      {
+            type:     'array',
+            items:    {
               type: 'string'
             },
             optional: true
           },
-          version: {
-            type: 'string',
+          version:    {
+            type:     'string',
             optional: true
           }
         },
-        strict: true
+        strict:     true
       },
-      responseId: {
-        type: 'string',
+      responseId:    {
+        type:     'string',
         optional: true
       },
-      eventType: {
+      eventType:     {
         type: 'string'
       },
-      customer: {
-        type: 'object',
+      customer:      {
+        type:       'object',
         properties: {
-          id: {
+          id:   {
             type: 'string'
           },
           area: {
-            type: 'string',
+            type:     'string',
             optional: false
           }
         },
-        strict: true
+        strict:     true
       },
-      search: {
+      search:        {
         properties: {
-          origin: {
-            type: 'object',
+          origin:              {
+            type:       'object',
             properties: {
-              sayt: {
-                type: 'boolean',
+              sayt:               {
+                type:     'boolean',
                 optional: false
               },
-              dym: {
-                type: 'boolean',
+              dym:                {
+                type:     'boolean',
                 optional: false
               },
-              search: {
-                type: 'boolean',
+              search:             {
+                type:     'boolean',
                 optional: false
               },
-              recommendations: {
-                type: 'boolean',
+              recommendations:    {
+                type:     'boolean',
                 optional: false
               },
-              autosearch: {
-                type: 'boolean',
+              autosearch:         {
+                type:     'boolean',
                 optional: false
               },
-              navigation: {
-                type: 'boolean',
+              navigation:         {
+                type:     'boolean',
                 optional: false
               },
               collectionSwitcher: {
-                type: 'boolean',
+                type:     'boolean',
                 optional: false
               }
             },
-            strict: true
+            strict:     true
           },
-          totalRecordCount: {
-            type: 'integer',
+          id:                  {
+            type:     'string',
+            optional: true
+          },
+          totalRecordCount:    {
+            type:     'integer',
             optional: false
           },
-          area: {
-            type: 'string',
+          area:                {
+            type:     'string',
             optional: true
           },
-          biasingProfile: {
-            type: 'string',
+          biasingProfile:      {
+            type:     'string',
             optional: true
           },
-          query: {
-            type: 'string',
+          query:               {
+            type:     'string',
             optional: false
           },
-          originalQuery: {
-            type: 'string',
+          originalQuery:       {
+            type:     'string',
             optional: true
           },
-          template: {
-            type: 'object',
+          correctedQuery:      {
+            type:     'string',
             optional: true
           },
-          pageInfo: {
-            type: 'object',
+          warnings:            {
+            type:     'array',
+            items:    {
+              type: 'string'
+            },
+            optional: true
+          },
+          errors:              {
+            type:     'string',
+            optional: true
+          },
+          template:            {
+            type:       'object',
+            properties: {
+              name:     {
+                type:     'string',
+                optional: true
+              },
+              ruleName: {
+                type:     'string',
+                optional: true
+              },
+              _id:      {
+                type:     'string',
+                optional: true
+              }
+            },
+            optional:   true
+          },
+          pageInfo:            {
+            type:       'object',
             properties: {
               recordStart: {
-                type: 'integer',
+                type:     'integer',
                 optional: false
               },
-              recordEnd: {
-                type: 'integer',
+              recordEnd:   {
+                type:     'integer',
                 optional: false
               }
             },
-            optional: false
+            optional:   false
           },
-          relatedQueries: {
-            type: 'array',
-            items: {
+          relatedQueries:      {
+            type:     'array',
+            items:    {
               type: 'string'
             },
             optional: true
           },
-          rewrites: {
-            type: 'array',
-            items: {
+          rewrites:            {
+            type:     'array',
+            items:    {
               type: 'string'
             },
             optional: true
           },
-          siteParams: {
-            type: 'array',
-            items: {
-              type: 'object',
+          redirect:            {
+            type:     'string',
+            optional: true
+          },
+          siteParams:          {
+            type:     'array',
+            items:    {
+              type:       'object',
               properties: {
-                key: {
-                  type: 'string',
+                key:   {
+                  type:     'string',
                   optional: true
                 },
                 value: {
-                  type: 'string',
+                  type:     'string',
                   optional: true
                 }
               }
             },
             optional: true
           },
-          matchStrategy: {
-            type: 'object',
+          matchStrategy:       {
+            type:       'object',
             properties: {
-              name: {
-                type: 'string',
+              name:  {
+                type:     'string',
                 optional: true
               },
               rules: {
-                type: 'array',
-                items: {
-                  type: 'object',
+                type:     'array',
+                items:    {
+                  type:       'object',
                   properties: {
-                    terms: {
-                      type: 'integer',
+                    terms:            {
+                      type:     'integer',
                       optional: true
                     },
                     termsGreaterThan: {
-                      type: 'integer',
+                      type:     'integer',
                       optional: true
                     },
-                    mustMatch: {
-                      type: 'integer',
+                    mustMatch:        {
+                      type:     'integer',
                       optional: true
                     },
-                    percentage: {
-                      type: 'boolean',
+                    percentage:       {
+                      type:     'boolean',
                       optional: true
                     }
                   }
@@ -200,79 +237,95 @@ module.exports={
                 optional: true
               }
             },
-            optional: true
+            optional:   true
           },
           availableNavigation: {
-            type: 'array',
-            items: {
-              type: 'object',
+            type:     'array',
+            items:    {
+              type:       'object',
               properties: {
-                name: {
-                  type: 'string',
+                name:            {
+                  type:     'string',
                   optional: false
                 },
-                displayName: {
-                  type: 'string',
+                displayName:     {
+                  type:     'string',
                   optional: true
                 },
-                range: {
-                  type: 'boolean',
+                range:           {
+                  type:     'boolean',
                   optional: true
                 },
-                or: {
-                  type: 'boolean',
+                or:              {
+                  type:     'boolean',
+                  optional: true
+                },
+                ignored:         {
+                  type:     'boolean',
                   optional: true
                 },
                 moreRefinements: {
-                  type: 'boolean',
+                  type:     'boolean',
                   optional: true
                 },
-                type: {
-                  type: 'string',
+                _id:             {
+                  type:     'string',
                   optional: true
                 },
-                metadata: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
+                type:            {
+                  type:     'string',
+                  optional: true
+                },
+                metadata:        {
+                  type:     'array',
+                  items:    {
+                    type:       'object',
                     properties: {
-                      key: {
-                        type: 'string',
+                      key:   {
+                        type:     'string',
                         optional: false
                       },
                       value: {
-                        type: 'string',
+                        type:     'string',
                         optional: false
                       }
                     },
-                    strict: true
+                    strict:     true
                   },
                   optional: true,
-                  strict: true
+                  strict:   true
                 },
-                refinements: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
+                refinements:     {
+                  type:     'array',
+                  items:    {
+                    type:       'object',
                     properties: {
-                      type: {
-                        type: 'string',
+                      type:    {
+                        type:     'string',
                         optional: false
                       },
-                      count: {
-                        type: 'integer',
+                      _id:     {
+                        type:     'string',
                         optional: true
                       },
-                      value: {
-                        type: 'string',
+                      count:   {
+                        type:     'integer',
                         optional: true
                       },
-                      high: {
-                        type: 'string',
+                      exclude: {
+                        type:     'boolean',
                         optional: true
                       },
-                      low: {
-                        type: 'string',
+                      value:   {
+                        type:     'string',
+                        optional: true
+                      },
+                      high:    {
+                        type:     'string',
+                        optional: true
+                      },
+                      low:     {
+                        type:     'string',
                         optional: true
                       }
                     }
@@ -283,77 +336,93 @@ module.exports={
             },
             optional: true
           },
-          selectedNavigation: {
-            type: 'array',
-            items: {
-              type: 'object',
+          selectedNavigation:  {
+            type:     'array',
+            items:    {
+              type:       'object',
               properties: {
-                name: {
-                  type: 'string',
+                name:            {
+                  type:     'string',
                   optional: false
                 },
-                displayName: {
-                  type: 'string',
+                displayName:     {
+                  type:     'string',
                   optional: true
                 },
-                range: {
-                  type: 'boolean',
+                range:           {
+                  type:     'boolean',
                   optional: true
                 },
-                or: {
-                  type: 'boolean',
+                or:              {
+                  type:     'boolean',
+                  optional: true
+                },
+                ignored:         {
+                  type:     'boolean',
                   optional: true
                 },
                 moreRefinements: {
-                  type: 'boolean',
+                  type:     'boolean',
                   optional: true
                 },
-                type: {
-                  type: 'string',
+                _id:             {
+                  type:     'string',
                   optional: true
                 },
-                metadata: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
+                type:            {
+                  type:     'string',
+                  optional: true
+                },
+                metadata:        {
+                  type:     'array',
+                  items:    {
+                    type:       'object',
                     properties: {
-                      key: {
-                        type: 'string',
+                      key:   {
+                        type:     'string',
                         optional: false
                       },
                       value: {
-                        type: 'string',
+                        type:     'string',
                         optional: false
                       }
                     },
-                    strict: true
+                    strict:     true
                   },
                   optional: true,
-                  strict: true
+                  strict:   true
                 },
-                refinements: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
+                refinements:     {
+                  type:     'array',
+                  items:    {
+                    type:       'object',
                     properties: {
-                      type: {
-                        type: 'string',
+                      type:    {
+                        type:     'string',
                         optional: false
                       },
-                      count: {
-                        type: 'integer',
+                      _id:     {
+                        type:     'string',
                         optional: true
                       },
-                      value: {
-                        type: 'string',
+                      count:   {
+                        type:     'integer',
                         optional: true
                       },
-                      high: {
-                        type: 'string',
+                      exclude: {
+                        type:     'boolean',
                         optional: true
                       },
-                      low: {
-                        type: 'string',
+                      value:   {
+                        type:     'string',
+                        optional: true
+                      },
+                      high:    {
+                        type:     'string',
+                        optional: true
+                      },
+                      low:     {
+                        type:     'string',
                         optional: true
                       }
                     }
@@ -364,102 +433,308 @@ module.exports={
             },
             optional: true
           },
-          records: {
-            type: 'array',
-            items: {
-              type: 'object',
+          records:             {
+            type:     'array',
+            items:    {
+              type:       'object',
               properties: {
-                allMeta: {
-                  type: 'object',
-                  optional: true,
-                  strict: false
+                allMeta:           {
+                  type:       'object',
+                  properties: {
+                    sku:       {
+                      type:     'string',
+                      optional: true
+                    },
+                    productId: {
+                      type:     'string',
+                      optional: true
+                    }
+                  },
+                  optional:   true
                 },
-                _id: {
-                  type: 'string',
+                refinementMatches: {
+                  type:     'array',
+                  items:    {
+                    type:       'object',
+                    properties: {
+                      name:   {
+                        type:     'string',
+                        optional: true
+                      },
+                      values: {
+                        type:     'array',
+                        items:    {
+                          type:       'object',
+                          properties: {
+                            value: {
+                              type:     'string',
+                              optional: true
+                            },
+                            count: {
+                              type:     'integer',
+                              optional: true
+                            }
+                          }
+                        },
+                        optional: true
+                      }
+                    }
+                  },
                   optional: true
                 },
-                _u: {
-                  type: 'string',
+                _id:               {
+                  type:     'string',
                   optional: true
                 },
-                _t: {
-                  type: 'string',
+                _u:                {
+                  type:     'string',
                   optional: true
                 },
-                collection: {
-                  type: 'string',
+                _t:                {
+                  type:     'string',
+                  optional: true
+                },
+                collection:        {
+                  type:     'string',
                   optional: true
                 }
               }
             },
             optional: true
           },
-          didYouMean: {
-            type: 'array',
-            items: {
+          didYouMean:          {
+            type:     'array',
+            items:    {
               type: 'string'
             },
             optional: true
           },
-          originalRequest: {
-            type: 'object',
+          originalRequest:     {
+            type:       'object',
             properties: {
-              collection: {
-                type: 'string',
+              collection:            {
+                type:     'string',
                 optional: true
               },
-              area: {
-                type: 'string',
+              area:                  {
+                type:     'string',
                 optional: true
               },
-              query: {
-                type: 'string',
+              sessionId:             {
+                type:     'string',
                 optional: true
               },
-              skip: {
-                type: 'integer',
+              visitorId:             {
+                type:     'string',
                 optional: true
               },
-              pageSize: {
-                type: 'integer',
+              biasingProfile:        {
+                type:     'string',
                 optional: true
               },
-              sort: {
-                type: 'array',
-                items: {
-                  type: 'object',
+              language:              {
+                type:     'string',
+                optional: true
+              },
+              customUrlParams:       {
+                type:     'array',
+                items:    {
+                  type:       'object',
                   properties: {
-                    field: {
-                      type: 'string',
+                    key:   {
+                      type:     'string',
                       optional: true
                     },
-                    order: {
-                      type: 'string',
+                    value: {
+                      type:     'string',
                       optional: true
                     }
                   }
                 },
                 optional: true
               },
-              fields: {
-                type: 'array',
-                items: {
+              query:                 {
+                type:     'string',
+                optional: true
+              },
+              refinementQuery:       {
+                type:     'string',
+                optional: true
+              },
+              matchStrategyName:     {
+                type:     'string',
+                optional: true
+              },
+              matchStrategy:         {
+                type:       'object',
+                properties: {
+                  name:  {
+                    type:     'string',
+                    optional: true
+                  },
+                  rules: {
+                    type:     'array',
+                    items:    {
+                      type:       'object',
+                      properties: {
+                        terms:            {
+                          type:     'integer',
+                          optional: true
+                        },
+                        termsGreaterThan: {
+                          type:     'integer',
+                          optional: true
+                        },
+                        mustMatch:        {
+                          type:     'integer',
+                          optional: true
+                        },
+                        percentage:       {
+                          type:     'boolean',
+                          optional: true
+                        }
+                      }
+                    },
+                    optional: true
+                  }
+                },
+                optional:   true
+              },
+              biasing:               {
+                type:       'object',
+                properties: {
+                  bringToTop:    {
+                    type:     'array',
+                    items:    {
+                      type: 'string'
+                    },
+                    optional: true
+                  },
+                  augmentBiases: {
+                    type:     'boolean',
+                    optional: true
+                  },
+                  influence:     {
+                    type:     'number',
+                    optional: true
+                  }
+                },
+                optional:   true
+              },
+              skip:                  {
+                type:     'integer',
+                optional: true
+              },
+              pageSize:              {
+                type:     'integer',
+                optional: true
+              },
+              returnBinary:          {
+                type:     'boolean',
+                optional: true
+              },
+              disableAutocorrection: {
+                type:     'boolean',
+                optional: true
+              },
+              pruneRefinements:      {
+                type:     'boolean',
+                optional: true
+              },
+              sort:                  {
+                type:     'array',
+                items:    {
+                  type:       'object',
+                  properties: {
+                    field: {
+                      type:     'string',
+                      optional: true
+                    },
+                    order: {
+                      type:     'string',
+                      optional: true
+                    }
+                  }
+                },
+                optional: true
+              },
+              fields:                {
+                type:     'array',
+                items:    {
                   type: 'string'
+                },
+                optional: true
+              },
+              orFields:              {
+                type:     'array',
+                items:    {
+                  type: 'string'
+                },
+                optional: true
+              },
+              includedNavigations:   {
+                type:     'array',
+                items:    {
+                  type: 'string'
+                },
+                optional: true
+              },
+              excludedNavigations:   {
+                type:     'array',
+                items:    {
+                  type: 'string'
+                },
+                optional: true
+              },
+              refinements:           {
+                type:     'array',
+                items:    {
+                  type:       'object',
+                  properties: {
+                    navigationName: {
+                      type:     'string',
+                      optional: true
+                    },
+                    type:           {
+                      type:     'string',
+                      optional: true
+                    },
+                    _id:            {
+                      type:     'string',
+                      optional: true
+                    },
+                    exclude:        {
+                      type:     'boolean',
+                      optional: true
+                    },
+                    value:          {
+                      type:     'string',
+                      optional: true
+                    },
+                    high:           {
+                      type:     'string',
+                      optional: true
+                    },
+                    low:            {
+                      type:     'string',
+                      optional: true
+                    }
+                  }
                 },
                 optional: true
               }
             },
-            optional: true
+            optional:   true
           }
         },
-        type: 'object',
-        optional: false
+        type:       'object',
+        optional:   false
       },
-      visit: {
-        type: 'object',
+      visit:         {
+        type:       'object',
         properties: {
           customerData: {
-            type: 'object',
+            type:       'object',
             properties: {
               visitorId: {
                 type: 'string'
@@ -468,615 +743,1022 @@ module.exports={
                 type: 'string'
               }
             },
-            strict: true
+            strict:     true
           }
         },
-        strict: true
+        strict:     true
       },
-      metadata: {
-        type: 'array',
-        items: {
-          type: 'object',
+      metadata:      {
+        type:     'array',
+        items:    {
+          type:       'object',
           properties: {
-            key: {
+            key:   {
               type: 'string'
             },
             value: {
               type: 'string'
             }
           },
-          strict: true
+          strict:     true
         },
         optional: true
       }
     },
-    strict: true
+    strict:     true
   },
   sanitization: {
     properties: {
       clientVersion: {
         properties: {
-          raw: {
+          raw:        {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
             ]
           },
-          major: {
-            type: 'integer',
+          major:      {
+            type:     'integer',
             optional: true
           },
-          minor: {
-            type: 'integer',
+          minor:      {
+            type:     'integer',
             optional: true
           },
-          patch: {
-            type: 'integer',
+          patch:      {
+            type:     'integer',
             optional: true
           },
           prerelease: {
-            type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            items: {},
+            type:     'array',
+            items:    {
+              maxLength: 10000,
+              rules:     [
+                'trim',
+                'lower'
+              ]
+            },
             optional: true
           },
-          build: {
-            type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            items: {},
+          build:      {
+            type:     'array',
+            items:    {
+              maxLength: 10000,
+              rules:     [
+                'trim',
+                'lower'
+              ]
+            },
             optional: true
           },
-          version: {
+          version:    {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
             ],
-            optional: true
+            optional:  true
           }
         },
-        strict: true
+        strict:     true
       },
-      responseId: {
+      responseId:    {
         maxLength: 10000,
-        rules: [
+        rules:     [
           'trim',
           'lower'
         ],
-        optional: true
+        optional:  true
       },
-      eventType: {
+      eventType:     {
         maxLength: 10000,
-        rules: [
+        rules:     [
           'trim'
         ]
       },
-      customer: {
+      customer:      {
         properties: {
-          id: {
+          id:   {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
             ]
           },
           area: {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim'
             ],
-            optional: false,
-            def: 'Production'
+            optional:  false,
+            def:       'Production'
           }
         },
-        strict: true
+        strict:     true
       },
-      search: {
+      search:        {
         properties: {
-          origin: {
+          origin:              {
             properties: {
-              sayt: {
+              sayt:               {
                 optional: false,
-                def: false
+                def:      false
               },
-              dym: {
+              dym:                {
                 optional: false,
-                def: false
+                def:      false
               },
-              search: {
+              search:             {
                 optional: false,
-                def: false
+                def:      false
               },
-              recommendations: {
+              recommendations:    {
                 optional: false,
-                def: false
+                def:      false
               },
-              autosearch: {
+              autosearch:         {
                 optional: false,
-                def: false
+                def:      false
               },
-              navigation: {
+              navigation:         {
                 optional: false,
-                def: false
+                def:      false
               },
               collectionSwitcher: {
                 optional: false,
-                def: false
+                def:      false
               }
             },
-            strict: true
+            strict:     true
           },
-          totalRecordCount: {
+          id:                  {
+            maxLength: 10000,
+            rules:     [
+              'trim',
+              'lower'
+            ]
+          },
+          totalRecordCount:    {
             type: 'integer'
           },
-          area: {
+          area:                {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim'
             ]
           },
-          biasingProfile: {
+          biasingProfile:      {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
             ]
           },
-          query: {
+          query:               {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
             ],
-            exec: {}
+            exec:      function (schema, post) {
+              if (typeof post === 'string') {
+                // Strip using blacklist
+                post = post.replace(utils.regex.BLACKLIST_STRIPING_REGEX, ' ');
+
+                // Replace all whitespace combinations with a single space
+                post = post.replace(/\s\s+/g, ' ');
+
+                post = post.trim();
+
+                return post;
+              } else {
+                return post;
+              }
+            }
           },
-          originalQuery: {
+          originalQuery:       {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
             ],
-            exec: {}
+            exec:      function (schema, post) {
+              if (typeof post === 'string') {
+                // Strip using blacklist
+                post = post.replace(utils.regex.BLACKLIST_STRIPING_REGEX, ' ');
+
+                // Replace all whitespace combinations with a single space
+                post = post.replace(/\s\s+/g, ' ');
+
+                post = post.trim();
+
+                return post;
+              } else {
+                return post;
+              }
+            }
           },
-          template: {},
-          pageInfo: {
+          correctedQuery:      {
+            maxLength: 10000,
+            rules:     [
+              'trim',
+              'lower'
+            ],
+            exec:      function (schema, post) {
+              if (typeof post === 'string') {
+                // Strip using blacklist
+                post = post.replace(utils.regex.BLACKLIST_STRIPING_REGEX, ' ');
+
+                // Replace all whitespace combinations with a single space
+                post = post.replace(/\s\s+/g, ' ');
+
+                post = post.trim();
+
+                return post;
+              } else {
+                return post;
+              }
+            }
+          },
+          warnings:            {
+            type:  'array',
+            items: {
+              maxLength: 10000,
+              rules:     [
+                'trim',
+                'lower'
+              ]
+            }
+          },
+          errors:              {
+            maxLength: 10000,
+            rules:     [
+              'trim',
+              'lower'
+            ]
+          },
+          template:            {
+            properties: {
+              name:     {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              ruleName: {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              _id:      {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              }
+            },
+            strict:     true
+          },
+          pageInfo:            {
             properties: {
               recordStart: {
                 type: 'integer'
               },
-              recordEnd: {
+              recordEnd:   {
                 type: 'integer'
               }
             },
-            strict: true
+            strict:     true
           },
-          relatedQueries: {
-            type: 'array',
+          relatedQueries:      {
+            type:  'array',
+            items: {
+              maxLength: 10000,
+              rules:     [
+                'trim',
+                'lower'
+              ]
+            }
+          },
+          rewrites:            {
+            type:  'array',
+            items: {
+              maxLength: 10000,
+              rules:     [
+                'trim',
+                'lower'
+              ]
+            }
+          },
+          redirect:            {
             maxLength: 10000,
-            rules: [
+            rules:     [
               'trim',
               'lower'
-            ],
-            items: {}
+            ]
           },
-          rewrites: {
-            type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            items: {}
-          },
-          siteParams: {
-            type: 'array',
+          siteParams:          {
+            type:  'array',
             items: {
               properties: {
-                key: {
+                key:   {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
                 value: {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 }
               },
-              strict: true
+              strict:     true
             }
           },
-          matchStrategy: {
+          matchStrategy:       {
             properties: {
-              name: {
+              name:  {
                 maxLength: 10000,
-                rules: [
+                rules:     [
                   'trim',
                   'lower'
                 ]
               },
               rules: {
-                type: 'array',
+                type:  'array',
                 items: {
                   properties: {
-                    terms: {
+                    terms:            {
                       type: 'integer'
                     },
                     termsGreaterThan: {
                       type: 'integer'
                     },
-                    mustMatch: {
+                    mustMatch:        {
                       type: 'integer'
                     },
-                    percentage: {}
+                    percentage:       {}
                   },
-                  strict: true
+                  strict:     true
                 }
               }
             },
-            strict: true
+            strict:     true
           },
           availableNavigation: {
-            type: 'array',
+            type:  'array',
             items: {
               properties: {
-                name: {
+                name:            {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                displayName: {
+                displayName:     {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                range: {},
-                or: {},
+                range:           {},
+                or:              {},
+                ignored:         {},
                 moreRefinements: {},
-                type: {
+                _id:             {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                metadata: {
-                  type: 'array',
+                type:            {
+                  maxLength: 10000,
+                  rules:     [
+                    'trim',
+                    'lower'
+                  ]
+                },
+                metadata:        {
+                  type:  'array',
                   items: {
                     properties: {
-                      key: {
+                      key:   {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
                       value: {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       }
                     },
-                    strict: true
+                    strict:     true
                   }
                 },
-                refinements: {
-                  type: 'array',
+                refinements:     {
+                  type:  'array',
                   items: {
                     properties: {
-                      type: {
+                      type:    {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
-                      count: {
+                      _id:     {
+                        maxLength: 10000,
+                        rules:     [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      count:   {
                         type: 'integer'
                       },
-                      value: {
+                      exclude: {},
+                      value:   {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
-                      high: {
+                      high:    {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
-                      low: {
+                      low:     {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       }
                     },
-                    strict: true
+                    strict:     true
                   }
                 }
               },
-              strict: true
+              strict:     true
             }
           },
-          selectedNavigation: {
-            type: 'array',
+          selectedNavigation:  {
+            type:  'array',
             items: {
               properties: {
-                name: {
+                name:            {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                displayName: {
+                displayName:     {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                range: {},
-                or: {},
+                range:           {},
+                or:              {},
+                ignored:         {},
                 moreRefinements: {},
-                type: {
+                _id:             {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                metadata: {
-                  type: 'array',
+                type:            {
+                  maxLength: 10000,
+                  rules:     [
+                    'trim',
+                    'lower'
+                  ]
+                },
+                metadata:        {
+                  type:  'array',
                   items: {
                     properties: {
-                      key: {
+                      key:   {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
                       value: {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       }
                     },
-                    strict: true
+                    strict:     true
                   }
                 },
-                refinements: {
-                  type: 'array',
+                refinements:     {
+                  type:  'array',
                   items: {
                     properties: {
-                      type: {
+                      type:    {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
-                      count: {
+                      _id:     {
+                        maxLength: 10000,
+                        rules:     [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      count:   {
                         type: 'integer'
                       },
-                      value: {
+                      exclude: {},
+                      value:   {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
-                      high: {
+                      high:    {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       },
-                      low: {
+                      low:     {
                         maxLength: 10000,
-                        rules: [
+                        rules:     [
                           'trim',
                           'lower'
                         ]
                       }
                     },
-                    strict: true
+                    strict:     true
                   }
                 }
               },
-              strict: true
+              strict:     true
             }
           },
-          records: {
-            type: 'array',
+          records:             {
+            type:  'array',
             items: {
               properties: {
-                allMeta: {
-                  strict: false
+                allMeta:           {
+                  properties: {
+                    sku:       {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ],
+                      type:      'string'
+                    },
+                    productId: {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ],
+                      type:      'string'
+                    }
+                  },
+                  strict:     true
                 },
-                _id: {
+                refinementMatches: {
+                  type:  'array',
+                  items: {
+                    properties: {
+                      name:   {
+                        maxLength: 10000,
+                        rules:     [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      values: {
+                        type:  'array',
+                        items: {
+                          properties: {
+                            value: {
+                              maxLength: 10000,
+                              rules:     [
+                                'trim',
+                                'lower'
+                              ]
+                            },
+                            count: {
+                              type: 'integer'
+                            }
+                          },
+                          strict:     true
+                        }
+                      }
+                    },
+                    strict:     true
+                  }
+                },
+                _id:               {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                _u: {
+                _u:                {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                _t: {
+                _t:                {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 },
-                collection: {
+                collection:        {
                   maxLength: 10000,
-                  rules: [
+                  rules:     [
                     'trim',
                     'lower'
                   ]
                 }
               },
-              strict: true
+              strict:     true
             }
           },
-          didYouMean: {
-            type: 'array',
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            items: {}
+          didYouMean:          {
+            type:  'array',
+            items: {
+              maxLength: 10000,
+              rules:     [
+                'trim',
+                'lower'
+              ]
+            }
           },
-          originalRequest: {
+          originalRequest:     {
             properties: {
-              collection: {
+              collection:            {
                 maxLength: 10000,
-                rules: [
+                rules:     [
                   'trim',
                   'lower'
                 ]
               },
-              area: {
+              area:                  {
                 maxLength: 10000,
-                rules: [
+                rules:     [
                   'trim',
                   'lower'
                 ]
               },
-              query: {
+              sessionId:             {
                 maxLength: 10000,
-                rules: [
+                rules:     [
                   'trim',
                   'lower'
                 ]
               },
-              skip: {
+              visitorId:             {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              biasingProfile:        {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              language:              {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              customUrlParams:       {
+                type:  'array',
+                items: {
+                  properties: {
+                    key:   {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    value: {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    }
+                  },
+                  strict:     true
+                }
+              },
+              query:                 {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ],
+                exec:      function (schema, post) {
+                  if (typeof post === 'string') {
+                    // Strip using blacklist
+                    post = post.replace(utils.regex.BLACKLIST_STRIPING_REGEX, ' ');
+
+                    // Replace all whitespace combinations with a single space
+                    post = post.replace(/\s\s+/g, ' ');
+
+                    post = post.trim();
+
+                    return post;
+                  } else {
+                    return post;
+                  }
+                }
+              },
+              refinementQuery:       {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              matchStrategyName:     {
+                maxLength: 10000,
+                rules:     [
+                  'trim',
+                  'lower'
+                ]
+              },
+              matchStrategy:         {
+                properties: {
+                  name:  {
+                    maxLength: 10000,
+                    rules:     [
+                      'trim',
+                      'lower'
+                    ]
+                  },
+                  rules: {
+                    type:  'array',
+                    items: {
+                      properties: {
+                        terms:            {
+                          type: 'integer'
+                        },
+                        termsGreaterThan: {
+                          type: 'integer'
+                        },
+                        mustMatch:        {
+                          type: 'integer'
+                        },
+                        percentage:       {}
+                      },
+                      strict:     true
+                    }
+                  }
+                },
+                strict:     true
+              },
+              biasing:               {
+                properties: {
+                  bringToTop:    {
+                    type:  'array',
+                    items: {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    }
+                  },
+                  augmentBiases: {},
+                  influence:     {
+                    type: 'number'
+                  }
+                },
+                strict:     true
+              },
+              skip:                  {
                 type: 'integer'
               },
-              pageSize: {
+              pageSize:              {
                 type: 'integer'
               },
-              sort: {
-                type: 'array',
+              returnBinary:          {},
+              disableAutocorrection: {},
+              pruneRefinements:      {},
+              sort:                  {
+                type:  'array',
                 items: {
                   properties: {
                     field: {
                       maxLength: 10000,
-                      rules: [
+                      rules:     [
                         'trim',
                         'lower'
                       ]
                     },
                     order: {
                       maxLength: 10000,
-                      rules: [
+                      rules:     [
                         'trim',
                         'lower'
                       ]
                     }
                   },
-                  strict: true
+                  strict:     true
                 }
               },
-              fields: {
-                type: 'array',
-                maxLength: 10000,
-                rules: [
-                  'trim',
-                  'lower'
-                ],
-                items: {}
+              fields:                {
+                type:  'array',
+                items: {
+                  maxLength: 10000,
+                  rules:     [
+                    'trim',
+                    'lower'
+                  ]
+                }
+              },
+              orFields:              {
+                type:  'array',
+                items: {
+                  maxLength: 10000,
+                  rules:     [
+                    'trim',
+                    'lower'
+                  ]
+                }
+              },
+              includedNavigations:   {
+                type:  'array',
+                items: {
+                  maxLength: 10000,
+                  rules:     [
+                    'trim',
+                    'lower'
+                  ]
+                }
+              },
+              excludedNavigations:   {
+                type:  'array',
+                items: {
+                  maxLength: 10000,
+                  rules:     [
+                    'trim',
+                    'lower'
+                  ]
+                }
+              },
+              refinements:           {
+                type:  'array',
+                items: {
+                  properties: {
+                    navigationName: {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    type:           {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    _id:            {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    exclude:        {},
+                    value:          {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    high:           {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    },
+                    low:            {
+                      maxLength: 10000,
+                      rules:     [
+                        'trim',
+                        'lower'
+                      ]
+                    }
+                  },
+                  strict:     true
+                }
               }
             },
-            strict: true
+            strict:     true
           }
         },
-        strict: true
+        strict:     true
       },
-      visit: {
+      visit:         {
         properties: {
           customerData: {
             properties: {
               visitorId: {
                 maxLength: 10000,
-                rules: [
+                rules:     [
                   'trim',
                   'lower'
                 ]
               },
               sessionId: {
                 maxLength: 10000,
-                rules: [
+                rules:     [
                   'trim',
                   'lower'
                 ]
               }
             },
-            strict: true
+            strict:     true
           }
         },
-        strict: true
+        strict:     true
       },
-      metadata: {
-        type: 'array',
-        items: {
+      metadata:      {
+        type:     'array',
+        items:    {
           properties: {
-            key: {
+            key:   {
               maxLength: 10000,
-              rules: [
+              rules:     [
                 'trim',
                 'lower'
               ]
             },
             value: {
               maxLength: 10000,
-              rules: [
+              rules:     [
                 'trim',
                 'lower'
               ]
             }
           },
-          strict: true
+          strict:     true
         },
         optional: true
       }
     },
-    strict: true
+    strict:     true
   }
 }

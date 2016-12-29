@@ -12,7 +12,7 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
-describe('search tests', ()=> {
+describe('search tests', () => {
   it('should accept valid search event without search id', (done) => {
     const expectedEvent = {
       search:    {
@@ -110,7 +110,7 @@ describe('search tests', ()=> {
 
   it('should accept valid search event with records', (done) => {
     const expectedEvent = {
-      search:    searchEvent.search,
+      search:    _.cloneDeep(searchEvent.search),
       eventType: 'search',
       customer:  {
         id:   'testcustomer',
@@ -139,7 +139,17 @@ describe('search tests', ()=> {
       search:             false
     };
 
-    // const lowercaseExpectedEvent = lowercaseAllValues(expectedEvent);
+    // Stripped by sanitization
+    expectedEvent.search.records = expectedEvent.search.records.map((value) => {
+      value.allMeta = _.pick(value.allMeta, [
+        'sku',
+        'productId'
+      ]);
+      return value;
+    });
+
+    // Stripped by sanitization
+    delete expectedEvent.search.template.zones;
 
     const gbTrackerCore = new GbTrackerCore(expectedEvent.customer.id, expectedEvent.customer.area);
 
@@ -156,6 +166,9 @@ describe('search tests', ()=> {
       // the 'lowercaseAllValues' function does somewhat mangle the object,
       // but does it consistently for both cases and ensures case insensitivity on comparison
       expect(lowercaseAllValues(event.search)).to.eql(lowercaseAllValues(expectedEvent.search));
+      expect(event.search.records[0].allMeta.sku).to.eql('some sku');
+      expect(event.search.records[0].allMeta.productId).to.eql('some id');
+      expect(_.size(event.search.records[0].allMeta)).to.eql(2);
       expect(event.eventType).to.eql(expectedEvent.eventType);
       expect(event.customer).to.eql(expectedEvent.customer);
       expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
@@ -189,8 +202,8 @@ describe('search tests', ()=> {
       expect(segment.clientVersion).to.not.be.undefined;
       expect(LZString.decompressFromEncodedURIComponent(segment.segment)).to.not.eql(null);
 
-      // 6 for search
-      if (segmentCounter > 5) {
+      // 3 for search
+      if (segmentCounter > 3) {
         done();
       }
     };
@@ -1409,6 +1422,8 @@ const searchEvent = {
       {
         "collection": "products2",
         "allMeta":    {
+          "sku":                           "some sku",
+          "productId":                     "some id",
           "category2":                     "Oral Care",
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
@@ -1436,6 +1451,7 @@ const searchEvent = {
       {
         "collection": "products2",
         "allMeta":    {
+          "sku":                           "sometihng",
           "category2":                     "Oral Care",
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [
@@ -1468,6 +1484,7 @@ const searchEvent = {
       {
         "collection": "products2",
         "allMeta":    {
+          "productId":                     "sometihng",
           "category2":                     "Oral Care",
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [
