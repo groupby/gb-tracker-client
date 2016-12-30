@@ -220,7 +220,7 @@ describe('search tests', () => {
       search:             false
     };
 
-    // Stripped by sanitization
+    // Everything but sku and productId stripped by sanitization
     expectedEvent.search.records = expectedEvent.search.records.map((value) => {
       value.allMeta = _.pick(value.allMeta, [
         'sku',
@@ -296,7 +296,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event that is not nested in search', (done) => {
+  it('should reject invalid search event that is not nested in search', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -347,7 +347,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing totalRecordCount', (done) => {
+  it('should reject invalid search event missing totalRecordCount', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -400,7 +400,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing pageInfo', (done) => {
+  it('should reject invalid search event missing pageInfo', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -449,7 +449,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing recordEnd', (done) => {
+  it('should reject invalid search event missing recordEnd', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -499,7 +499,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing recordStart', (done) => {
+  it('should reject invalid search event missing recordStart', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -548,7 +548,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing selectedNavigation.name', (done) => {
+  it('should reject invalid search event missing selectedNavigation.name', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -598,7 +598,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing selectedNavigation.refinements', (done) => {
+  it('should reject invalid search event missing selectedNavigation.refinements', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -647,7 +647,7 @@ describe('search tests', () => {
     });
   });
 
-  it('should reject invalid addToCart event missing query', (done) => {
+  it('should reject invalid search event missing query', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -1509,7 +1509,7 @@ const searchEvent = {
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
           "category1":                     "Personal Care",
-          "title":                         "CVS Travel Toothbrush With Colgate Toothpaste",
+          "title":                         "Travel Toothbrush With Colgate Toothpaste",
           "child":                         [
             {
               "CUSTOMER_PRICE":          "1.99",
@@ -1518,7 +1518,7 @@ const searchEvent = {
               "PRODCUT_AVAILABILITY":    "Available",
               "id":                      "234381",
               "PRODUCT_SIZE":            "1 EA",
-              "PRODUCT_SHORTNAME":       "CVS Travel Toothbrush With Colgate Toothpaste",
+              "PRODUCT_SHORTNAME":       "Travel Toothbrush With Colgate Toothpaste",
               "PRODUCT_UPCNUMBER":       "5042804753",
               "DEFAULT_SKU_IMAGE":       "m667511",
               "PRODUCT_SUBCATEGORYNAME": "Toothpaste"
@@ -1527,7 +1527,7 @@ const searchEvent = {
         },
         "_id":        "01715b58c5a82069eb1cf72e6e7a8f3d",
         "_u":         "http://gbipoccvspilot1products2.com/234381",
-        "_t":         "CVS Travel Toothbrush With Colgate Toothpaste"
+        "_t":         "Travel Toothbrush With Colgate Toothpaste"
       },
       {
         "collection": "products2",
@@ -1539,14 +1539,14 @@ const searchEvent = {
             1
           ],
           "category1":                     "Personal Care",
-          "title":                         "CVS Sensitive Toothpaste With Fluoride Extra Whitening",
+          "title":                         "Sensitive Toothpaste With Fluoride Extra Whitening",
           "child":                         [
             {
               "CUSTOMER_PRICE":              "4.99",
               "gbietl_sku_rating_rounded_0": 1,
               "PRODCUT_AVAILABILITY":        "Available",
               "PRODUCT_SIZE":                "4 OZ",
-              "PRODUCT_SHORTNAME":           "CVS Sensitive Toothpaste With Fluoride Extra Whitening",
+              "PRODUCT_SHORTNAME":           "Sensitive Toothpaste With Fluoride Extra Whitening",
               "PRODUCT_REVIEW":              "1",
               "PRODUCT_RATING":              "1",
               "PRODUCT_BRAND":               "CVS/pharmacy",
@@ -1560,7 +1560,7 @@ const searchEvent = {
         },
         "_id":        "e58d0a46807a30e1521f0ba3cd184138",
         "_u":         "http://gbipoccvspilot1products2.com/307117",
-        "_t":         "CVS Sensitive Toothpaste With Fluoride Extra Whitening"
+        "_t":         "Sensitive Toothpaste With Fluoride Extra Whitening"
       },
       {
         "collection": "products2",
@@ -1574,14 +1574,14 @@ const searchEvent = {
             3
           ],
           "category1":                     "Personal Care",
-          "title":                         "CVS Maximum Strength Sensitive Toothpaste with Fluoride, Fresh Mint",
+          "title":                         "Maximum Strength Sensitive Toothpaste with Fluoride, Fresh Mint",
           "child":                         [
             {
               "CUSTOMER_PRICE":              "4.99",
               "gbietl_sku_rating_rounded_0": 3,
               "PRODCUT_AVAILABILITY":        "Available",
               "PRODUCT_SIZE":                "4 OZ",
-              "PRODUCT_SHORTNAME":           "CVS Maximum Strength Sensitive Toothpaste with Fluoride, Fresh Mint",
+              "PRODUCT_SHORTNAME":           "Maximum Strength Sensitive Toothpaste with Fluoride, Fresh Mint",
               "PRODUCT_REVIEW":              "3",
               "PRODUCT_RATING":              "3.3333",
               "PRODUCT_BRAND":               "CVS/pharmacy",
@@ -1595,7 +1595,7 @@ const searchEvent = {
         },
         "_id":        "dfbdab08437bc562ffc32a7ab098ac34",
         "_u":         "http://gbipoccvspilot1products2.com/307118",
-        "_t":         "CVS Maximum Strength Sensitive Toothpaste with Fluoride, Fresh Mint"
+        "_t":         "Maximum Strength Sensitive Toothpaste with Fluoride, Fresh Mint"
       },
       {
         "collection": "products2",
@@ -1609,14 +1609,14 @@ const searchEvent = {
             4
           ],
           "category1":                     "Personal Care",
-          "title":                         "CVS Enamel Guard Toothpaste for Sensitive Teeth",
+          "title":                         "Enamel Guard Toothpaste for Sensitive Teeth",
           "child":                         [
             {
               "CUSTOMER_PRICE":              "4.99",
               "gbietl_sku_rating_rounded_0": 5,
               "PRODCUT_AVAILABILITY":        "Available",
               "PRODUCT_SIZE":                "4 OZ",
-              "PRODUCT_SHORTNAME":           "CVS Enamel Guard Toothpaste for Sensitive Teeth",
+              "PRODUCT_SHORTNAME":           "Enamel Guard Toothpaste for Sensitive Teeth",
               "PRODUCT_REVIEW":              "1",
               "PRODUCT_RATING":              "5",
               "PRODUCT_BRAND":               "CVS/pharmacy",
@@ -1630,7 +1630,7 @@ const searchEvent = {
         },
         "_id":        "be0a0d57285af0ac6d44e2ef2481f6be",
         "_u":         "http://gbipoccvspilot1products2.com/469084",
-        "_t":         "CVS Enamel Guard Toothpaste for Sensitive Teeth"
+        "_t":         "Enamel Guard Toothpaste for Sensitive Teeth"
       },
       {
         "collection": "products2",
@@ -1644,14 +1644,14 @@ const searchEvent = {
             4
           ],
           "category1":                     "Personal Care",
-          "title":                         "CVS Health HD Xtreme White Fluoride Anti-Cavity Whitening Toothpaste, Cool Mint",
+          "title":                         "Health HD Xtreme White Fluoride Anti-Cavity Whitening Toothpaste, Cool Mint",
           "child":                         [
             {
               "CUSTOMER_PRICE":              "3.69",
               "gbietl_sku_rating_rounded_0": 4,
               "PRODCUT_AVAILABILITY":        "Available",
               "PRODUCT_SIZE":                "5.8 OZ",
-              "PRODUCT_SHORTNAME":           "CVS Health HD Xtreme White Fluoride Anti-Cavity Whitening Toothpaste, Cool Mint",
+              "PRODUCT_SHORTNAME":           "Health HD Xtreme White Fluoride Anti-Cavity Whitening Toothpaste, Cool Mint",
               "PRODUCT_REVIEW":              "3",
               "PRODUCT_RATING":              "4.6667",
               "PRODUCT_BRAND":               "CVS/pharmacy",
@@ -1665,7 +1665,7 @@ const searchEvent = {
         },
         "_id":        "cc3736fee1a0d0cd2db084c97109a5aa",
         "_u":         "http://gbipoccvspilot1products2.com/897731",
-        "_t":         "CVS Health HD Xtreme White Fluoride Anti-Cavity Whitening Toothpaste, Cool Mint"
+        "_t":         "Health HD Xtreme White Fluoride Anti-Cavity Whitening Toothpaste, Cool Mint"
       },
       {
         "collection": "products2",
@@ -1679,14 +1679,14 @@ const searchEvent = {
             4
           ],
           "category1":                     "Personal Care",
-          "title":                         "CVS Enamel Guard Daily Anti-Cavity Toothpaste with Fluoride, Alpine Mint",
+          "title":                         "Enamel Guard Daily Anti-Cavity Toothpaste with Fluoride, Alpine Mint",
           "child":                         [
             {
               "CUSTOMER_PRICE":              "4.99",
               "gbietl_sku_rating_rounded_0": 5,
               "PRODCUT_AVAILABILITY":        "Available",
               "PRODUCT_SIZE":                "4 OZ",
-              "PRODUCT_SHORTNAME":           "CVS Enamel Guard Daily Anti-Cavity Toothpaste with Fluoride, Alpine Mint",
+              "PRODUCT_SHORTNAME":           "Enamel Guard Daily Anti-Cavity Toothpaste with Fluoride, Alpine Mint",
               "PRODUCT_REVIEW":              "1",
               "PRODUCT_RATING":              "5",
               "PRODUCT_BRAND":               "CVS/pharmacy",
@@ -1700,7 +1700,7 @@ const searchEvent = {
         },
         "_id":        "f7c02374431a00695d14cdb7e49577e6",
         "_u":         "http://gbipoccvspilot1products2.com/897738",
-        "_t":         "CVS Enamel Guard Daily Anti-Cavity Toothpaste with Fluoride, Alpine Mint"
+        "_t":         "Enamel Guard Daily Anti-Cavity Toothpaste with Fluoride, Alpine Mint"
       },
       {
         "collection": "products2",
@@ -1709,7 +1709,7 @@ const searchEvent = {
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
           "category1":                     "Personal Care",
-          "title":                         "CVS Reflective White Anticavity + Whitening Power Toothpaste, Dazzling Mint",
+          "title":                         "Reflective White Anticavity + Whitening Power Toothpaste, Dazzling Mint",
           "child":                         [
             {
               "CUSTOMER_PRICE":          "3.59",
@@ -1718,7 +1718,7 @@ const searchEvent = {
               "PRODCUT_AVAILABILITY":    "Available",
               "id":                      "909057",
               "PRODUCT_SIZE":            "4 OZ",
-              "PRODUCT_SHORTNAME":       "CVS Reflective White Anticavity + Whitening Power Toothpaste, Dazzling Mint",
+              "PRODUCT_SHORTNAME":       "Reflective White Anticavity + Whitening Power Toothpaste, Dazzling Mint",
               "PRODUCT_UPCNUMBER":       "5042845708",
               "DEFAULT_SKU_IMAGE":       "m2950419",
               "PRODUCT_SUBCATEGORYNAME": "Toothpaste"
@@ -1727,7 +1727,7 @@ const searchEvent = {
         },
         "_id":        "cfb7c606b9c9e8ee1a191fc11c4c4c80",
         "_u":         "http://gbipoccvspilot1products2.com/909057",
-        "_t":         "CVS Reflective White Anticavity + Whitening Power Toothpaste, Dazzling Mint"
+        "_t":         "Reflective White Anticavity + Whitening Power Toothpaste, Dazzling Mint"
       },
       {
         "collection": "products2",
@@ -1740,14 +1740,14 @@ const searchEvent = {
             3
           ],
           "category1":                     "Personal Care",
-          "title":                         "CVS Interdental Brushes",
+          "title":                         "Interdental Brushes",
           "child":                         [
             {
               "CUSTOMER_PRICE":              "4.99",
               "gbietl_sku_rating_rounded_0": 3,
               "PRODCUT_AVAILABILITY":        "Available",
               "PRODUCT_SIZE":                "16 EA",
-              "PRODUCT_SHORTNAME":           "CVS Interdental Brushes",
+              "PRODUCT_SHORTNAME":           "Interdental Brushes",
               "PRODUCT_REVIEW":              "2",
               "PRODUCT_RATING":              "3.5",
               "PRODUCT_BRAND":               "CVS/pharmacy",
@@ -1761,7 +1761,7 @@ const searchEvent = {
         },
         "_id":        "8512e75372e3c272fa38941ed7ab6734",
         "_u":         "http://gbipoccvspilot1products2.com/933823",
-        "_t":         "CVS Interdental Brushes"
+        "_t":         "Interdental Brushes"
       },
       {
         "collection": "products2",
@@ -1770,7 +1770,7 @@ const searchEvent = {
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
           "category1":                     "Personal Care",
-          "title":                         "CVS Health Repair and Protect Toothpaste, 3.4 OZ",
+          "title":                         "Health Repair and Protect Toothpaste, 3.4 OZ",
           "child":                         [
             {
               "CUSTOMER_PRICE":          "4.99",
@@ -1779,7 +1779,7 @@ const searchEvent = {
               "PRODCUT_AVAILABILITY":    "Available",
               "id":                      "571448",
               "PRODUCT_SIZE":            "3.4 OZ",
-              "PRODUCT_SHORTNAME":       "CVS Health Repair and Protect Toothpaste, 3.4 OZ",
+              "PRODUCT_SHORTNAME":       "Health Repair and Protect Toothpaste, 3.4 OZ",
               "PRODUCT_UPCNUMBER":       "5042853549",
               "DEFAULT_SKU_IMAGE":       "m5381431",
               "PRODUCT_SUBCATEGORYNAME": "Toothpaste"
@@ -1788,7 +1788,7 @@ const searchEvent = {
         },
         "_id":        "fc499908d2d1802269ad0ec1c705ad9f",
         "_u":         "http://gbipoccvspilot1products2.com/1090042",
-        "_t":         "CVS Health Repair and Protect Toothpaste, 3.4 OZ"
+        "_t":         "Health Repair and Protect Toothpaste, 3.4 OZ"
       },
       {
         "collection": "products2",
@@ -1797,7 +1797,7 @@ const searchEvent = {
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
           "category1":                     "Personal Care",
-          "title":                         "CVS Health Gentle Dry Mouth Anticavity Toothpaste with Fluoride Fresh Mint, 4.3 OZ",
+          "title":                         "Health Gentle Dry Mouth Anticavity Toothpaste with Fluoride Fresh Mint, 4.3 OZ",
           "child":                         [
             {
               "CUSTOMER_PRICE":          "6.99",
@@ -1806,7 +1806,7 @@ const searchEvent = {
               "PRODCUT_AVAILABILITY":    "Available",
               "id":                      "571463",
               "PRODUCT_SIZE":            "4.3 OZ",
-              "PRODUCT_SHORTNAME":       "CVS Health Gentle Dry Mouth Anticavity Toothpaste with Fluoride Fresh Mint, 4.3 OZ",
+              "PRODUCT_SHORTNAME":       "Health Gentle Dry Mouth Anticavity Toothpaste with Fluoride Fresh Mint, 4.3 OZ",
               "PRODUCT_UPCNUMBER":       "5042853488",
               "DEFAULT_SKU_IMAGE":       "m5381425",
               "PRODUCT_SUBCATEGORYNAME": "Toothpaste"
@@ -1815,7 +1815,7 @@ const searchEvent = {
         },
         "_id":        "0ba64947b8023c519f567301627302b9",
         "_u":         "http://gbipoccvspilot1products2.com/1090043",
-        "_t":         "CVS Health Gentle Dry Mouth Anticavity Toothpaste with Fluoride Fresh Mint, 4.3 OZ"
+        "_t":         "Health Gentle Dry Mouth Anticavity Toothpaste with Fluoride Fresh Mint, 4.3 OZ"
       },
       {
         "collection": "products2",
@@ -1824,7 +1824,7 @@ const searchEvent = {
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
           "category1":                     "Personal Care",
-          "title":                         "CVS Health Sensitive Enamel Guard Daily Anti-Cavity Toothpaste With Fluoride, 2CT",
+          "title":                         "Health Sensitive Enamel Guard Daily Anti-Cavity Toothpaste With Fluoride, 2CT",
           "child":                         [
             {
               "CUSTOMER_PRICE":          "8.99",
@@ -1833,7 +1833,7 @@ const searchEvent = {
               "PRODCUT_AVAILABILITY":    "Available",
               "id":                      "903500",
               "PRODUCT_SIZE":            "2 CT",
-              "PRODUCT_SHORTNAME":       "CVS Health Sensitive Enamel Guard Daily Anti-Cavity Toothpaste With Fluoride, 2CT",
+              "PRODUCT_SHORTNAME":       "Health Sensitive Enamel Guard Daily Anti-Cavity Toothpaste With Fluoride, 2CT",
               "PRODUCT_UPCNUMBER":       "5042853705",
               "DEFAULT_SKU_IMAGE":       "m5425045",
               "PRODUCT_SUBCATEGORYNAME": "Toothpaste"
@@ -1842,7 +1842,7 @@ const searchEvent = {
         },
         "_id":        "539fb4c0a28d3044a48305ec0a4fec79",
         "_u":         "http://gbipoccvspilot1products2.com/1090372",
-        "_t":         "CVS Health Sensitive Enamel Guard Daily Anti-Cavity Toothpaste With Fluoride, 2CT"
+        "_t":         "Health Sensitive Enamel Guard Daily Anti-Cavity Toothpaste With Fluoride, 2CT"
       },
       {
         "collection": "products2",
@@ -1851,7 +1851,7 @@ const searchEvent = {
           "category3":                     "Toothpaste",
           "gbietl_product_rating_buckets": [],
           "category1":                     "Personal Care",
-          "title":                         "CVS Health Maximum Strength Sensitive Toothpaste With Fluoride, 2CT",
+          "title":                         "Health Maximum Strength Sensitive Toothpaste With Fluoride, 2CT",
           "child":                         [
             {
               "CUSTOMER_PRICE":          "8.99",
@@ -1860,7 +1860,7 @@ const searchEvent = {
               "PRODCUT_AVAILABILITY":    "Available",
               "id":                      "903468",
               "PRODUCT_SIZE":            "2 CT",
-              "PRODUCT_SHORTNAME":       "CVS Health Maximum Strength Sensitive Toothpaste With Fluoride, 2CT",
+              "PRODUCT_SHORTNAME":       "Health Maximum Strength Sensitive Toothpaste With Fluoride, 2CT",
               "PRODUCT_UPCNUMBER":       "5042853583",
               "DEFAULT_SKU_IMAGE":       "m5425049",
               "PRODUCT_SUBCATEGORYNAME": "Toothpaste"
@@ -1869,7 +1869,7 @@ const searchEvent = {
         },
         "_id":        "a0d029ee713442be98b56e6b82ba8916",
         "_u":         "http://gbipoccvspilot1products2.com/1090401",
-        "_t":         "CVS Health Maximum Strength Sensitive Toothpaste With Fluoride, 2CT"
+        "_t":         "Health Maximum Strength Sensitive Toothpaste With Fluoride, 2CT"
       }
     ],
     "didYouMean":          [],
