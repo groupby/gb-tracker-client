@@ -7,9 +7,6 @@ Or it can be directly included from our CDN using:
 ```html
 <!-- Always the latest non-breaking changes -->
 <script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-3.min.js"></script>
-
-<!-- Fixed to specific version -->
-<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-3.3.2.min.js"></script>
 ```
 
 Including it directly from the CDN will create the global variable 
