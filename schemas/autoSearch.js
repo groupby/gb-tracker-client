@@ -44,8 +44,7 @@ module.exports={
       },
       responseId: {
         type: 'string',
-        pattern: /^[0-9a-f]{40}$/,
-        error: 'must be SHA1 hex'
+        optional: true
       },
       eventType: {
         type: 'string'
@@ -196,7 +195,14 @@ module.exports={
         },
         strict: true
       },
-      responseId: {},
+      responseId: {
+        maxLength: 10000,
+        rules: [
+          'trim',
+          'lower'
+        ],
+        optional: true
+      },
       eventType: {
         maxLength: 10000,
         rules: [
