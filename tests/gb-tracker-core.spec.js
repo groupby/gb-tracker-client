@@ -187,6 +187,10 @@ describe('gb-tracker-core tests', () => {
     setTimeout(() => done(), 2);
   });
 
+  it.only('sets visitor and session cookies', (done) => {
+
+  });
+
   it('should allow visitor or session IDs as numbers and coerce to strings', () => {
     const gbTrackerCore               = new GbTrackerCore('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = (event) => {};
