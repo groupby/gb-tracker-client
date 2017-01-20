@@ -127,6 +127,8 @@ app.controller('SelectEventController', [
   function (scope) {
     scope.eventTypes    = [
       'addToCart',
+      'viewCart',
+      'removeFromCart',
       'order',
       'autoSearch',
       'search',

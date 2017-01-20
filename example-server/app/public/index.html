@@ -43,7 +43,7 @@
             </div>
             <div ng-controller="ViewCartController" ng-show="selectedEvent ==='viewCart'">
                 <form novalidate class="simple-form">
-                    <H2>Add To Cart</H2>
+                    <H2>View Cart</H2>
                     <textarea ng-model="eventString" rows="20" cols="50"></textarea>
                     </br>
                     <input type="submit" ng-click="send(event)" value="Send"/>
@@ -53,7 +53,7 @@
             </div>
             <div ng-controller="RemoveFromCartController" ng-show="selectedEvent ==='removeFromCart'">
                 <form novalidate class="simple-form">
-                    <H2>Add To Cart</H2>
+                    <H2>Remove From Cart</H2>
                     <textarea ng-model="eventString" rows="20" cols="50"></textarea>
                     </br>
                     <input type="submit" ng-click="send(event)" value="Send"/>

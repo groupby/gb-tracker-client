@@ -25,8 +25,82 @@ gbTracker.setVisitor('visitorId', 'sessionId');
 
 // There are four event API's.
 
-// AddToBasket events
+// AddToCart events
 gbTracker.sendAddToCartEvent({
+ cart: {
+   id: 'asfasdf',                     // Optional
+   items:[  
+     {
+        productId:  'asdfasd',
+        title:      'super boat',
+        price:      100.21,
+        quantity:   20,
+        collection: 'testcollection',  // Optional: Defaults to 'Default'
+        category:   'boats',           // Optional
+        sku:        'asdfasf98',       // Optional
+        margin:     0.81,              // Optional
+        metadata: [                    // Optional
+           {
+             key: 'some key',
+             value: 'some value'
+           }
+         ]
+      }
+   ],
+   metadata: [                          // Optional
+      {
+        key: 'some key',
+        value: 'some value'
+      }
+    ]
+ },
+ metadata: [                            // Optional
+   {
+     key: 'some key',
+     value: 'some value'
+   }
+ ]
+});
+
+// ViewCart events
+gbTracker.sendViewCartEvent({
+ cart: {
+   id: 'asfasdf',                     // Optional
+   items:[  
+     {
+        productId:  'asdfasd',
+        title:      'super boat',
+        price:      100.21,
+        quantity:   20,
+        collection: 'testcollection',  // Optional: Defaults to 'Default'
+        category:   'boats',           // Optional
+        sku:        'asdfasf98',       // Optional
+        margin:     0.81,              // Optional
+        metadata: [                    // Optional
+           {
+             key: 'some key',
+             value: 'some value'
+           }
+         ]
+      }
+   ],
+   metadata: [                          // Optional
+      {
+        key: 'some key',
+        value: 'some value'
+      }
+    ]
+ },
+ metadata: [                            // Optional
+   {
+     key: 'some key',
+     value: 'some value'
+   }
+ ]
+});
+
+// RemoveFromCart events
+gbTracker.sendRemoveFromCartEvent({
  cart: {
    id: 'asfasdf',                     // Optional
    items:[  
