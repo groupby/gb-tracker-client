@@ -2,6 +2,7 @@ const chai   = require('chai');
 const expect = chai.expect;
 const diff   = require('deep-diff').diff;
 var LZString = require('lz-string/libs/lz-string.min.js');
+const jsdom = require('jsdom');
 
 window                = false;
 document              = false;
@@ -187,8 +188,14 @@ describe('gb-tracker-core tests', () => {
     setTimeout(() => done(), 2);
   });
 
-  it.only('sets visitor and session cookies', (done) => {
+  it.only('sets visitor and session cookies', () => {
+    const window = require('cookies-js')(jsdom.jsdom().parentWindow);
 
+    expect(window.cookieJar)
+
+    GbTrackerCore.__overrideCookiesLib(window);
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.autoSetVisitor();
   });
 
   it('should allow visitor or session IDs as numbers and coerce to strings', () => {
