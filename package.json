@@ -31,6 +31,7 @@
     "istanbul": "^0.4.3",
     "jsdom": "^9.9.1",
     "lodash": "^4.16.6",
+    "moment": "^2.17.1",
     "stream-combiner2": "^1.1.1",
     "stringify-object": "3.0.0",
     "supertest": "^2.0.1",
