@@ -1,16 +1,18 @@
 env:
-  es6: false
+  es6: true
   node: true
-  browser: true
   mocha: true
+  browser: true
 extends: 'eslint:recommended'
+plugins:
+  - no-only-tests
 rules:
-  key-spacing:
-    - warn
-    - {align: value}
+  no-only-tests/no-only-tests:
+    - error
   indent:
     - error
     - 2
+    - {"SwitchCase": 1}
   linebreak-style:
     - error
     - unix
@@ -21,12 +23,15 @@ rules:
   semi:
     - error
     - always
+  no-console:
+    - off
+  no-invalid-this:
+    - error
   no-magic-numbers:
-    - warn
-    - {ignore: [-1, 0, 1], ignoreArrayIndexes: true}
+    - off
   no-multi-spaces:
     - error
-    - {exceptions: {VariableDeclarator: true, ImportDeclaration: true}}
+    - {exceptions: {VariableDeclarator: true, ImportDeclaration: true, Property: true, AssignmentExpression: true}}
   no-sequences:
     - error
   no-warning-comments:
@@ -63,18 +68,16 @@ rules:
     - error
   space-infix-ops:
     - error
-  no-console:
-    - off # Can only rely on console logging in the browser
-
-#  ES6 features ignored
-#  arrow-parens:
-#    - error
-#    - never
-#  no-var:
-#    - error
-#  prefer-arrow-callback:
-#    - error
-#  prefer-const:
-#    - warn
-#  prefer-template:
-#    - error
+  arrow-parens:
+    - error
+    - always
+  arrow-spacing:
+    - error
+  no-var:
+    - error
+  prefer-arrow-callback:
+    - error
+  prefer-const:
+    - warn
+  prefer-template:
+    - error
