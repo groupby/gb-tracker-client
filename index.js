@@ -1,3 +1,3 @@
-const gbTrackerCore = require('./lib/gb-tracker-core');
+var gbTrackerCore = require('./bin/lib');
 
 module.exports = gbTrackerCore;

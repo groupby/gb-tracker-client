@@ -117,7 +117,7 @@ describe('autoSearch tests', ()=> {
     gbTrackerCore.setVisitor('visitor', 'session');
 
     gbTrackerCore.setInvalidEventCallback((event, error) => {
-      expect(error).to.match(/responseId: must be SHA1 hex/);
+      expect(error).to.match(/responseId: is missing/);
       done();
     });
 

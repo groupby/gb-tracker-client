@@ -1,9 +1,10 @@
-const gulp      = require('gulp');
-const mocha     = require('gulp-mocha');
-const eslint    = require('gulp-eslint');
-const istanbul  = require('gulp-istanbul');
-const gulpIf    = require('gulp-if');
+const gulp     = require('gulp');
+const mocha    = require('gulp-mocha');
+const eslint   = require('gulp-eslint');
+const istanbul = require('gulp-istanbul');
+const gulpIf   = require('gulp-if');
 
+const nodeExternals = require('webpack-node-externals');
 const path          = require('path');
 const webpack       = require('webpack');
 const webpackStream = require('webpack-stream');
@@ -32,7 +33,20 @@ gulp.task('build:normal', () => gulp.src('lib/gb-tracker.js')
   .pipe(webpackStream(webpackConfig))
   .pipe(gulp.dest('dist')));
 
+gulp.task('build:bin', () => gulp.src('lib/gb-tracker-core.js')
+  .pipe(webpackStream(Object.assign({}, webpackConfig, {
+    entry:   ['./lib/gb-tracker-core.js'],
+    output:    {
+      filename:      'lib.js',
+      libraryTarget: 'commonjs2'
+    },
+    target:    'node',
+    externals: [nodeExternals()]
+  })))
+  .pipe(gulp.dest('bin')));
+
 gulp.task('build', [
+  'build:bin',
   'build:normal',
   'build:minify'
 ]);
@@ -48,8 +62,11 @@ gulp.task('test:dirty', () => {
     .pipe(mocha({reporter: 'spec'}));
 });
 
-gulp.task('pre-test', () => {
-  return gulp.src(['lib/gb-tracker-core.js', 'lib/utils.js'])
+gulp.task('pre-test', ['build:bin'], () => {
+  return gulp.src([
+    'lib/gb-tracker-core.js',
+    'lib/utils.js'
+  ])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
