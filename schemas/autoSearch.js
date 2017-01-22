@@ -44,7 +44,7 @@ module.exports={
       },
       responseId: {
         type: 'string',
-        optional: true
+        optional: false
       },
       eventType: {
         type: 'string'
