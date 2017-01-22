@@ -89,7 +89,7 @@ describe('gb-tracker-core tests', () => {
   it('should require that visitor information is set before events are sent', () => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
-    expect(() => gbTrackerCore.sendAddToCartEvent({})).to.throw(/visitor/);
+    expect(() => gbTrackerCore.sendAddToCartEvent({})).to.throw(/autoSetVisitor/);
   });
 
   it('should validate input to setVisitor', () => {
@@ -233,7 +233,7 @@ describe('gb-tracker-core tests', () => {
 
     const visitorCookieValue = uuid.v4();
     const sessionCookieValue = uuid.v4();
-    CookiesLib.set(GbTrackerCore.VISITOR_COOKIE_KEY, visitorCookieValue);
+    CookiesLib.set(GbTrackerCore.VISITOR_COOKIE_KEY, visitorCookieValue, {expires: Infinity});
     CookiesLib.set(GbTrackerCore.SESSION_COOKIE_KEY, sessionCookieValue, {expires: GbTrackerCore.SESSION_TIMEOUT_SEC});
 
     expect(CookiesLib.get(GbTrackerCore.VISITOR_COOKIE_KEY)).to.eql(visitorCookieValue);
@@ -259,7 +259,7 @@ describe('gb-tracker-core tests', () => {
     expect(moment(visitorCookie.expires).year()).to.eql(9999);
   });
 
-  it.only('sets visitor and session cookies, and keeps loginId locally', () => {
+  it('sets visitor and session cookies, and keeps loginId locally', () => {
     const cookieJar = jsdom.createCookieJar();
 
     const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
@@ -287,6 +287,117 @@ describe('gb-tracker-core tests', () => {
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTrackerCore.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
     expect(moment(visitorCookie.expires).year()).to.eql(9999);
+  });
+
+  it('autoSetVisitor overrides setVisitor', () => {
+    const window     = jsdom.jsdom().defaultView;
+    const CookiesLib = require('cookies-js')(window);
+
+    GbTrackerCore.__overrideCookiesLib(CookiesLib);
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.setVisitor(1,1);
+    gbTrackerCore.autoSetVisitor();
+
+    expect(CookiesLib.get(GbTrackerCore.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTrackerCore.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+  });
+
+  it('autoSetVisitor ignores setVisitor', () => {
+    const window     = jsdom.jsdom().defaultView;
+    const CookiesLib = require('cookies-js')(window);
+
+    GbTrackerCore.__overrideCookiesLib(CookiesLib);
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.autoSetVisitor();
+    gbTrackerCore.setVisitor(1,1);
+
+    expect(CookiesLib.get(GbTrackerCore.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTrackerCore.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+  });
+
+  it('sending events refreshes session expiry when autoSetVisitor is used', (done) => {
+    const cookieJar = jsdom.createCookieJar();
+
+    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const CookiesLib = require('cookies-js')(window);
+
+    expect(CookiesLib.get(GbTrackerCore.VISITOR_COOKIE_KEY)).to.be.undefined;
+    expect(CookiesLib.get(GbTrackerCore.SESSION_COOKIE_KEY)).to.be.undefined;
+
+    const SHORT_EXPIRY_SEC = 5;
+
+    const visitorCookieValue = uuid.v4();
+    const sessionCookieValue = uuid.v4();
+    CookiesLib.set(GbTrackerCore.VISITOR_COOKIE_KEY, visitorCookieValue, {expires: Infinity});
+    CookiesLib.set(GbTrackerCore.SESSION_COOKIE_KEY, sessionCookieValue, {expires: SHORT_EXPIRY_SEC});
+
+    GbTrackerCore.__overrideCookiesLib(CookiesLib);
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.autoSetVisitor();
+
+    let sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTrackerCore.SESSION_COOKIE_KEY});
+    expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(SHORT_EXPIRY_SEC, 'seconds').valueOf());
+
+    gbTrackerCore.__private.sendEvent = () => {
+      sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTrackerCore.SESSION_COOKIE_KEY});
+      expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTrackerCore.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
+      done();
+    };
+
+    gbTrackerCore.sendAddToCartEvent({
+      cart:      {
+        items: [
+          {
+            productId:  'asdfasd',
+            category:   'boats',
+            collection: 'boatssrus',
+            title:      'boats',
+            sku:        'asdfasf98',
+            quantity:   10,
+            price:      100.21
+          }
+        ]
+      }
+    });
+  });
+
+  it('sending events does not set session when autoSetVisitor is not used', (done) => {
+    const cookieJar = jsdom.createCookieJar();
+
+    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const CookiesLib = require('cookies-js')(window);
+
+    expect(CookiesLib.get(GbTrackerCore.VISITOR_COOKIE_KEY)).to.be.undefined;
+    expect(CookiesLib.get(GbTrackerCore.SESSION_COOKIE_KEY)).to.be.undefined;
+
+    GbTrackerCore.__overrideCookiesLib(CookiesLib);
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    gbTrackerCore.setVisitor(1, 1);
+
+    let sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTrackerCore.SESSION_COOKIE_KEY});
+    expect(sessionCookie).to.be.undefined;
+
+    gbTrackerCore.__private.sendEvent = () => {
+      sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTrackerCore.SESSION_COOKIE_KEY});
+      expect(sessionCookie).to.be.undefined;
+      done();
+    };
+
+    gbTrackerCore.sendAddToCartEvent({
+      cart:      {
+        items: [
+          {
+            productId:  'asdfasd',
+            category:   'boats',
+            collection: 'boatssrus',
+            title:      'boats',
+            sku:        'asdfasf98',
+            quantity:   10,
+            price:      100.21
+          }
+        ]
+      }
+    });
   });
 
   it('should allow visitor or session IDs as numbers and coerce to strings', () => {
