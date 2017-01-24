@@ -335,6 +335,7 @@ describe('gb-tracker-core tests', () => {
 
     let sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(SHORT_EXPIRY_SEC, 'seconds').valueOf());
+    expect(moment(sessionCookie.expires).valueOf()).to.be.least(moment().add(SHORT_EXPIRY_SEC - 2, 'seconds').valueOf());
 
     gbTrackerCore.__private.sendEvent = () => {
       sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
