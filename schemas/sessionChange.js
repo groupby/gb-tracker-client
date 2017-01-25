@@ -89,6 +89,10 @@ module.exports={
               },
               sessionId: {
                 type: 'string'
+              },
+              loginId: {
+                type: 'string',
+                optional: true
               }
             },
             strict: true
@@ -244,6 +248,13 @@ module.exports={
                 ]
               },
               sessionId: {
+                maxLength: 10000,
+                rules: [
+                  'trim',
+                  'lower'
+                ]
+              },
+              loginId: {
                 maxLength: 10000,
                 rules: [
                   'trim',

@@ -1,3 +1,4 @@
+/*eslint  no-global-assign: "off"*/
 const chai   = require('chai');
 const expect = chai.expect;
 

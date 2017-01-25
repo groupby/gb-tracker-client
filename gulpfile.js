@@ -1,8 +1,8 @@
-const gulp      = require('gulp');
-const mocha     = require('gulp-mocha');
-const eslint    = require('gulp-eslint');
-const istanbul  = require('gulp-istanbul');
-const gulpIf    = require('gulp-if');
+const gulp     = require('gulp');
+const mocha    = require('gulp-mocha');
+const eslint   = require('gulp-eslint');
+const istanbul = require('gulp-istanbul');
+const gulpIf   = require('gulp-if');
 
 const path          = require('path');
 const webpack       = require('webpack');
@@ -23,12 +23,12 @@ gulp.task('build:minify', () => {
     ]
   });
 
-  return gulp.src('lib/gb-tracker.js')
+  return gulp.src(['lib/gb-tracker-window.js'])
     .pipe(webpackStream(minConfig))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build:normal', () => gulp.src('lib/gb-tracker.js')
+gulp.task('build:normal', () => gulp.src(['lib/gb-tracker-window.js'])
   .pipe(webpackStream(webpackConfig))
   .pipe(gulp.dest('dist')));
 
@@ -48,8 +48,11 @@ gulp.task('test:dirty', () => {
     .pipe(mocha({reporter: 'spec'}));
 });
 
-gulp.task('pre-test', () => {
-  return gulp.src(['lib/gb-tracker-core.js', 'lib/utils.js'])
+gulp.task('pre-test', ['build'], () => {
+  return gulp.src([
+    'lib/gb-tracker-core.js',
+    'lib/utils.js'
+  ])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
@@ -71,13 +74,17 @@ gulp.task('test:coverage', ['pre-test'], () => {
 });
 
 const lint = () => {
-  return gulp.src('lib/gb-tracker-core.js')
+  return gulp.src([
+    'lib/gb-tracker-core.js',
+    'lib/utils.js',
+    'tests/**/*.js'
+  ], {base: './'})
     .pipe(eslint({
       fix: true
     }))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
-    .pipe(gulpIf(isFixed, gulp.dest('./lib')))
+    .pipe(gulpIf(isFixed, gulp.dest('./')))
     .once('error', () => {
       console.error('lint failed');
       process.exit(1);

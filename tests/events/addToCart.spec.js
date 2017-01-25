@@ -1,6 +1,6 @@
+/*eslint  no-global-assign: "off"*/
 const chai   = require('chai');
 const expect = chai.expect;
-const diff   = require('deep-diff').diff;
 
 window                = false;
 document              = false;
@@ -8,9 +8,9 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTrackerCore = require('../../lib/gb-tracker-core');
+const GbTracker = require('../../index');
 
-describe('addToCart tests', ()=> {
+describe('addToCart tests', () => {
   it('should accept valid addToCart event', (done) => {
     const expectedEvent = {
       cart:      {
@@ -44,13 +44,13 @@ describe('addToCart tests', ()=> {
       }
     };
 
-    const gbTrackerCore = new GbTrackerCore(expectedEvent.customer.id, expectedEvent.customer.area);
+    const gbTracker = new GbTracker(expectedEvent.customer.id, expectedEvent.customer.area);
 
-    gbTrackerCore.setInvalidEventCallback(() => {
+    gbTracker.setInvalidEventCallback(() => {
       done('fail');
     });
 
-    gbTrackerCore.__private.sendEvent = (event) => {
+    gbTracker.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
         return;
       }
@@ -65,15 +65,15 @@ describe('addToCart tests', ()=> {
       done();
     };
 
-    gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
+    gbTracker.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
-    gbTrackerCore.sendAddToCartEvent({
+    gbTracker.sendAddToCartEvent({
       cart: expectedEvent.cart
     });
   });
 
   it('should reject invalid addToCart event that is not nested in cart', (done) => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
@@ -107,7 +107,7 @@ describe('addToCart tests', ()=> {
   });
 
   it('should reject invalid addToCart event that is missing productId', (done) => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
@@ -143,7 +143,7 @@ describe('addToCart tests', ()=> {
   });
 
   it('should reject invalid addToCart event that is missing quantity', (done) => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
@@ -179,7 +179,7 @@ describe('addToCart tests', ()=> {
   });
 
   it('should reject invalid addToCart event that is missing price', (done) => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
@@ -215,7 +215,7 @@ describe('addToCart tests', ()=> {
   });
 
   it('should reject invalid addToCart event that is missing title', (done) => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
@@ -251,7 +251,7 @@ describe('addToCart tests', ()=> {
   });
 
   it('should NOT reject addToCart event that is missing category', (done) => {
-    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
       if (event.eventType === 'sessionChange') {
