@@ -1,6 +1,6 @@
+/*eslint  no-global-assign: "off"*/
 const chai   = require('chai');
 const expect = chai.expect;
-const diff   = require('deep-diff').diff;
 
 window                = false;
 document              = false;
@@ -8,9 +8,9 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTrackerCore = require('../../lib/gb-tracker-core');
+const GbTrackerCore = require('../../index');
 
-describe('autoSearch tests', ()=> {
+describe('autoSearch tests', () => {
   it('should accept valid search event containing only origin and id', (done) => {
     const expectedEvent = {
       responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
@@ -117,7 +117,7 @@ describe('autoSearch tests', ()=> {
     gbTrackerCore.setVisitor('visitor', 'session');
 
     gbTrackerCore.setInvalidEventCallback((event, error) => {
-      expect(error).to.match(/responseId: must be SHA1 hex/);
+      expect(error).to.match(/responseId: is missing/);
       done();
     });
 
