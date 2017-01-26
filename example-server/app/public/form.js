@@ -541,8 +541,8 @@ app.controller('AutoSearchController', [
 
     scope.randomize = function () {
       scope.event = {
-        responseId: getUuid(),
-        search:     {
+        search: {
+          id:     getUuid(),
           origin: {
             search:          true,
             dym:             false,

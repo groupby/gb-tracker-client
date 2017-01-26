@@ -11,20 +11,20 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 const GbTrackerCore = require('../../index');
 
 describe('autoSearch tests', () => {
-  it('should accept valid search event containing only origin and id', (done) => {
+  it('should accept valid search event containing only origin and search id', (done) => {
     const expectedEvent = {
-      responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      search:     {
+      search:    {
+        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
           sayt: true
         }
       },
-      eventType:  'autoSearch',
-      customer:   {
+      eventType: 'autoSearch',
+      customer:  {
         id:   'testcustomer',
         area: 'area'
       },
-      visit:      {
+      visit:     {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
@@ -103,7 +103,7 @@ describe('autoSearch tests', () => {
     });
   });
 
-  it('should reject invalid autoSearch event that has no response id', (done) => {
+  it('should reject invalid autoSearch event that has search id', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -117,13 +117,40 @@ describe('autoSearch tests', () => {
     gbTrackerCore.setVisitor('visitor', 'session');
 
     gbTrackerCore.setInvalidEventCallback((event, error) => {
-      expect(error).to.match(/responseId: is missing/);
+      expect(error).to.match(/search\.id: is missing/);
       done();
     });
 
     gbTrackerCore.sendAutoSearchEvent({
       // responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       search: {
+        origin: {
+          sayt: true
+        }
+      }
+    });
+  });
+
+  it('should accept autoSearch event that has only search id', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done();
+    };
+
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done('fail');
+    });
+
+    gbTrackerCore.sendAutoSearchEvent({
+      search: {
+        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
           sayt: true
         }
