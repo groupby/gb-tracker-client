@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-    <script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-canary.min.js"></script>
-    <!--<script src="/dist/gb-tracker-client-3.3.2.js"></script>-->
+    <!--<script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-canary.min.js"></script>-->
+    <script src="/dist/gb-tracker-client-3.3.3.js"></script>
     <script src="http://chancejs.com/chance.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="/form.js"></script>
@@ -34,6 +34,26 @@
             <div ng-controller="AddToCartController" ng-show="selectedEvent ==='addToCart'">
                 <form novalidate class="simple-form">
                     <H2>Add To Cart</H2>
+                    <textarea ng-model="eventString" rows="20" cols="50"></textarea>
+                    </br>
+                    <input type="submit" ng-click="send(event)" value="Send"/>
+                </form>
+                <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
+                <pre ng-show="sent" class="text-success">Sent {{event | json}}</pre>
+            </div>
+            <div ng-controller="ViewCartController" ng-show="selectedEvent ==='viewCart'">
+                <form novalidate class="simple-form">
+                    <H2>View Cart</H2>
+                    <textarea ng-model="eventString" rows="20" cols="50"></textarea>
+                    </br>
+                    <input type="submit" ng-click="send(event)" value="Send"/>
+                </form>
+                <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
+                <pre ng-show="sent" class="text-success">Sent {{event | json}}</pre>
+            </div>
+            <div ng-controller="RemoveFromCartController" ng-show="selectedEvent ==='removeFromCart'">
+                <form novalidate class="simple-form">
+                    <H2>Remove From Cart</H2>
                     <textarea ng-model="eventString" rows="20" cols="50"></textarea>
                     </br>
                     <input type="submit" ng-click="send(event)" value="Send"/>

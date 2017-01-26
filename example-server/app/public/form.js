@@ -85,6 +85,24 @@ app.service('tracker', function () {
     tracker.sendAddToCartEvent(event);
   };
 
+  this.sendViewCartEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendViewCartEvent(event);
+  };
+
+  this.sendRemoveFromCartEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendRemoveFromCartEvent(event);
+  };
+
   this.sendOrderEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
@@ -127,6 +145,8 @@ app.controller('SelectEventController', [
   function (scope) {
     scope.eventTypes    = [
       'addToCart',
+      'viewCart',
+      'removeFromCart',
       'order',
       'autoSearch',
       'search',
@@ -223,6 +243,124 @@ app.controller('AddToCartController', [
 
     scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendAddToCartEvent');
+    }
+  }
+]);
+
+app.controller('ViewCartController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        cart: {
+          id:    getUuid(),
+          items: [
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            },
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            }
+          ]
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error       = '';
+
+    scope.send = function () {
+      sendEvent(scope, sentTimeout, tracker, 'sendViewCartEvent');
+    }
+  }
+]);
+
+app.controller('RemoveFromCartController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        cart: {
+          id:    getUuid(),
+          items: [
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            },
+            {
+              productId:  getUuid(),
+              category:   chance.word(),
+              collection: chance.word(),
+              title:      chance.word(),
+              sku:        getUuid(),
+              price:      chance.floating({
+                min:   0,
+                max:   100,
+                fixed: 2
+              }),
+              quantity:   chance.integer({
+                min: 1,
+                max: 20
+              })
+            }
+          ]
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error       = '';
+
+    scope.send = function () {
+      sendEvent(scope, sentTimeout, tracker, 'sendRemoveFromCartEvent');
     }
   }
 ]);
