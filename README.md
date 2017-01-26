@@ -19,11 +19,11 @@ Recommendations Request and API documentation can be found [here](http://docs.re
 var GbTracker = require('gb-tracker-client');
 var gbTracker = new GbTracker('customerId', 'area');
 
-// Must set the visitor at least once before any events are sent
-// Should be called on login/logout or any time the visitorId/sessionId change
-gbTracker.setVisitor('visitorId', 'sessionId');
+// Automatically sets visitor and session from cookies
+// Should be called on login/logout. Can be called without an argument if the user is anonymous
+gbTracker.autoSetVisitor('someLoginId'); // login ID is optional
 
-// There are four event API's.
+// There are six event API's.
 
 // AddToCart events
 gbTracker.sendAddToCartEvent({
@@ -61,6 +61,7 @@ gbTracker.sendAddToCartEvent({
    }
  ]
 });
+
 
 // ViewCart events
 gbTracker.sendViewCartEvent({
