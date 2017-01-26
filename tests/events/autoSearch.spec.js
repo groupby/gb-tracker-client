@@ -103,7 +103,7 @@ describe('autoSearch tests', () => {
     });
   });
 
-  it('should reject invalid autoSearch event that has no response id', (done) => {
+  it('should reject invalid autoSearch event that has no response id or search id', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -124,6 +124,33 @@ describe('autoSearch tests', () => {
     gbTrackerCore.sendAutoSearchEvent({
       // responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       search: {
+        origin: {
+          sayt: true
+        }
+      }
+    });
+  });
+
+  it('should accept autoSearch event that has only search id', (done) => {
+    const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      done();
+    };
+
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done('fail');
+    });
+
+    gbTrackerCore.sendAutoSearchEvent({
+      search: {
+        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
           sayt: true
         }

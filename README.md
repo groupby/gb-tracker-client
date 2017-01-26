@@ -25,6 +25,31 @@ gbTracker.autoSetVisitor('someLoginId'); // login ID is optional
 
 // There are six event API's.
 
+// Auto Search events
+gbTracker.sendAutoSearchEvent({
+  search:   {
+    origin:           {                       // Required: Search defaults to true
+      recommendations: false,
+      dym:             false,
+      sayt:            false,
+      search:          true,
+      autosearch:      false,
+      navigation:      false,
+      collectionSwitcher: false
+    },
+    id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', // Required: Search ID
+  },
+  metadata: [                            // Optional
+    {
+      key: 'some key',
+      value: 'some value'
+    }
+  ]
+});
+
+// NOTE: The 'sendSearchEvent' function is still available, but deprecated. 
+// Please use 'sendAutoSearchEvent' instead as shown above.
+
 // AddToCart events
 gbTracker.sendAddToCartEvent({
  cart: {
@@ -175,82 +200,6 @@ gbTracker.sendOrderEvent({
      value: 'some value'
    }
  ]
-});
-
-// Search events
-gbTracker.sendSearchEvent({
-  search:   {
-    origin:           {                       // Optional: Search defaults to true
-      recommendations: false,
-      dym:             false,
-      sayt:            false,
-      search:          true
-    },
-    id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', // Optional: 40-character search ID
-    totalRecordCount: 122,
-    area:             'Default',
-    biasingProfile:   'ThisBiasingProfile',   // Optional
-    query:            'i searched for this',
-    pageInfo: {           
-      recordStart: 1,
-      recordEnd:   24
-    },
-    matchStrategy: {                          // Optional: matchStrategy returned by searchandiser
-      rules: [
-        {
-          termsGreaterThan: 1,
-          mustMatch:        100,
-          percentage:       true
-        }
-      ]
-    },
-    availableNavigation: [                    // Optional: Array of selectedNavigations returned by searchandiser
-      {
-        name:        'reg_price',
-        displayName: 'Price',
-        refinements: [
-          {
-            type:  'Range',
-            count: 3,
-            high:  '50',
-            low:   '20'
-          },
-          {
-            type:  'Range',
-            count: 25,
-            high:  '100',
-            low:   '50'
-          },
-          {
-            type:  'Range',
-            count: 84,
-            high:  '150',
-            low:   '100'
-          },
-          {
-            type:  'Range',
-            count: 10,
-            high:  '200',
-            low:   '150'
-          }
-        ],
-        metadata: [],
-        range:    true,
-        or:       false
-      }
-    ],
-    selectedNavigation: [],  // Optional: Array of selectedNavigations returned by searchandiser
-    records:            [],  // Optional: Array of records returned by searchandiser
-    didYouMean: [
-      'I should have searched for this'
-    ]
-  },
-  metadata: [                            // Optional
-    {
-      key: 'some key',
-      value: 'some value'
-    }
-  ]
 });
 
 // ViewProduct events
