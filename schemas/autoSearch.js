@@ -44,7 +44,7 @@ module.exports={
       },
       responseId: {
         type: 'string',
-        optional: false
+        optional: true
       },
       eventType: {
         type: 'string'
@@ -97,6 +97,10 @@ module.exports={
               }
             },
             strict: true
+          },
+          id: {
+            type: 'string',
+            optional: false
           }
         },
         type: 'object',
@@ -267,6 +271,13 @@ module.exports={
               }
             },
             strict: true
+          },
+          id: {
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ]
           }
         },
         strict: true
