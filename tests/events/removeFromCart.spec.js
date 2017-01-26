@@ -1,6 +1,6 @@
+/*eslint  no-global-assign: "off"*/
 const chai   = require('chai');
 const expect = chai.expect;
-const diff   = require('deep-diff').diff;
 
 window                = false;
 document              = false;
@@ -10,7 +10,7 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
-describe('addToCart tests', ()=> {
+describe('addToCart tests', () => {
   it('should accept valid removeFromCart event', (done) => {
     const expectedEvent = {
       cart:      {
