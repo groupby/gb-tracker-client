@@ -85,6 +85,24 @@ app.service('tracker', function () {
     tracker.sendAddToCartEvent(event);
   };
 
+  this.sendViewCartEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendViewCartEvent(event);
+  };
+
+  this.sendRemoveFromCartEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendRemoveFromCartEvent(event);
+  };
+
   this.sendOrderEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
