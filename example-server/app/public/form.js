@@ -51,7 +51,7 @@ app.service('tracker', function () {
     customer.customerId = customerId;
     customer.area       = area;
     customer.key        = key;
-
+    
     tracker.setVisitor('testvisitor', 'testsession');
   };
 
