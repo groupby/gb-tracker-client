@@ -217,7 +217,7 @@ describe('gb-tracker-core tests', () => {
     const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
-    expect(moment(visitorCookie.expires).year()).to.eql(9999);
+    expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
   });
 
   it('reads existing visitor and session cookies', () => {
@@ -254,7 +254,7 @@ describe('gb-tracker-core tests', () => {
     const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
-    expect(moment(visitorCookie.expires).year()).to.eql(9999);
+    expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
   });
 
   it('sets visitor and session cookies, and keeps loginId locally', () => {
@@ -284,7 +284,7 @@ describe('gb-tracker-core tests', () => {
     const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
-    expect(moment(visitorCookie.expires).year()).to.eql(9999);
+    expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
   });
 
   it('autoSetVisitor overrides setVisitor', () => {
@@ -311,6 +311,37 @@ describe('gb-tracker-core tests', () => {
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
     expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+  });
+
+  it('should push back the cookie expiry every time autoSetVisitor is used', () => {
+    const cookieJar = jsdom.createCookieJar();
+
+    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const CookiesLib = require('cookies-js')(window);
+
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.be.undefined;
+
+    const SHORT_EXPIRY = 5;
+
+    const visitorCookieValue = uuid.v4();
+    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, {expires: SHORT_EXPIRY});
+
+    GbTracker.__overrideCookiesLib(CookiesLib);
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
+    let visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+
+    const initialTime = moment(visitorCookie.expires).valueOf();
+    const currentMoment = moment();
+
+    expect(initialTime).to.be.most(moment(currentMoment).add(SHORT_EXPIRY + 1, 'seconds'));
+    gbTrackerCore.autoSetVisitor();
+
+    visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    const laterTime = moment(visitorCookie.expires).valueOf();
+    expect(laterTime).to.be.least(moment(currentMoment).add(GbTracker.VISITOR_TIMEOUT_SEC - 1, 'seconds').valueOf());
+
+    expect(laterTime).to.be.most(moment(currentMoment).add(GbTracker.VISITOR_TIMEOUT_SEC + 5, 'seconds').valueOf());
   });
 
   it('sending events refreshes session expiry when autoSetVisitor is used', (done) => {
