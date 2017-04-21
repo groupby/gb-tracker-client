@@ -3,9 +3,6 @@ module.exports={
   validation: {
     type: 'object',
     properties: {
-      id: {
-        type: 'string'
-      },
       clientVersion: {
         type: 'object',
         properties: {
@@ -203,13 +200,6 @@ module.exports={
   },
   sanitization: {
     properties: {
-      id: {
-        maxLength: 10000,
-        rules: [
-          'trim',
-          'lower'
-        ]
-      },
       clientVersion: {
         properties: {
           raw: {
