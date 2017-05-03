@@ -1,4 +1,3 @@
-const webpack     = require('webpack');
 const packageJson = require('./package.json');
 
 module.exports = {
@@ -15,11 +14,8 @@ module.exports = {
       },
       {
         test:   /\.json$/,
-        loader: "json"
+        loader: 'json-loader'
       }
     ]
-  },
-  plugins: [
-    new webpack.optimize.DedupePlugin()
-  ]
+  }
 };

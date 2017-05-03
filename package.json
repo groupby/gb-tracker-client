@@ -46,7 +46,7 @@
     "stringify-object": "3.0.0",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.2",
-    "webpack": "^1.13.3",
+    "webpack": "^2.4.1",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
