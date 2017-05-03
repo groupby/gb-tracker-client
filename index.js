@@ -1,1 +1,1 @@
-module.exports = require('./lib/gb-tracker-core');
+module.exports = require('./build/gb-tracker-core');
