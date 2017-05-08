@@ -40,3 +40,4 @@ cdn
 api-javascript
 documentation
 .idea
+yarn.lock

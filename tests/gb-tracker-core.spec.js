@@ -7,7 +7,7 @@ const _        = require('lodash');
 const moment   = require('moment');
 const uuid     = require('uuid');
 
-window                = false;
+window                = {};
 document              = false;
 navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
