@@ -257,6 +257,43 @@ describe('gb-tracker-core tests', () => {
     expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
   });
 
+  it('reads existing visitor and session cookies and updates to valid expiry', () => {
+    const cookieJar = jsdom.createCookieJar();
+
+    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const CookiesLib = require('cookies-js')(window);
+
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.be.undefined;
+
+    const visitorCookieValue = uuid.v4();
+    const sessionCookieValue = uuid.v4();
+    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue);
+    CookiesLib.set(GbTracker.SESSION_COOKIE_KEY, sessionCookieValue);
+
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.eql(visitorCookieValue);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.eql(sessionCookieValue);
+
+    GbTracker.__overrideCookiesLib(CookiesLib);
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
+    gbTrackerCore.autoSetVisitor();
+
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.eql(visitorCookieValue);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.eql(sessionCookieValue);
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.not.eql(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY));
+
+    expect(gbTrackerCore.getVisitorId()).to.eql(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY));
+    expect(gbTrackerCore.getSessionId()).to.eql(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY));
+    expect(gbTrackerCore.getLoginId()).to.be.undefined;
+
+    expect(cookieJar.toJSON().cookies.length).to.eql(2);
+    const sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+    const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+
+    expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
+    expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
+  });
+
   it('sets visitor and session cookies, and keeps loginId locally', () => {
     const cookieJar = jsdom.createCookieJar();
 
