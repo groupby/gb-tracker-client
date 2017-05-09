@@ -164,6 +164,7 @@ app.controller('SetCustomerController', [
     scope.area          = 'RecommendationsSandbox';
     scope.key           = '';
     scope.pixelPath     = '';
+    scope.searchPath    = '';
     scope.allowOverride = false;
 
     scope.init = function () {
@@ -173,6 +174,10 @@ app.controller('SetCustomerController', [
     scope.override = function () {
       scope.allowOverride = !scope.allowOverride;
     };
+
+    scope.overrideSearch = function (){
+      scope.allowSearchOverride = !scope.allowSearchOverride;
+    }
 
     scope.isReady = tracker.isInitialized;
   }
@@ -537,6 +542,7 @@ app.controller('AutoSearchController', [
   '$scope',
   'tracker',
   function (scope, tracker) {
+    scope.allowSearchOverride = false;
     var sentTimeout = null;
 
     scope.randomize = function () {
