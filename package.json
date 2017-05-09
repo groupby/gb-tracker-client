@@ -11,9 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/groupby/gb-tracker-client.git"
   },
-  "main": "index.js",
+  "main": "bin/gb-tracker-client.js",
   "scripts": {
     "test": "gulp test",
+    "build": "babel lib --out-dir build",
     "coverage:codacy": "cat ./coverage/lcov.info | codacy-coverage"
   },
   "engines": {
@@ -22,6 +23,7 @@
   "author": "Eric Hacke",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-preset-latest": "^6.16.0",
@@ -46,7 +48,7 @@
     "stringify-object": "3.0.0",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.2",
-    "webpack": "^1.13.3",
+    "webpack": "^2.4.1",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
