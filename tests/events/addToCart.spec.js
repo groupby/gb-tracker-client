@@ -8,7 +8,7 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTracker = require('../../index');
+const GbTracker = require('../../lib/gb-tracker-core');
 
 describe('addToCart tests', () => {
   it('should accept valid addToCart event', (done) => {

@@ -13,7 +13,7 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTracker = require('../index');
+const GbTracker = require('../lib/gb-tracker-core');
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -76,7 +76,7 @@ describe('gb-tracker-core tests', () => {
     expect(() => gbTrackerCore.setInvalidEventCallback(9)).to.throw();
   });
 
-  it('should throw if customerId is not a string with lenght', () => {
+  it('should throw if customerId is not a string with length', () => {
     expect(() => new GbTracker(null, 'default')).to.throw(/customerId/);
     expect(() => new GbTracker('', 'default')).to.throw(/customerId/);
     expect(() => new GbTracker({}, 'default')).to.throw(/customerId/);
@@ -652,19 +652,4 @@ describe('gb-tracker-core tests', () => {
     gbTrackerCore.__private.sendEvent(event, sendSegment);
   });
 
-  // it('should attach eventListeners for mozilla', () => {
-  //   const eventListener          = {};
-  //   thisDoc.removeEventListener = (type) => {
-  //     delete eventListener[type];
-  //   };
-  //
-  //   thisDoc.addEventListener = (type, listener) => {
-  //     eventListener[type] = listener;
-  //   };
-  //
-  //
-  //   expect(Object.keys(eventListener).length).to.eql(0);
-  //   const gbTrackerCore = new GbTracker('testcustomer', 'area');
-  //   expect(Object.keys(eventListener).length).to.eql(1);
-  // });
 });

@@ -8,12 +8,11 @@ const path          = require('path');
 const webpack       = require('webpack');
 const webpackStream = require('webpack-stream');
 const packageJson   = require('./package.json');
-const webpackConfig = require('./webpack.config');
-const webpackPackageConfig = require('./webpackPackage.config');
+const webpackConfigs = require('./multi.webpack.config');
 const exec          = require('gulp-exec');
 
 gulp.task('build:minify', () => {
-  const minConfig = Object.assign({}, webpackConfig, {
+  const minConfig = Object.assign({}, webpackConfigs.browser, {
     output:  {filename: packageJson.name + '-' + packageJson.version + '.min.js'},
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
@@ -30,11 +29,11 @@ gulp.task('build:minify', () => {
 });
 
 gulp.task('build:normal', () => gulp.src(['lib/gb-tracker-window.js'])
-  .pipe(webpackStream(webpackConfig))
+  .pipe(webpackStream(webpackConfigs.browser))
   .pipe(gulp.dest('dist')));
 
 gulp.task('build:bin', () => gulp.src(['lib/gb-tracker-core.js'])
-    .pipe(webpackStream(webpackPackageConfig))
+    .pipe(webpackStream(webpackConfigs.node))
     .pipe(gulp.dest('bin')));
 
 gulp.task('build', [
@@ -56,7 +55,8 @@ gulp.task('test:dirty', () => {
 
 gulp.task('pre-test', ['build'], () => {
   return gulp.src([
-    'bin/gb-tracker-client.js',
+    'lib/gb-tracker-core.js',
+    'lib/utils.js'
   ])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
