@@ -227,4 +227,5 @@ gbTracker.sendViewProductEvent({
  ]
 });
 
+
 ```
