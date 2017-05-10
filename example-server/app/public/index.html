@@ -20,12 +20,14 @@
 <div ng-controller="SetCustomerController">
   <form novalidate class="simple-form">
     Customer ID: <input type="text" ng-model="customerId"/><br/>
-    Area: <input type="text" ng-model="area"/><br/>
+    Area: <input type="text" ng-model="area"/><br/><br/>
     <input type="button" ng-click="override()" value="Override Pixel Path"/>
-    <div ng-show="allowOverride">Override Pixel Path: <input type="text" ng-model="pixelPath" size="100"/><br/></div>
+    <input ng-show="allowOverride" type="text" ng-model="pixelPath" size="100"/><br/>
     <input type="button" ng-click="overrideSearch()" value="Override Search Endpoint"/>
-    <div ng-show="allowSearchOverride">Override Search Endpoint: <input type="text" ng-model="searchPath" size="100"/><br/></div>
-    <input type="submit" ng-click="init()" value="Initialize"/>
+    <input ng-show="allowSearchOverride" type="text" ng-model="searchPath" size="100"/><br/>
+    <input type="button" ng-click="overrideBeacon()" value="Override Beacon Endpoint"/>
+    <input ng-show="allowBeaconOverride" type="text" ng-model="beaconPath" size="100"/><br/>
+    <br/><input type="submit" ng-click="init()" value="Initialize"/>
   </form>
 
   <p ng-hide="isReady()">Set customer info before continuing</p>
@@ -78,7 +80,14 @@
           <H2>Auto Search</H2>
           <textarea ng-model="eventString" rows="20" cols="50"></textarea>
           </br>
-          <input type="submit" ng-click="send(event)" value="Send"/>
+          <div>
+            Search body: <input type="text" ng-model="searchBody" size="50"/>
+            <span ng-show="jsonError" style="color:red">Invalid JSON!</span>
+            <br/><br/>
+          </div>
+          <input type="button" ng-click="overrideApiKey()" value="Override API Key"/>
+          <input ng-show="allowOverrideApiKey" type="text" ng-model="apiKey" size="100"/><br/>
+          <br/><input type="submit" ng-click="send(event)" value="Send"/>
         </form>
         <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
         <pre ng-show="sent" class="text-success">Sent {{event | json}}</pre>

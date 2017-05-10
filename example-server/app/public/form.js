@@ -51,7 +51,7 @@ app.service('tracker', function () {
     customer.customerId = customerId;
     customer.area       = area;
     customer.key        = key;
-    
+
     tracker.setVisitor('testvisitor', 'testsession');
   };
 
@@ -130,6 +130,15 @@ app.service('tracker', function () {
     tracker.sendAutoSearchEvent(event);
   };
 
+  this.sendDirectBeaconEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendDirectBeaconEvent(event);
+  };
+
   this.sendViewProductEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
@@ -138,6 +147,18 @@ app.service('tracker', function () {
 
     tracker.sendViewProductEvent(event);
   };
+
+  this.querySearchandiser = function(searchBody) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    console.log(tracker);
+
+    tracker.querySearchandiser(searchBody);
+  }
+
 });
 
 app.controller('SelectEventController', [
@@ -160,12 +181,15 @@ app.controller('SetCustomerController', [
   '$scope',
   'tracker',
   function (scope, tracker) {
-    scope.customerId    = '';
-    scope.area          = 'RecommendationsSandbox';
-    scope.key           = '';
-    scope.pixelPath     = '';
-    scope.searchPath    = '';
-    scope.allowOverride = false;
+    scope.customerId          = '';
+    scope.area                = 'RecommendationsSandbox';
+    scope.key                 = '';
+    scope.pixelPath           = '';
+    scope.searchPath          = '';
+    scope.beaconPath          = '';
+    scope.allowOverride       = false;
+    scope.allowSearchOverride = false;
+    scope.allowBeaconOverride = false;
 
     scope.init = function () {
       tracker.initialize(scope.customerId, scope.area, scope.key, scope.pixelPath);
@@ -173,11 +197,24 @@ app.controller('SetCustomerController', [
 
     scope.override = function () {
       scope.allowOverride = !scope.allowOverride;
+      if (!scope.allowOverride) {
+        scope.pixelPath = '';
+      }
     };
 
-    scope.overrideSearch = function (){
+    scope.overrideSearch = function () {
       scope.allowSearchOverride = !scope.allowSearchOverride;
-    }
+      if (!scope.allowSearchOverride) {
+        scope.searchPath = '';
+      }
+    };
+
+    scope.overrideBeacon = function () {
+      scope.allowBeaconOverride = !scope.allowBeaconOverride;
+      if (!scope.allowBeaconOverride) {
+        scope.beaconPath = '';
+      }
+    };
 
     scope.isReady = tracker.isInitialized;
   }
@@ -539,11 +576,13 @@ app.controller('SearchController', [
 ]);
 
 app.controller('AutoSearchController', [
+  '$http',
   '$scope',
   'tracker',
-  function (scope, tracker) {
-    scope.allowSearchOverride = false;
-    var sentTimeout = null;
+  function (http, scope, tracker) {
+    scope.allowOverrideApiKey = false;
+    scope.apiKey              = '';
+    scope.searchBody          = '{"collection": "misconl", "query": "notebook"}';
 
     scope.randomize = function () {
       scope.event = {
@@ -564,8 +603,33 @@ app.controller('AutoSearchController', [
     scope.eventString = JSON.stringify(scope.event, null, 2);
     scope.error       = '';
 
+    scope.overrideApiKey = function () {
+      scope.allowOverrideApiKey = !scope.allowOverrideApiKey;
+    };
+
     scope.send = function () {
-      sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
+      try {
+        scope.jsonError = false;
+        const searchBodyObject = JSON.parse(scope.searchBody);
+        console.log(searchBodyObject);
+
+        tracker.querySearchandiser(searchBodyObject);
+
+
+        // http.get('http://104.198.32.81:30828/search').then((response) => {
+        //   console.log(response);
+        //   console.log(scope.searchTerm);
+        //
+        //   if (scope.allowOverrideApiKey && scope.apiKey.length > 0) {
+        //     sendEvent(scope, sentTimeout, tracker, 'sendDirectBeaconEvent');
+        //   }
+        //   scope.event.id = response.id;
+        //   sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
+        // })
+      } catch (err){
+        console.log(err);
+        scope.jsonError = true;
+      }
     }
   }
 ]);
