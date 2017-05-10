@@ -147,18 +147,6 @@ app.service('tracker', function () {
 
     tracker.sendViewProductEvent(event);
   };
-
-  this.querySearchandiser = function(searchBody) {
-    if (!tracker) {
-      console.error('Set customer ID, area, and key first');
-      return
-    }
-
-    console.log(tracker);
-
-    tracker.querySearchandiser(searchBody);
-  }
-
 });
 
 app.controller('SelectEventController', [
@@ -181,15 +169,11 @@ app.controller('SetCustomerController', [
   '$scope',
   'tracker',
   function (scope, tracker) {
-    scope.customerId          = '';
-    scope.area                = 'RecommendationsSandbox';
-    scope.key                 = '';
-    scope.pixelPath           = '';
-    scope.searchPath          = '';
-    scope.beaconPath          = '';
-    scope.allowOverride       = false;
-    scope.allowSearchOverride = false;
-    scope.allowBeaconOverride = false;
+    scope.customerId    = '';
+    scope.area          = 'RecommendationsSandbox';
+    scope.key           = '';
+    scope.pixelPath     = 'http://104.197.36.94:30862/pixel';
+    scope.allowOverride = false;
 
     scope.init = function () {
       tracker.initialize(scope.customerId, scope.area, scope.key, scope.pixelPath);
@@ -199,20 +183,6 @@ app.controller('SetCustomerController', [
       scope.allowOverride = !scope.allowOverride;
       if (!scope.allowOverride) {
         scope.pixelPath = '';
-      }
-    };
-
-    scope.overrideSearch = function () {
-      scope.allowSearchOverride = !scope.allowSearchOverride;
-      if (!scope.allowSearchOverride) {
-        scope.searchPath = '';
-      }
-    };
-
-    scope.overrideBeacon = function () {
-      scope.allowBeaconOverride = !scope.allowBeaconOverride;
-      if (!scope.allowBeaconOverride) {
-        scope.beaconPath = '';
       }
     };
 
@@ -580,9 +550,16 @@ app.controller('AutoSearchController', [
   '$scope',
   'tracker',
   function (http, scope, tracker) {
+    var sentTimeout           = null;
     scope.allowOverrideApiKey = false;
-    scope.apiKey              = '';
-    scope.searchBody          = '{"collection": "misconl", "query": "notebook"}';
+    scope.allowSearchOverride = false;
+    scope.allowBeaconOverride = false;
+    scope.manualBeacon        = false;
+
+    scope.apiKey     = '';
+    scope.searchBody = '{"collection": "misconl", "query": "notebook"}';
+    scope.searchPath = 'http://qa-cors.groupbycloud.com/api/v1/search';
+    scope.beaconPath = 'http://104.197.54.40:8080/internal/beacon';
 
     scope.randomize = function () {
       scope.event = {
@@ -607,28 +584,74 @@ app.controller('AutoSearchController', [
       scope.allowOverrideApiKey = !scope.allowOverrideApiKey;
     };
 
+    scope.overrideSearch = function () {
+      scope.allowSearchOverride = !scope.allowSearchOverride;
+      if (!scope.allowSearchOverride) {
+        scope.searchPath = '';
+      }
+    };
+
+    scope.overrideBeacon = function () {
+      scope.allowBeaconOverride = !scope.allowBeaconOverride;
+      if (!scope.allowBeaconOverride) {
+        scope.beaconPath   = '';
+        scope.manualBeacon = false;
+      }
+    };
+
+    scope.beaconPathChange = function () {
+      console.log('changed');
+      scope.manualBeacon = scope.beaconPath.length !== 0;
+    };
+
     scope.send = function () {
       try {
-        scope.jsonError = false;
+        scope.jsonError        = false;
         const searchBodyObject = JSON.parse(scope.searchBody);
-        console.log(searchBodyObject);
 
-        tracker.querySearchandiser(searchBodyObject);
+        let searchUrl;
+        if (scope.searchPath.length > 0) {
+          searchUrl = scope.searchPath;
+        } else {
+          searchUrl = "http://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
+        }
 
+        let beaconUrl;
+        if (scope.beaconPath.length > 0) {
+          beaconUrl = scope.beaconPath;
+        } else {
+          beaconUrl = "http://" + scope.customerId + ".groupbycloud.com/internal/beacon"
+        }
 
-        // http.get('http://104.198.32.81:30828/search').then((response) => {
-        //   console.log(response);
-        //   console.log(scope.searchTerm);
-        //
-        //   if (scope.allowOverrideApiKey && scope.apiKey.length > 0) {
-        //     sendEvent(scope, sentTimeout, tracker, 'sendDirectBeaconEvent');
-        //   }
-        //   scope.event.id = response.id;
-        //   sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
-        // })
-      } catch (err){
+        http.post(searchUrl, searchBodyObject).then((response) => {
+          console.log(response);
+          scope.event.search.id = response.data.id;
+          scope.eventString     = JSON.stringify(scope.event, null, 2);
+
+          const directBeaconEvent = {
+            eventType:  'search',
+            customerId: scope.customerId,
+            responseId: response.data.id,
+            event:      response.data
+          };
+
+          if (scope.manualBeacon) {
+            http.post(beaconUrl, directBeaconEvent, {
+              headers: {
+                'x-gbi-roles': 'admin',
+                Authorization: scope.apiKey
+              }
+            }).then((response) => console.log(response));
+          }
+
+          sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
+        }).catch((err) => console.log(err))
+        
+      } catch (err) {
         console.log(err);
-        scope.jsonError = true;
+        if (err.message.match(/JSON/)) {
+          scope.jsonError = true;
+        }
       }
     }
   }
