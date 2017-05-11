@@ -172,7 +172,7 @@ app.controller('SetCustomerController', [
     scope.customerId    = '';
     scope.area          = 'RecommendationsSandbox';
     scope.key           = '';
-    scope.pixelPath     = 'http://104.197.36.94:30862/pixel';
+    scope.pixelPath     = '';
     scope.allowOverride = false;
 
     scope.init = function () {
@@ -558,8 +558,8 @@ app.controller('AutoSearchController', [
 
     scope.apiKey     = '';
     scope.searchBody = '{"collection": "misconl", "query": "notebook"}';
-    scope.searchPath = 'http://qa-cors.groupbycloud.com/api/v1/search';
-    scope.beaconPath = 'http://104.197.54.40:8080/internal/beacon';
+    scope.searchPath = '';
+    scope.beaconPath = '';
 
     scope.randomize = function () {
       scope.event = {
@@ -638,17 +638,16 @@ app.controller('AutoSearchController', [
           if (scope.manualBeacon) {
             http.post(beaconUrl, directBeaconEvent, {
               headers: {
-                'x-gbi-roles': 'admin',
                 Authorization: scope.apiKey
               }
-            }).then((response) => console.log(response));
+            }).then((response) => console.log(response)).catch((err) => console.error(err));
           }
 
           sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
-        }).catch((err) => console.log(err))
-        
+        }).catch((err) => console.error(err))
+
       } catch (err) {
-        console.log(err);
+        console.error(err);
         if (err.message.match(/JSON/)) {
           scope.jsonError = true;
         }
