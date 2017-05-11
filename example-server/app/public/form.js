@@ -130,15 +130,6 @@ app.service('tracker', function () {
     tracker.sendAutoSearchEvent(event);
   };
 
-  this.sendDirectBeaconEvent = function (event) {
-    if (!tracker) {
-      console.error('Set customer ID, area, and key first');
-      return
-    }
-
-    tracker.sendDirectBeaconEvent(event);
-  };
-
   this.sendViewProductEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
