@@ -548,7 +548,7 @@ app.controller('AutoSearchController', [
     scope.manualBeacon        = false;
 
     scope.apiKey     = '';
-    scope.searchBody = '{"collection": "misconl", "query": "notebook"}';
+    scope.searchBody = '{"query": "record"}';
     scope.searchPath = '';
     scope.beaconPath = '';
 
@@ -604,14 +604,14 @@ app.controller('AutoSearchController', [
         if (scope.searchPath.length > 0) {
           searchUrl = scope.searchPath;
         } else {
-          searchUrl = "http://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
+          searchUrl = "https://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
         }
 
         let beaconUrl;
         if (scope.beaconPath.length > 0) {
           beaconUrl = scope.beaconPath;
         } else {
-          beaconUrl = "http://" + scope.customerId + ".groupbycloud.com/internal/beacon"
+          beaconUrl = "https://" + scope.customerId + ".groupbycloud.com/internal/beacon"
         }
 
         http.post(searchUrl, searchBodyObject).then((response) => {

@@ -87,7 +87,7 @@
           <input ng-show="allowBeaconOverride" type="text" ng-model="beaconPath" ng-change="beaconPathChange()" size="100"/><br/>
           <input type="button" ng-click="overrideApiKey()" value="Override API Key"/>
           <input ng-show="allowOverrideApiKey" type="text" ng-model="apiKey" size="100"/><br/>
-          Manually Send Beacon&nbsp&nbsp&nbsp<input type="checkbox" ng-model="manualBeacon" ng-disabled="true"/><br/>
+          Manually Send Beacon&nbsp&nbsp&nbsp<input type="checkbox" ng-model="manualBeacon"/><br/>
           <br/><input type="submit" ng-click="send(event)" value="Send"/>
         </form>
         <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
