@@ -611,9 +611,10 @@ app.controller('AutoSearchController', [
         if (scope.beaconPath.length > 0) {
           beaconUrl = scope.beaconPath;
         } else {
-          beaconUrl = "https://" + scope.customerId + ".groupbycloud.com/internal/beacon"
+          beaconUrl = "https://" + scope.customerId + "-cors.groupbycloud.com/internal/beacon"
         }
 
+        http.defaults.headers.post['Content-Type'] = 'text/plain';
         http.post(searchUrl, searchBodyObject).then((response) => {
           console.log(response);
           scope.event.search.id = response.data.id;
@@ -627,9 +628,11 @@ app.controller('AutoSearchController', [
           };
 
           if (scope.manualBeacon) {
+            http.defaults.headers.post['Content-Type'] = 'text/plain';
             http.post(beaconUrl, directBeaconEvent, {
               headers: {
-                Authorization: scope.apiKey
+                Authorization: scope.apiKey,
+                'Content-Type': 'text/plain'
               }
             }).then((response) => console.log(response)).catch((err) => console.error(err));
           }

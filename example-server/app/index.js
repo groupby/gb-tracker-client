@@ -8,7 +8,7 @@ const distPath = path.join(__dirname, './dist');
 app.use('/', express.static(publicPath));
 app.use('/dist', express.static(distPath));
 
-const PORT = 3000;
+const PORT = 7000;
 
 app.listen(PORT);
 console.log(`serving on port: ${PORT}`);
