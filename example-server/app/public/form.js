@@ -629,7 +629,6 @@ app.controller('AutoSearchController', [
 
           if (scope.manualBeacon) {
             // http.defaults.headers.post['Content-Type'] = 'text/plain';
-            scope.apiKey = scope.apiKey.length > 0 ? scope.apiKey : 'e17c2883-4f0d-4029-91ea-d60c314f9504';
             http.post(beaconUrl, directBeaconEvent, {
               headers: {
                 Authorization: scope.apiKey,
