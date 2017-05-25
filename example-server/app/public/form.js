@@ -531,7 +531,6 @@ app.controller('AutoSearchController', [
   'tracker',
   function (http, scope, tracker) {
     var sentTimeout           = null;
-    scope.allowOverrideApiKey = false;
     scope.allowSearchOverride = false;
     scope.allowBeaconOverride = false;
     scope.manualBeacon        = false;
@@ -559,10 +558,6 @@ app.controller('AutoSearchController', [
 
     scope.eventString = JSON.stringify(scope.event, null, 2);
     scope.error       = '';
-
-    scope.overrideApiKey = function () {
-      scope.allowOverrideApiKey = !scope.allowOverrideApiKey;
-    };
 
     scope.overrideSearch = function () {
       scope.allowSearchOverride = !scope.allowSearchOverride;
