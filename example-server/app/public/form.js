@@ -172,9 +172,7 @@ app.controller('SetCustomerController', [
 
     scope.override = function () {
       scope.allowOverride = !scope.allowOverride;
-      if (!scope.allowOverride) {
-        scope.pixelPath = '';
-      }
+      scope.pixelPath     = '';
     };
 
     scope.isReady = tracker.isInitialized;
@@ -577,21 +575,17 @@ app.controller('AutoSearchController', [
 
     scope.overrideSearch = function () {
       scope.allowSearchOverride = !scope.allowSearchOverride;
-      if (!scope.allowSearchOverride) {
-        scope.searchPath = '';
-      }
+      scope.searchPath          = '';
     };
 
     scope.overrideBeacon = function () {
       scope.allowBeaconOverride = !scope.allowBeaconOverride;
       if (!scope.allowBeaconOverride) {
-        scope.beaconPath   = '';
         scope.manualBeacon = false;
       }
     };
 
     scope.beaconPathChange = function () {
-      console.log('changed');
       scope.manualBeacon = scope.beaconPath.length !== 0;
     };
 
@@ -600,23 +594,13 @@ app.controller('AutoSearchController', [
         scope.jsonError        = false;
         const searchBodyObject = JSON.parse(scope.searchBody);
 
-        let searchUrl;
-        if (scope.searchPath.length > 0) {
-          searchUrl = scope.searchPath;
-        } else {
-          searchUrl = "https://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
-        }
 
-        let beaconUrl;
-        if (scope.beaconPath.length > 0) {
-          beaconUrl = scope.beaconPath;
-        } else {
-          beaconUrl = "https://" + scope.customerId + "-cors.groupbycloud.com/wisdom/v2/internal/beacon"
-        }
+        const searchUrl = scope.searchPath.length > 0 ? searchUrl = scope.searchPath : "https://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
+
+        const beaconUrl = scope.beaconPath.length > 0 ? beaconUrl = scope.beaconPath : "https://" + scope.customerId + "-cors.groupbycloud.com/wisdom/v2/internal/beacon";
 
         // http.defaults.headers.post['Content-Type'] = 'text/plain';
         http.post(searchUrl, searchBodyObject).then((response) => {
-          console.log(response);
           scope.event.search.id = response.data.id;
           scope.eventString     = JSON.stringify(scope.event, null, 2);
 
@@ -633,7 +617,7 @@ app.controller('AutoSearchController', [
               headers: {
                 Authorization: scope.apiKey,
               }
-            }).then((response) => console.log(response)).catch((err) => console.error(err));
+            }).catch((err) => console.error(err));
           }
 
           sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
