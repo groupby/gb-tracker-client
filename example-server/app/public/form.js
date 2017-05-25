@@ -52,7 +52,7 @@ app.service('tracker', function () {
     customer.area       = area;
     customer.key        = key;
 
-    tracker.setVisitor('testvisitor', 'testsession');
+    tracker.autoSetVisitor();
   };
 
   this.isInitialized = function () {
@@ -65,15 +65,6 @@ app.service('tracker', function () {
 
   this.setInvalidEventCallback = function (callback) {
     tracker.setInvalidEventCallback(callback);
-  };
-
-  this.setVisitor = function (visitorId, sessionId) {
-    if (!tracker) {
-      console.error('Set customer ID, area, and key first');
-      return;
-    }
-
-    tracker.setVisitor(visitorId, sessionId);
   };
 
   this.sendAddToCartEvent = function (event) {
