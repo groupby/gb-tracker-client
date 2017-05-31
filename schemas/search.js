@@ -100,7 +100,8 @@ module.exports={
           },
           id: {
             type: 'string',
-            optional: true
+            optional: true,
+            minLength: 1
           },
           totalRecordCount: {
             type: 'integer',

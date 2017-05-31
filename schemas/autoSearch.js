@@ -100,7 +100,8 @@ module.exports={
           },
           id: {
             type: 'string',
-            optional: false
+            optional: false,
+            minLength: 1
           }
         },
         type: 'object',
