@@ -72,7 +72,45 @@ describe('autoSearch tests', () => {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendAutoSearchEvent({
-      responseId: expectedEvent.responseId,
+      search: expectedEvent.search
+    });
+  });
+
+  it('should NOT accept with blank search.id', (done) => {
+    const expectedEvent = {
+      search:    {
+        id:     '',
+        origin: {
+          sayt: true
+        }
+      },
+      eventType: 'autoSearch',
+      customer:  {
+        id:   'testcustomer',
+        area: 'area'
+      },
+      visit:     {
+        customerData: {
+          visitorId: 'visitor',
+          sessionId: 'session'
+        },
+        generated:    {
+          uri:            '',
+          timezoneOffset: 240,
+          localTime:      '2016-08-14T14:05:26.872Z'
+        }
+      }
+    };
+
+    const gbTrackerCore = new GbTrackerCore(expectedEvent.customer.id, expectedEvent.customer.area);
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done();
+    });
+
+    gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
+
+    gbTrackerCore.sendAutoSearchEvent({
       search:     expectedEvent.search
     });
   });
