@@ -47,7 +47,10 @@ gbTracker.sendAutoSearchEvent({
   ]
 });
 
-// Auto MoreREfinements events
+// NOTE: The 'sendSearchEvent' function is still available, but deprecated. 
+// Please use 'sendAutoSearchEvent' instead as shown above.
+
+// Auto MoreRefinements events
 gbTracker.sendAutoMoreRefinementsEvent({
   moreRefinements:   {
     id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', // Required: MoreRefinements ID
@@ -59,9 +62,6 @@ gbTracker.sendAutoMoreRefinementsEvent({
     }
   ]
 });
-
-// NOTE: The 'sendSearchEvent' function is still available, but deprecated. 
-// Please use 'sendAutoSearchEvent' instead as shown above.
 
 // AddToCart events
 gbTracker.sendAddToCartEvent({
