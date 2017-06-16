@@ -731,14 +731,18 @@ app.controller('MoreRefinementsController', [
           }).then(function () {
             scope.eventString = JSON.stringify({moreRefinements: {id: scope.event.moreRefinements.id}}, null, 2);
             return sendEvent(scope, sentTimeout, tracker, 'sendMoreRefinementsEvent');
-          }).catch((err) => console.error(err));
+          }).catch((err) => console.error(err)).then(function () {
+            scope.randomize();
+          });
         } else {
           return http.post(moreRefinementsUrl, moreRefinementsBodyObject).then((response) => {
             scope.event.search.id = response.data.id;
             scope.eventString     = JSON.stringify(scope.event, null, 2);
 
             return sendEvent(scope, sentTimeout, tracker, 'sendMoreRefinementsEvent');
-          }).catch((err) => console.error(err))
+          }).catch((err) => console.error(err)).then(function () {
+            scope.randomize();
+          })
         }
 
       } catch (err) {
