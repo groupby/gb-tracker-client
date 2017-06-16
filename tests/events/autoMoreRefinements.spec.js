@@ -58,7 +58,7 @@ describe('autoMoreRefinements tests', () => {
 
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
-    gbTrackerCore.sendAutoMoreRefinementsEvent({
+    gbTrackerCore.sendMoreRefinementsEvent({
       moreRefinements: expectedEvent.moreRefinements
     });
   });
@@ -97,7 +97,7 @@ describe('autoMoreRefinements tests', () => {
 
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
-    gbTrackerCore.sendAutoMoreRefinementsEvent({
+    gbTrackerCore.sendMoreRefinementsEvent({
       moreRefinements:     expectedEvent.moreRefinements
     });
   });
@@ -120,7 +120,7 @@ describe('autoMoreRefinements tests', () => {
       done();
     });
 
-    gbTrackerCore.sendAutoMoreRefinementsEvent({
+    gbTrackerCore.sendMoreRefinementsEvent({
       id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     });
   });
@@ -143,7 +143,7 @@ describe('autoMoreRefinements tests', () => {
       done();
     });
 
-    gbTrackerCore.sendAutoMoreRefinementsEvent({
+    gbTrackerCore.sendMoreRefinementsEvent({
       moreRefinements: {
         // id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       }
@@ -167,7 +167,7 @@ describe('autoMoreRefinements tests', () => {
       done('fail');
     });
 
-    gbTrackerCore.sendAutoMoreRefinementsEvent({
+    gbTrackerCore.sendMoreRefinementsEvent({
       moreRefinements: {
         id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       }

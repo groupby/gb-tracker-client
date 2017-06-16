@@ -112,6 +112,15 @@ app.service('tracker', function () {
     tracker.sendSearchEvent(event);
   };
 
+  this.sendMoreRefinementsEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.sendMoreRefinementsEvent(event);
+  };
+
   this.sendAutoSearchEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
@@ -141,7 +150,8 @@ app.controller('SelectEventController', [
       'order',
       'autoSearch',
       'search',
-      'viewProduct'
+      'viewProduct',
+      'moreRefinements'
     ];
     scope.selectedEvent = scope.eventTypes[0];
   }
@@ -560,6 +570,7 @@ app.controller('AutoSearchController', [
     scope.error       = '';
 
     scope.overrideSearch = function () {
+      console.log('no');
       scope.allowSearchOverride = !scope.allowSearchOverride;
       scope.searchPath          = '';
     };
@@ -580,10 +591,9 @@ app.controller('AutoSearchController', [
         scope.jsonError        = false;
         const searchBodyObject = JSON.parse(scope.searchBody);
 
+        const searchUrl = scope.searchPath.length > 0 ? scope.searchPath : "https://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
 
-        const searchUrl = scope.searchPath.length > 0 ? searchUrl = scope.searchPath : "https://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
-
-        const beaconUrl = scope.beaconPath.length > 0 ? beaconUrl = scope.beaconPath : "https://" + scope.customerId + "-cors.groupbycloud.com/wisdom/v2/internal/beacon";
+        const beaconUrl = scope.beaconPath.length > 0 ? scope.beaconPath : "https://" + scope.customerId + "-cors.groupbycloud.com/wisdom/v2/internal/beacon";
 
         // http.defaults.headers.post['Content-Type'] = 'text/plain';
         http.post(searchUrl, searchBodyObject).then((response) => {
@@ -608,6 +618,128 @@ app.controller('AutoSearchController', [
 
           sendEvent(scope, sentTimeout, tracker, 'sendAutoSearchEvent');
         }).catch((err) => console.error(err))
+
+      } catch (err) {
+        console.error(err);
+        if (err.message.match(/JSON/)) {
+          scope.jsonError = true;
+        }
+      }
+    }
+  }
+]);
+
+app.controller('MoreRefinementsController', [
+  '$http',
+  '$scope',
+  'tracker',
+  function (http, scope, tracker) {
+    var sentTimeout           = null;
+    scope.allowSearchOverride = false;
+    scope.allowBeaconOverride = false;
+    scope.manualBeacon        = false;
+
+    scope.apiKey              = '';
+    scope.moreRefinementsBody = '{"navigationName":"brand", "originalQuery":{"query": "record"}}';
+    scope.searchPath          = '';
+    scope.beaconPath          = '';
+
+    scope.randomize = function () {
+      scope.event = {
+        moreRefinements: {
+          id: getUuid()
+        }
+      };
+
+      scope.eventString     = JSON.stringify(scope.event, null, 2);
+
+      scope.directMoreRefinementsBody = JSON.stringify({
+        eventType:  'moreRefinements',
+        customerId: scope.customerId,
+        responseId: scope.event.moreRefinements.id,
+        event:      {
+          id:              scope.event.moreRefinements.id,
+          navigation:     {
+            name:        chance.word(),
+            displayName: chance.word() + ' ' + chance.word(),
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: chance.word(),
+                count: chance.integer({
+                  min: 1,
+                  max: 500
+                })
+              }
+            ]
+          },
+          originalRequest: {
+            navigation:    'brand',
+            originalQuery: {
+              query: 'record'
+            }
+          }
+        }
+      }, null, 2);
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error       = '';
+
+    scope.overrideMoreRefinements = function () {
+      console.log('more');
+      scope.randomize();
+      scope.allowMoreRefinementsOverride = !scope.allowMoreRefinementsOverride;
+      scope.moreRefinementsPath          = '';
+
+      if (scope.allowMoreRefinementsOverride) {
+        scope.allowBeaconOverride = false;
+      }
+    };
+
+    scope.overrideBeacon = function () {
+      scope.randomize();
+      scope.allowBeaconOverride = !scope.allowBeaconOverride;
+      if (!scope.allowBeaconOverride) {
+        scope.manualBeacon = false;
+      } else {
+        scope.allowMoreRefinementsOverride = false
+      }
+    };
+
+    scope.beaconPathChange = function () {
+      scope.manualBeacon = scope.beaconPath.length !== 0;
+    };
+
+    scope.send = function () {
+      try {
+        scope.jsonError                 = false;
+        const moreRefinementsBodyObject = JSON.parse(scope.moreRefinementsBody);
+
+        const moreRefinementsUrl = scope.moreRefinementsPath && scope.moreRefinementsPath.length > 0 ? scope.moreRefinementsPath : "https://" + scope.customerId + "-cors.groupbycloud.com/api/v1/search";
+        const beaconUrl          = scope.beaconPath && scope.beaconPath.length > 0 ? scope.beaconPath : "https://" + scope.customerId + "-cors.groupbycloud.com/wisdom/v2/internal/beacon";
+
+        if (scope.manualBeacon) {
+          return http.post(beaconUrl, JSON.parse(scope.directMoreRefinementsBody), {
+            headers: {
+              'x-forwarded-host': scope.customerId + '.groupbycloud.com',
+              Authorization:      scope.apiKey,
+            }
+          }).then(function () {
+            scope.eventString = JSON.stringify({moreRefinements: {id: scope.event.moreRefinements.id}}, null, 2);
+            return sendEvent(scope, sentTimeout, tracker, 'sendMoreRefinementsEvent');
+          }).catch((err) => console.error(err));
+        } else {
+          return http.post(moreRefinementsUrl, moreRefinementsBodyObject).then((response) => {
+            scope.event.search.id = response.data.id;
+            scope.eventString     = JSON.stringify(scope.event, null, 2);
+
+            return sendEvent(scope, sentTimeout, tracker, 'sendMoreRefinementsEvent');
+          }).catch((err) => console.error(err))
+        }
 
       } catch (err) {
         console.error(err);
