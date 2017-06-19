@@ -99,9 +99,6 @@ module.exports={
                 price: {
                   type: 'number'
                 },
-                quantity: {
-                  type: 'integer'
-                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -117,6 +114,9 @@ module.exports={
                     strict: true
                   },
                   optional: true
+                },
+                quantity: {
+                  type: 'integer'
                 }
               },
               strict: true
@@ -331,9 +331,6 @@ module.exports={
                 price: {
                   type: 'number'
                 },
-                quantity: {
-                  type: 'integer'
-                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -356,6 +353,9 @@ module.exports={
                     strict: true
                   },
                   optional: true
+                },
+                quantity: {
+                  type: 'integer'
                 }
               },
               strict: true

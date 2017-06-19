@@ -63,6 +63,7 @@ module.exports={
         strict: true
       },
       search: {
+        type: 'object',
         properties: {
           origin: {
             type: 'object',
@@ -96,7 +97,8 @@ module.exports={
                 optional: false
               }
             },
-            strict: true
+            strict: true,
+            optional: false
           },
           id: {
             type: 'string',
@@ -104,7 +106,6 @@ module.exports={
             minLength: 1
           }
         },
-        type: 'object',
         optional: false
       },
       visit: {

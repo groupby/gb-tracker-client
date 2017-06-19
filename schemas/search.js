@@ -63,6 +63,7 @@ module.exports={
         strict: true
       },
       search: {
+        type: 'object',
         properties: {
           origin: {
             type: 'object',
@@ -96,7 +97,8 @@ module.exports={
                 optional: false
               }
             },
-            strict: true
+            strict: true,
+            optional: false
           },
           id: {
             type: 'string',
@@ -277,25 +279,6 @@ module.exports={
                   type: 'string',
                   optional: true
                 },
-                metadata: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      key: {
-                        type: 'string',
-                        optional: false
-                      },
-                      value: {
-                        type: 'string',
-                        optional: false
-                      }
-                    },
-                    strict: true
-                  },
-                  optional: true,
-                  strict: true
-                },
                 refinements: {
                   type: 'array',
                   items: {
@@ -332,6 +315,25 @@ module.exports={
                     }
                   },
                   optional: false
+                },
+                metadata: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      key: {
+                        type: 'string',
+                        optional: false
+                      },
+                      value: {
+                        type: 'string',
+                        optional: false
+                      }
+                    },
+                    strict: true
+                  },
+                  optional: true,
+                  strict: true
                 }
               }
             },
@@ -374,25 +376,6 @@ module.exports={
                   type: 'string',
                   optional: true
                 },
-                metadata: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      key: {
-                        type: 'string',
-                        optional: false
-                      },
-                      value: {
-                        type: 'string',
-                        optional: false
-                      }
-                    },
-                    strict: true
-                  },
-                  optional: true,
-                  strict: true
-                },
                 refinements: {
                   type: 'array',
                   items: {
@@ -429,6 +412,25 @@ module.exports={
                     }
                   },
                   optional: false
+                },
+                metadata: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      key: {
+                        type: 'string',
+                        optional: false
+                      },
+                      value: {
+                        type: 'string',
+                        optional: false
+                      }
+                    },
+                    strict: true
+                  },
+                  optional: true,
+                  strict: true
                 }
               }
             },
@@ -767,7 +769,6 @@ module.exports={
             optional: true
           }
         },
-        type: 'object',
         optional: false
       },
       visit: {
@@ -1194,28 +1195,6 @@ module.exports={
                     'lower'
                   ]
                 },
-                metadata: {
-                  type: 'array',
-                  items: {
-                    properties: {
-                      key: {
-                        maxLength: 10000,
-                        rules: [
-                          'trim',
-                          'lower'
-                        ]
-                      },
-                      value: {
-                        maxLength: 10000,
-                        rules: [
-                          'trim',
-                          'lower'
-                        ]
-                      }
-                    },
-                    strict: true
-                  }
-                },
                 refinements: {
                   type: 'array',
                   items: {
@@ -1253,6 +1232,28 @@ module.exports={
                         ]
                       },
                       low: {
+                        maxLength: 10000,
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      }
+                    },
+                    strict: true
+                  }
+                },
+                metadata: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      key: {
+                        maxLength: 10000,
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      value: {
                         maxLength: 10000,
                         rules: [
                           'trim',
@@ -1303,28 +1304,6 @@ module.exports={
                     'lower'
                   ]
                 },
-                metadata: {
-                  type: 'array',
-                  items: {
-                    properties: {
-                      key: {
-                        maxLength: 10000,
-                        rules: [
-                          'trim',
-                          'lower'
-                        ]
-                      },
-                      value: {
-                        maxLength: 10000,
-                        rules: [
-                          'trim',
-                          'lower'
-                        ]
-                      }
-                    },
-                    strict: true
-                  }
-                },
                 refinements: {
                   type: 'array',
                   items: {
@@ -1362,6 +1341,28 @@ module.exports={
                         ]
                       },
                       low: {
+                        maxLength: 10000,
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      }
+                    },
+                    strict: true
+                  }
+                },
+                metadata: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      key: {
+                        maxLength: 10000,
+                        rules: [
+                          'trim',
+                          'lower'
+                        ]
+                      },
+                      value: {
                         maxLength: 10000,
                         rules: [
                           'trim',

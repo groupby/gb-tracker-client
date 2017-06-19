@@ -61,10 +61,6 @@ module.exports={
       cart: {
         type: 'object',
         properties: {
-          id: {
-            type: 'string',
-            optional: true
-          },
           totalItems: {
             type: 'integer',
             optional: true
@@ -79,6 +75,10 @@ module.exports={
           },
           generatedTotalPrice: {
             type: 'number',
+            optional: true
+          },
+          id: {
+            type: 'string',
             optional: true
           },
           items: {
@@ -115,9 +115,6 @@ module.exports={
                 price: {
                   type: 'number'
                 },
-                quantity: {
-                  type: 'integer'
-                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -133,6 +130,9 @@ module.exports={
                     strict: true
                   },
                   optional: true
+                },
+                quantity: {
+                  type: 'integer'
                 }
               },
               strict: true
@@ -282,14 +282,6 @@ module.exports={
       },
       cart: {
         properties: {
-          id: {
-            maxLength: 10000,
-            rules: [
-              'trim',
-              'lower'
-            ],
-            optional: true
-          },
           totalItems: {
             type: 'integer',
             optional: true
@@ -304,6 +296,14 @@ module.exports={
           },
           generatedTotalPrice: {
             type: 'number',
+            optional: true
+          },
+          id: {
+            maxLength: 10000,
+            rules: [
+              'trim',
+              'lower'
+            ],
             optional: true
           },
           items: {
@@ -363,9 +363,6 @@ module.exports={
                 price: {
                   type: 'number'
                 },
-                quantity: {
-                  type: 'integer'
-                },
                 metadata: {
                   type: 'array',
                   items: {
@@ -388,6 +385,9 @@ module.exports={
                     strict: true
                   },
                   optional: true
+                },
+                quantity: {
+                  type: 'integer'
                 }
               },
               strict: true
