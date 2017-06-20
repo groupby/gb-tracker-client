@@ -50,6 +50,19 @@ gbTracker.sendAutoSearchEvent({
 // NOTE: The 'sendSearchEvent' function is still available, but deprecated. 
 // Please use 'sendAutoSearchEvent' instead as shown above.
 
+// Auto MoreRefinements events
+gbTracker.sendAutoMoreRefinementsEvent({
+  moreRefinements:   {
+    id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', // Required: MoreRefinements ID
+  },
+  metadata: [                            // Optional
+    {
+      key: 'some key',
+      value: 'some value'
+    }
+  ]
+});
+
 // AddToCart events
 gbTracker.sendAddToCartEvent({
  cart: {

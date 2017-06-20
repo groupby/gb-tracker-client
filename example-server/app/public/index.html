@@ -11,7 +11,7 @@
         integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
   <script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-canary.min.js"></script>
-  <!--<script src="/dist/gb-tracker-client-3.3.3.js"></script>-->
+  <!--<script src="/dist/gb-tracker-client-3.4.5.js"></script>-->
   <script src="http://chancejs.com/chance.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
   <script src="/form.js"></script>
@@ -88,6 +88,30 @@
           <span ng-show="manualBeacon" style="color:red">Override API Key</span>
           <input ng-show="manualBeacon" type="text" ng-model="apiKey" size="100"/><br/>
           Manually Send Beacon&nbsp&nbsp&nbsp<input type="checkbox" ng-model="manualBeacon"/><br/>
+          <br/><input type="submit" ng-click="send(event)" value="Send"/>
+        </form>
+        <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
+        <pre ng-show="sent" class="text-success">Sent {{event | json}}</pre>
+      </div>
+      <div ng-controller="MoreRefinementsController" ng-show="selectedEvent ==='moreRefinements'">
+        <form novalidate class="simple-form">
+          <H2>More Refinements</H2>
+          <textarea ng-model="eventString" rows="5" cols="50"></textarea>
+          </br>
+          <div>
+            <H3 ng-show="!allowBeaconOverride">More Refinements Search API request:</H3>
+            <textarea ng-show="!allowBeaconOverride" type="text" ng-model="moreRefinementsBody" rows="5" cols="50"></textarea>
+            <H3 ng-show="allowBeaconOverride">More Refinements Direct Beacon:</H3>
+            <textarea type="text" ng-show="allowBeaconOverride" ng-model="directMoreRefinementsBody" rows="20" cols="50"></textarea><br/>
+            <span ng-show="jsonError" style="color:red">Invalid JSON!</span>
+            <br/><br/>
+          </div>
+          <input type="button" ng-click="overrideMoreRefinements()" value="Override More Refinements Endpoint"/>
+          <input ng-show="allowMoreRefinementsOverride && !allowBeaconOverride" type="text" ng-model="moreRefinementsPath" size="100"/><br/>
+          <input type="button" ng-click="overrideBeacon()" value="Override Direct Beacon Endpoint"/>
+          <input ng-show="allowBeaconOverride && !allowMoreRefinementsOverride" type="text" ng-model="beaconPath" ng-change="beaconPathChange()" size="100"/><br/>
+          <span ng-show="manualBeacon" style="color:red">Override API Key</span>
+          <input ng-show="manualBeacon" type="text" ng-model="apiKey" size="100"/><br/>
           <br/><input type="submit" ng-click="send(event)" value="Send"/>
         </form>
         <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
