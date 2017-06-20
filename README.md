@@ -51,7 +51,7 @@ gbTracker.sendAutoSearchEvent({
 // Please use 'sendAutoSearchEvent' instead as shown above.
 
 // Auto MoreRefinements events
-gbTracker.sendAutoMoreRefinementsEvent({
+gbTracker.sendMoreRefinementsEvent({
   moreRefinements:   {
     id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', // Required: MoreRefinements ID
   },

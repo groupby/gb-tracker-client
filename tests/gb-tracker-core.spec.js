@@ -371,7 +371,7 @@ describe('gb-tracker-core tests', () => {
     const initialTime = moment(visitorCookie.expires).valueOf();
     const currentMoment = moment();
 
-    expect(initialTime).to.be.most(moment(currentMoment).add(SHORT_EXPIRY + 1, 'seconds'));
+    expect(initialTime).to.be.most(moment(currentMoment).add(SHORT_EXPIRY + 1, 'seconds').valueOf());
     gbTrackerCore.autoSetVisitor();
 
     visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
