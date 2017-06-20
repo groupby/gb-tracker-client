@@ -675,7 +675,7 @@ app.controller('MoreRefinementsController', [
             ]
           },
           originalRequest: {
-            navigation:    'brand',
+            navigationName:    'brand',
             originalQuery: {
               query: 'record'
             }
