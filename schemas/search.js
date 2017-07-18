@@ -332,8 +332,7 @@ module.exports={
                     },
                     strict: true
                   },
-                  optional: true,
-                  strict: true
+                  optional: true
                 }
               }
             },
@@ -429,8 +428,7 @@ module.exports={
                     },
                     strict: true
                   },
-                  optional: true,
-                  strict: true
+                  optional: true
                 }
               }
             },
@@ -1165,17 +1163,11 @@ module.exports={
               properties: {
                 name: {
                   maxLength: 10000,
-                  rules: [
-                    'trim',
-                    'lower'
-                  ]
+                  rules: []
                 },
                 displayName: {
                   maxLength: 10000,
-                  rules: [
-                    'trim',
-                    'lower'
-                  ]
+                  rules: []
                 },
                 range: {},
                 or: {},
@@ -1219,10 +1211,7 @@ module.exports={
                       exclude: {},
                       value: {
                         maxLength: 10000,
-                        rules: [
-                          'trim',
-                          'lower'
-                        ]
+                        rules: []
                       },
                       high: {
                         maxLength: 10000,
@@ -1274,17 +1263,11 @@ module.exports={
               properties: {
                 name: {
                   maxLength: 10000,
-                  rules: [
-                    'trim',
-                    'lower'
-                  ]
+                  rules: []
                 },
                 displayName: {
                   maxLength: 10000,
-                  rules: [
-                    'trim',
-                    'lower'
-                  ]
+                  rules: []
                 },
                 range: {},
                 or: {},
@@ -1328,10 +1311,7 @@ module.exports={
                       exclude: {},
                       value: {
                         maxLength: 10000,
-                        rules: [
-                          'trim',
-                          'lower'
-                        ]
+                        rules: []
                       },
                       high: {
                         maxLength: 10000,
@@ -1713,10 +1693,7 @@ module.exports={
                 properties: {
                   name: {
                     maxLength: 10000,
-                    rules: [
-                      'trim',
-                      'lower'
-                    ]
+                    rules: []
                   },
                   count: {
                     type: 'integer'
@@ -1728,20 +1705,14 @@ module.exports={
                 type: 'array',
                 items: {
                   maxLength: 10000,
-                  rules: [
-                    'trim',
-                    'lower'
-                  ]
+                  rules: []
                 }
               },
               excludedNavigations: {
                 type: 'array',
                 items: {
                   maxLength: 10000,
-                  rules: [
-                    'trim',
-                    'lower'
-                  ]
+                  rules: []
                 }
               },
               refinements: {
@@ -1750,10 +1721,7 @@ module.exports={
                   properties: {
                     navigationName: {
                       maxLength: 10000,
-                      rules: [
-                        'trim',
-                        'lower'
-                      ]
+                      rules: []
                     },
                     type: {
                       maxLength: 10000,
@@ -1772,10 +1740,7 @@ module.exports={
                     exclude: {},
                     value: {
                       maxLength: 10000,
-                      rules: [
-                        'trim',
-                        'lower'
-                      ]
+                      rules: []
                     },
                     high: {
                       maxLength: 10000,
