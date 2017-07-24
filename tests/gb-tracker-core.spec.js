@@ -377,7 +377,6 @@ describe('gb-tracker-core tests', () => {
     visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
     const laterTime = moment(visitorCookie.expires).valueOf();
     expect(laterTime).to.be.least(moment(currentMoment).add(GbTracker.VISITOR_TIMEOUT_SEC - 1, 'seconds').valueOf());
-
     expect(laterTime).to.be.most(moment(currentMoment).add(GbTracker.VISITOR_TIMEOUT_SEC + 5, 'seconds').valueOf());
   });
 
@@ -399,11 +398,17 @@ describe('gb-tracker-core tests', () => {
 
     GbTracker.__overrideCookiesLib(CookiesLib);
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    gbTrackerCore.autoSetVisitor();
 
     let sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+    console.log(sessionCookie.expires);
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(SHORT_EXPIRY_SEC, 'seconds').valueOf());
     expect(moment(sessionCookie.expires).valueOf()).to.be.least(moment().add(SHORT_EXPIRY_SEC - 2, 'seconds').valueOf());
+
+    gbTrackerCore.autoSetVisitor();
+
+    sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+    // Minus 2 just to allow for a bit of lag between setting and checking the value
+    expect(moment(sessionCookie.expires).valueOf()).to.be.least(moment().add(GbTracker.SESSION_TIMEOUT_SEC - 2, 'seconds').valueOf());
 
     gbTrackerCore.__private.sendEvent = () => {
       sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
