@@ -1,35 +1,35 @@
 /*eslint  no-global-assign: "off"*/
-const chai   = require('chai');
+const chai = require('chai');
 const expect = chai.expect;
 
-window                = false;
-document              = false;
-navigator             = {};
+window = false;
+document = false;
+navigator = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
-navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
+navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
 describe('autoMoreRefinements tests', () => {
   it('should accept valid moreRefinements event containing only origin and moreRefinements id', (done) => {
     const expectedEvent = {
-      moreRefinements:    {
-        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+      moreRefinements: {
+        id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       },
       eventType: 'autoMoreRefinements',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -65,26 +65,26 @@ describe('autoMoreRefinements tests', () => {
 
   it('should NOT accept with blank moreRefinements.id', (done) => {
     const expectedEvent = {
-      moreRefinements:    {
-        id:     '',
+      moreRefinements: {
+        id: '',
         origin: {
           sayt: true
         }
       },
       eventType: 'autoMoreRefinements',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -98,7 +98,7 @@ describe('autoMoreRefinements tests', () => {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendMoreRefinementsEvent({
-      moreRefinements:     expectedEvent.moreRefinements
+      moreRefinements: expectedEvent.moreRefinements
     });
   });
 
@@ -169,7 +169,7 @@ describe('autoMoreRefinements tests', () => {
 
     gbTrackerCore.sendMoreRefinementsEvent({
       moreRefinements: {
-        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+        id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
       }
     });
   });

@@ -1,12 +1,12 @@
 /*eslint  no-global-assign: "off"*/
-const chai   = require('chai');
+const chai = require('chai');
 const expect = chai.expect;
 
-window                = false;
-document              = false;
-navigator             = {};
+window = false;
+document = false;
+navigator = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
-navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
+navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
 const utils = require('../lib/utils');
 
@@ -34,17 +34,17 @@ describe('utils tests', () => {
   it('should merge two objects', () => {
     const first = {
       something: 'yo',
-      else:      598,
-      deep:      {
-        nested:  '9403',
+      else: 598,
+      deep: {
+        nested: '9403',
         notHere: null
       }
     };
 
     const second = {
       something: 'yo',
-      new:       'kjsdf',
-      deep:      {
+      new: 'kjsdf',
+      deep: {
         nested: 'other',
         isHere: '098098'
       }
@@ -53,11 +53,11 @@ describe('utils tests', () => {
     const result = utils.merge(first, second);
     expect(result).to.eql({
       something: 'yo',
-      else:      598,
-      new:       'kjsdf',
-      deep:      {
-        nested:  'other',
-        isHere:  '098098',
+      else: 598,
+      new: 'kjsdf',
+      deep: {
+        nested: 'other',
+        isHere: '098098',
         notHere: null
       }
     });
@@ -66,17 +66,17 @@ describe('utils tests', () => {
   it('should merge more than two objects', () => {
     const first = {
       something: 'yo',
-      else:      598,
-      deep:      {
-        nested:  '9403',
+      else: 598,
+      deep: {
+        nested: '9403',
         notHere: null
       }
     };
 
     const second = {
       something: 'yo',
-      new:       'kjsdf',
-      deep:      {
+      new: 'kjsdf',
+      deep: {
         nested: 'other',
         isHere: '098098'
       }
@@ -89,11 +89,11 @@ describe('utils tests', () => {
     const result = utils.merge(first, second, third);
     expect(result).to.eql({
       something: 'yo',
-      else:      598,
-      new:       'another thing',
-      deep:      {
-        nested:  'other',
-        isHere:  '098098',
+      else: 598,
+      new: 'another thing',
+      deep: {
+        nested: 'other',
+        isHere: '098098',
         notHere: null
       }
     });
@@ -102,9 +102,9 @@ describe('utils tests', () => {
   it('should make a deep copy of an object', () => {
     const first = {
       something: 'yo',
-      else:      598,
-      deep:      {
-        nested:  '9403',
+      else: 598,
+      deep: {
+        nested: '9403',
         notHere: null
       }
     };
@@ -135,13 +135,13 @@ describe('utils tests', () => {
 
   it('should get IE version', () => {
     const appCodeName = 'Microsoft Internet Explorer';
-    let userAgent     = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
+    let userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
     let version = utils.getInternetExplorerVersion(appCodeName, userAgent);
     expect(version).to.eql(8);
 
     userAgent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
-    version   = utils.getInternetExplorerVersion(appCodeName, userAgent);
+    version = utils.getInternetExplorerVersion(appCodeName, userAgent);
     expect(version).to.eql(10);
 
     version = utils.getInternetExplorerVersion(appCodeName, {});

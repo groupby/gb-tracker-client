@@ -1,8 +1,8 @@
 /*eslint  no-global-assign: "off"*/
-const chai   = require('chai');
+const chai = require('chai');
 const expect = chai.expect;
-const jsdom  = require('jsdom');
-const _      = require('lodash');
+const jsdom = require('jsdom');
+const _ = require('lodash');
 const pjson = require('../package.json');
 const fs = require('fs');
 
@@ -22,40 +22,38 @@ describe('browser version tests', () => {
 
   it('first file loads onto the window object and can send event', (done) => {
     window = jsdom.jsdom().defaultView;
-    const filedata = fs.readFileSync(distFiles[0],'utf8');
+    const filedata = fs.readFileSync(distFiles[0], 'utf8');
     eval(filedata);
 
     expect(_.isObject(window.GbTracker)).to.eql(true);
     expect(window.GbTracker.VERSION).to.eql(pjson.version);
 
     const expectedEvent = {
-      cart:      {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+      cart: {
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       },
       eventType: 'addToCart',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -91,40 +89,38 @@ describe('browser version tests', () => {
 
   it('second file loads onto the window object and can send event', (done) => {
     window = jsdom.jsdom().defaultView;
-    const filedata = fs.readFileSync(distFiles[1],'utf8');
+    const filedata = fs.readFileSync(distFiles[1], 'utf8');
     eval(filedata);
 
     expect(_.isObject(window.GbTracker)).to.eql(true);
     expect(window.GbTracker.VERSION).to.eql(pjson.version);
 
     const expectedEvent = {
-      cart:      {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+      cart: {
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       },
       eventType: 'addToCart',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };

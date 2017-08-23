@@ -1,38 +1,38 @@
 /*eslint  no-global-assign: "off"*/
-const chai   = require('chai');
+const chai = require('chai');
 const expect = chai.expect;
 
-window                = false;
-document              = false;
-navigator             = {};
+window = false;
+document = false;
+navigator = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
-navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
+navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
 describe('autoSearch tests', () => {
   it('should accept valid search event containing only origin and search id', (done) => {
     const expectedEvent = {
-      search:    {
-        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      search: {
+        id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
           sayt: true
         }
       },
       eventType: 'autoSearch',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -50,12 +50,12 @@ describe('autoSearch tests', () => {
 
       expect(event.search).to.eql(Object.assign({}, expectedEvent.search, {
         origin: {
-          dym:                false,
-          sayt:               true,
-          search:             false,
-          recommendations:    false,
-          autosearch:         false,
-          navigation:         false,
+          dym: false,
+          sayt: true,
+          search: false,
+          recommendations: false,
+          autosearch: false,
+          navigation: false,
           collectionSwitcher: false
         }
       }));
@@ -78,26 +78,26 @@ describe('autoSearch tests', () => {
 
   it('should NOT accept with blank search.id', (done) => {
     const expectedEvent = {
-      search:    {
-        id:     '',
+      search: {
+        id: '',
         origin: {
           sayt: true
         }
       },
       eventType: 'autoSearch',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -111,7 +111,7 @@ describe('autoSearch tests', () => {
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
     gbTrackerCore.sendAutoSearchEvent({
-      search:     expectedEvent.search
+      search: expectedEvent.search
     });
   });
 
@@ -135,7 +135,7 @@ describe('autoSearch tests', () => {
 
     gbTrackerCore.sendAutoSearchEvent({
       responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      origin:     {
+      origin: {
         sayt: true
       }
     });
@@ -188,7 +188,7 @@ describe('autoSearch tests', () => {
 
     gbTrackerCore.sendAutoSearchEvent({
       search: {
-        id:     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
           sayt: true
         }
@@ -216,7 +216,7 @@ describe('autoSearch tests', () => {
 
     gbTrackerCore.sendAutoSearchEvent({
       responseId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      search:     {
+      search: {
         // origin: {
         //   sayt: true
         // }

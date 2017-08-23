@@ -1,61 +1,55 @@
 /*eslint  no-global-assign: "off"*/
-const chai     = require('chai');
-const expect   = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 const LZString = require('lz-string/libs/lz-string.min.js');
-const jsdom    = require('jsdom');
-const _        = require('lodash');
-const moment   = require('moment');
-const uuid     = require('uuid');
+const jsdom = require('jsdom');
+const _ = require('lodash');
+const moment = require('moment');
+const cuid = require('cuid');
 
-window                = {};
-document              = false;
-navigator             = {};
+window = {};
+document = false;
+navigator = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
-navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
+navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
 const GbTracker = require('../lib/gb-tracker-core');
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const CUID_REGEX = /^c[0-9a-z]{8}[0-9a-z]{4}[0-9a-z]{4}[0-9a-z]{8}$/i;
 
 describe('gb-tracker-core tests', () => {
 
   it('should return the fields not present on the sanitised object', () => {
-    const gbTrackerCore               = new GbTracker('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = () => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
     const first = {
-      thing:  'soomething',
+      thing: 'soomething',
       ignore: 'not a thing',
-      deep:   {
-        other:      'banana',
-        arrayThing: [
-          {
-            included: 'other'
-          },
-          {
-            included: 'other2'
-          }
-        ]
+      deep: {
+        other: 'banana',
+        arrayThing: [{
+          included: 'other'
+        }, {
+          included: 'other2'
+        }]
       }
     };
 
     const second = {
-      thing:        'soomething',
+      thing: 'soomething',
       anExtraThing: 'yo',
-      deep:         {
-        other:           'banana',
+      deep: {
+        other: 'banana',
         manyExtraThings: 'fo sho',
-        arrayThing:      [
-          {
-            included: 'other',
-            extra:    'yo'
-          },
-          {
-            included: 'other2',
-            extra:    'yo2'
-          }
-        ]
+        arrayThing: [{
+          included: 'other',
+          extra: 'yo'
+        }, {
+          included: 'other2',
+          extra: 'yo2'
+        }]
       }
     };
 
@@ -108,15 +102,15 @@ describe('gb-tracker-core tests', () => {
     const sessionChangeEvent = {
       previousVisitorId: 'prevVisitor',
       previousSessionId: 'prevSession',
-      newVisitorId:      'newVisitor',
-      newSessionId:      'newSession'
+      newVisitorId: 'newVisitor',
+      newSessionId: 'newSession'
     };
 
     gbTrackerCore.__private.sendSessionChangeEvent = (event) => {
       expect(event).to.eql({
         session: {
-          newVisitorId:      sessionChangeEvent.newVisitorId,
-          newSessionId:      sessionChangeEvent.newSessionId,
+          newVisitorId: sessionChangeEvent.newVisitorId,
+          newSessionId: sessionChangeEvent.newSessionId,
           previousVisitorId: sessionChangeEvent.previousVisitorId,
           previousSessionId: sessionChangeEvent.previousSessionId
         }
@@ -135,15 +129,15 @@ describe('gb-tracker-core tests', () => {
     const sessionChangeEvent = {
       previousVisitorId: 'prevVisitor',
       previousSessionId: 'prevSession',
-      newVisitorId:      'newVisitor',
-      newSessionId:      'newSession'
+      newVisitorId: 'newVisitor',
+      newSessionId: 'newSession'
     };
 
     gbTrackerCore.__private.sendSessionChangeEvent = (event) => {
       expect(event).to.eql({
         session: {
-          newVisitorId:      sessionChangeEvent.newVisitorId,
-          newSessionId:      sessionChangeEvent.newSessionId,
+          newVisitorId: sessionChangeEvent.newVisitorId,
+          newSessionId: sessionChangeEvent.newSessionId,
           previousVisitorId: sessionChangeEvent.previousVisitorId,
           previousSessionId: sessionChangeEvent.previousSessionId
         }
@@ -162,8 +156,8 @@ describe('gb-tracker-core tests', () => {
     const sessionChangeEvent = {
       previousVisitorId: 'prevVisitor',
       previousSessionId: 'prevSession',
-      newVisitorId:      'prevVisitor', // New same as previous
-      newSessionId:      'prevSession'
+      newVisitorId: 'prevVisitor', // New same as previous
+      newSessionId: 'prevSession'
     };
 
     let firstCall = true;
@@ -194,7 +188,7 @@ describe('gb-tracker-core tests', () => {
   it('sets visitor and session cookies', () => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -204,8 +198,8 @@ describe('gb-tracker-core tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.autoSetVisitor();
 
-    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
-    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(CUID_REGEX);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.not.eql(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY));
 
     expect(gbTrackerCore.getVisitorId()).to.eql(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY));
@@ -213,8 +207,8 @@ describe('gb-tracker-core tests', () => {
     expect(gbTrackerCore.getLoginId()).to.be.undefined;
 
     expect(cookieJar.toJSON().cookies.length).to.eql(2);
-    const sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
-    const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    const sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
+    const visitorCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.VISITOR_COOKIE_KEY });
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
     expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
@@ -223,16 +217,16 @@ describe('gb-tracker-core tests', () => {
   it('reads existing visitor and session cookies', () => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
     expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.be.undefined;
 
-    const visitorCookieValue = uuid.v4();
-    const sessionCookieValue = uuid.v4();
-    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, {expires: Infinity});
-    CookiesLib.set(GbTracker.SESSION_COOKIE_KEY, sessionCookieValue, {expires: GbTracker.SESSION_TIMEOUT_SEC});
+    const visitorCookieValue = cuid();
+    const sessionCookieValue = cuid();
+    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, { expires: Infinity });
+    CookiesLib.set(GbTracker.SESSION_COOKIE_KEY, sessionCookieValue, { expires: GbTracker.SESSION_TIMEOUT_SEC });
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.eql(visitorCookieValue);
     expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.eql(sessionCookieValue);
@@ -250,8 +244,8 @@ describe('gb-tracker-core tests', () => {
     expect(gbTrackerCore.getLoginId()).to.be.undefined;
 
     expect(cookieJar.toJSON().cookies.length).to.eql(2);
-    const sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
-    const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    const sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
+    const visitorCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.VISITOR_COOKIE_KEY });
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
     expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
@@ -260,14 +254,14 @@ describe('gb-tracker-core tests', () => {
   it('reads existing visitor and session cookies and updates to valid expiry', () => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
     expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.be.undefined;
 
-    const visitorCookieValue = uuid.v4();
-    const sessionCookieValue = uuid.v4();
+    const visitorCookieValue = cuid();
+    const sessionCookieValue = cuid();
     CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue);
     CookiesLib.set(GbTracker.SESSION_COOKIE_KEY, sessionCookieValue);
 
@@ -287,8 +281,8 @@ describe('gb-tracker-core tests', () => {
     expect(gbTrackerCore.getLoginId()).to.be.undefined;
 
     expect(cookieJar.toJSON().cookies.length).to.eql(2);
-    const sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
-    const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    const sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
+    const visitorCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.VISITOR_COOKIE_KEY });
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
     expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
@@ -297,7 +291,7 @@ describe('gb-tracker-core tests', () => {
   it('sets visitor and session cookies, and keeps loginId locally', () => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -305,11 +299,11 @@ describe('gb-tracker-core tests', () => {
 
     GbTracker.__overrideCookiesLib(CookiesLib);
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const loginId       = 'some user';
+    const loginId = 'some user';
     gbTrackerCore.autoSetVisitor(loginId);
 
-    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
-    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(CUID_REGEX);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.not.eql(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY));
 
     expect(gbTrackerCore.getVisitorId()).to.eql(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY));
@@ -317,15 +311,15 @@ describe('gb-tracker-core tests', () => {
     expect(gbTrackerCore.getLoginId()).to.eql(loginId);
 
     expect(cookieJar.toJSON().cookies.length).to.eql(2);
-    const sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
-    const visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    const sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
+    const visitorCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.VISITOR_COOKIE_KEY });
 
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
     expect(moment(visitorCookie.expires).year()).to.eql(moment().add(GbTracker.VISITOR_TIMEOUT_SEC, 'seconds').year());
   });
 
   it('autoSetVisitor overrides setVisitor', () => {
-    const window     = jsdom.jsdom().defaultView;
+    const window = jsdom.jsdom().defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     GbTracker.__overrideCookiesLib(CookiesLib);
@@ -333,12 +327,12 @@ describe('gb-tracker-core tests', () => {
     gbTrackerCore.setVisitor(1, 1);
     gbTrackerCore.autoSetVisitor();
 
-    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
-    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(CUID_REGEX);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
   });
 
   it('autoSetVisitor ignores setVisitor', () => {
-    const window     = jsdom.jsdom().defaultView;
+    const window = jsdom.jsdom().defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     GbTracker.__overrideCookiesLib(CookiesLib);
@@ -346,14 +340,14 @@ describe('gb-tracker-core tests', () => {
     gbTrackerCore.autoSetVisitor();
     gbTrackerCore.setVisitor(1, 1);
 
-    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
-    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(CUID_REGEX);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
   });
 
   it('should push back the cookie expiry every time autoSetVisitor is used', () => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -361,12 +355,12 @@ describe('gb-tracker-core tests', () => {
 
     const SHORT_EXPIRY = 5;
 
-    const visitorCookieValue = uuid.v4();
-    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, {expires: SHORT_EXPIRY});
+    const visitorCookieValue = cuid();
+    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, { expires: SHORT_EXPIRY });
 
     GbTracker.__overrideCookiesLib(CookiesLib);
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    let visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    let visitorCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.VISITOR_COOKIE_KEY });
 
     const initialTime = moment(visitorCookie.expires).valueOf();
     const currentMoment = moment();
@@ -374,7 +368,7 @@ describe('gb-tracker-core tests', () => {
     expect(initialTime).to.be.most(moment(currentMoment).add(SHORT_EXPIRY + 1, 'seconds').valueOf());
     gbTrackerCore.autoSetVisitor();
 
-    visitorCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.VISITOR_COOKIE_KEY});
+    visitorCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.VISITOR_COOKIE_KEY });
     const laterTime = moment(visitorCookie.expires).valueOf();
     expect(laterTime).to.be.least(moment(currentMoment).add(GbTracker.VISITOR_TIMEOUT_SEC - 1, 'seconds').valueOf());
     expect(laterTime).to.be.most(moment(currentMoment).add(GbTracker.VISITOR_TIMEOUT_SEC + 5, 'seconds').valueOf());
@@ -383,7 +377,7 @@ describe('gb-tracker-core tests', () => {
   it('sending events refreshes session expiry when autoSetVisitor is used', (done) => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -391,44 +385,42 @@ describe('gb-tracker-core tests', () => {
 
     const SHORT_EXPIRY_SEC = 5;
 
-    const visitorCookieValue = uuid.v4();
-    const sessionCookieValue = uuid.v4();
-    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, {expires: Infinity});
-    CookiesLib.set(GbTracker.SESSION_COOKIE_KEY, sessionCookieValue, {expires: SHORT_EXPIRY_SEC});
+    const visitorCookieValue = cuid();
+    const sessionCookieValue = cuid();
+    CookiesLib.set(GbTracker.VISITOR_COOKIE_KEY, visitorCookieValue, { expires: Infinity });
+    CookiesLib.set(GbTracker.SESSION_COOKIE_KEY, sessionCookieValue, { expires: SHORT_EXPIRY_SEC });
 
     GbTracker.__overrideCookiesLib(CookiesLib);
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
-    let sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+    let sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
     console.log(sessionCookie.expires);
     expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(SHORT_EXPIRY_SEC, 'seconds').valueOf());
     expect(moment(sessionCookie.expires).valueOf()).to.be.least(moment().add(SHORT_EXPIRY_SEC - 2, 'seconds').valueOf());
 
     gbTrackerCore.autoSetVisitor();
 
-    sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+    sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
     // Minus 2 just to allow for a bit of lag between setting and checking the value
     expect(moment(sessionCookie.expires).valueOf()).to.be.least(moment().add(GbTracker.SESSION_TIMEOUT_SEC - 2, 'seconds').valueOf());
 
     gbTrackerCore.__private.sendEvent = () => {
-      sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+      sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
       expect(moment(sessionCookie.expires).valueOf()).to.be.most(moment().add(GbTracker.SESSION_TIMEOUT_SEC, 'seconds').valueOf());
       done();
     };
 
     gbTrackerCore.sendAddToCartEvent({
       cart: {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       }
     });
   });
@@ -436,7 +428,7 @@ describe('gb-tracker-core tests', () => {
   it('sending events does not set session when autoSetVisitor is not used', (done) => {
     const cookieJar = jsdom.createCookieJar();
 
-    const window     = jsdom.jsdom(undefined, {cookieJar}).defaultView;
+    const window = jsdom.jsdom(undefined, { cookieJar }).defaultView;
     const CookiesLib = require('cookies-js')(window);
 
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -446,34 +438,32 @@ describe('gb-tracker-core tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.setVisitor(1, 1);
 
-    let sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+    let sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
     expect(sessionCookie).to.be.undefined;
 
     gbTrackerCore.__private.sendEvent = () => {
-      sessionCookie = _.find(cookieJar.toJSON().cookies, {key: GbTracker.SESSION_COOKIE_KEY});
+      sessionCookie = _.find(cookieJar.toJSON().cookies, { key: GbTracker.SESSION_COOKIE_KEY });
       expect(sessionCookie).to.be.undefined;
       done();
     };
 
     gbTrackerCore.sendAddToCartEvent({
       cart: {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       }
     });
   });
 
   it('should allow visitor or session IDs as numbers and coerce to strings', () => {
-    const gbTrackerCore               = new GbTracker('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = () => {};
 
     gbTrackerCore.setVisitor(7, 5);
@@ -483,15 +473,15 @@ describe('gb-tracker-core tests', () => {
   });
 
   it('should validate valid event', () => {
-    const gbTrackerCore               = new GbTracker('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = () => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
     const validationSchema = {
-      type:       'object',
-      strict:     true,
+      type: 'object',
+      strict: true,
       properties: {
-        thing:        {
+        thing: {
           type: 'string'
         },
         anotherThing: {
@@ -501,22 +491,22 @@ describe('gb-tracker-core tests', () => {
     };
 
     const sanitizationSchema = {
-      strict:     true,
+      strict: true,
       properties: {
-        thing:        {},
+        thing: {},
         anotherThing: {}
       }
     };
 
     const schemas = {
-      validation:   validationSchema,
+      validation: validationSchema,
       sanitization: sanitizationSchema
     };
 
     const event = {
-      thing:        'yo',
+      thing: 'yo',
       anotherThing: 190,
-      extraThing:   {
+      extraThing: {
         subExtra: 'fo sho'
       }
     };
@@ -534,13 +524,13 @@ describe('gb-tracker-core tests', () => {
     gbTrackerCore.setStrictMode(true);
 
     const validationSchema = {
-      type:       'object',
-      strict:     true,
+      type: 'object',
+      strict: true,
       properties: {
-        eventType:    {
+        eventType: {
           type: 'string'
         },
-        thing:        {
+        thing: {
           type: 'string'
         },
         anotherThing: {
@@ -550,24 +540,24 @@ describe('gb-tracker-core tests', () => {
     };
 
     const sanitizationSchema = {
-      strict:     true,
+      strict: true,
       properties: {
-        eventType:    {},
-        thing:        {},
+        eventType: {},
+        thing: {},
         anotherThing: {}
       }
     };
 
     const schemas = {
-      validation:   validationSchema,
+      validation: validationSchema,
       sanitization: sanitizationSchema
     };
 
     const event = {
-      eventType:    'eventType',
-      thing:        'string',
+      eventType: 'eventType',
+      thing: 'string',
       anotherThing: 190,
-      extraThing:   {
+      extraThing: {
         subExtra: 'fo sho'
       }
     };
@@ -579,13 +569,13 @@ describe('gb-tracker-core tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     const validationSchema = {
-      type:       'object',
-      strict:     true,
+      type: 'object',
+      strict: true,
       properties: {
-        eventType:    {
+        eventType: {
           type: 'string'
         },
-        thing:        {
+        thing: {
           type: 'string'
         },
         anotherThing: {
@@ -595,48 +585,46 @@ describe('gb-tracker-core tests', () => {
     };
 
     const sanitizationSchema = {
-      strict:     true,
+      strict: true,
       properties: {
-        eventType:    {},
-        thing:        {},
+        eventType: {},
+        thing: {},
         anotherThing: {}
       }
     };
 
     const schemas = {
-      validation:   validationSchema,
+      validation: validationSchema,
       sanitization: sanitizationSchema
     };
 
     const event = {
-      eventType:    'eventType',
-      thing:        'string',
+      eventType: 'eventType',
+      thing: 'string',
       anotherThing: 190,
-      extraThing:   {
+      extraThing: {
         subExtra: 'fo sho'
       }
     };
 
     const validated = gbTrackerCore.__private.validateEvent(event, schemas);
 
-    expect(validated.event.metadata).to.eql([
-      {
-        key:   'gbi-field-warning',
-        value: 'extraThing'
-      }
-    ]);
+    expect(validated.event.metadata).to.eql([{
+      key: 'gbi-field-warning',
+      value: 'extraThing'
+    }]);
   });
 
   it('should drop an invalid event', () => {
-    const gbTrackerCore               = new GbTracker('testcustomer', 'area');
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.__private.sendEvent = () => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
     const validationSchema = {
-      type:       'object',
-      strict:     true,
+      type: 'object',
+      strict: true,
       properties: {
-        thing:        {
+        thing: {
           type: 'string'
         },
         anotherThing: {
@@ -646,24 +634,24 @@ describe('gb-tracker-core tests', () => {
     };
 
     const sanitizationSchema = {
-      strict:     true,
+      strict: true,
       properties: {
-        thing:        {},
+        thing: {},
         anotherThing: {}
       }
     };
 
     const schemas = {
-      validation:   validationSchema,
+      validation: validationSchema,
       sanitization: sanitizationSchema
     };
 
     const event = {
-      thing:        {
+      thing: {
         shouldNotBeAnObject: 100
       },
       anotherThing: 190,
-      extraThing:   {
+      extraThing: {
         subExtra: 'fo sho'
       }
     };
@@ -682,12 +670,12 @@ describe('gb-tracker-core tests', () => {
       expect(segment.id).to.eql(0);
       expect(segment.total).to.eql(1);
       expect(segment.clientVersion).to.not.be.undefined;
-      expect(segment.uuid).to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+      expect(segment.uuid).to.match(/^c[0-9a-z]{8}[0-9a-z]{4}[0-9a-z]{4}[0-9a-z]{8}$/i);
       done();
     };
 
     const event = {
-      first:  'this',
+      first: 'this',
       second: 'that'
     };
 
