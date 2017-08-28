@@ -16,7 +16,13 @@ describe('autoSearch tests', () => {
       search: {
         id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
-          sayt: true
+          dym: false,
+          sayt: true,
+          search: false,
+          recommendations: false,
+          autosearch: false,
+          navigation: false,
+          collectionSwitcher: false
         }
       },
       eventType: 'autoSearch',

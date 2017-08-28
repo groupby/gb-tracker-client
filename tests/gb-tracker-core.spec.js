@@ -477,7 +477,7 @@ describe('gb-tracker-core tests', () => {
     gbTrackerCore.__private.sendEvent = () => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
-    const validationSchema = {
+    const schema = {
       type: 'object',
       strict: true,
       properties: {
@@ -488,19 +488,6 @@ describe('gb-tracker-core tests', () => {
           type: 'integer'
         }
       }
-    };
-
-    const sanitizationSchema = {
-      strict: true,
-      properties: {
-        thing: {},
-        anotherThing: {}
-      }
-    };
-
-    const schemas = {
-      validation: validationSchema,
-      sanitization: sanitizationSchema
     };
 
     const event = {
@@ -511,7 +498,7 @@ describe('gb-tracker-core tests', () => {
       }
     };
 
-    const validated = gbTrackerCore.__private.validateEvent(event, schemas);
+    const validated = gbTrackerCore.__private.validateEvent(event, schema);
 
     expect(validated.event.thing).to.eql('yo');
     expect(validated.event.anotherThing).to.eql(190);
@@ -519,56 +506,10 @@ describe('gb-tracker-core tests', () => {
     expect(validated.event.visit.generated.timezoneOffset).to.not.be.undefined;
   });
 
-  it('throws during validation if strictMode is on and there are extra fields in event', () => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    gbTrackerCore.setStrictMode(true);
-
-    const validationSchema = {
-      type: 'object',
-      strict: true,
-      properties: {
-        eventType: {
-          type: 'string'
-        },
-        thing: {
-          type: 'string'
-        },
-        anotherThing: {
-          type: 'integer'
-        }
-      }
-    };
-
-    const sanitizationSchema = {
-      strict: true,
-      properties: {
-        eventType: {},
-        thing: {},
-        anotherThing: {}
-      }
-    };
-
-    const schemas = {
-      validation: validationSchema,
-      sanitization: sanitizationSchema
-    };
-
-    const event = {
-      eventType: 'eventType',
-      thing: 'string',
-      anotherThing: 190,
-      extraThing: {
-        subExtra: 'fo sho'
-      }
-    };
-
-    expect(() => gbTrackerCore.__private.validateEvent(event, schemas)).to.throw('Unexpected fields ["extraThing"] in eventType: eventType');
-  });
-
   it('appends warnings about stripped fields to metadata', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
-    const validationSchema = {
+    const schema = {
       type: 'object',
       strict: true,
       properties: {
@@ -584,20 +525,6 @@ describe('gb-tracker-core tests', () => {
       }
     };
 
-    const sanitizationSchema = {
-      strict: true,
-      properties: {
-        eventType: {},
-        thing: {},
-        anotherThing: {}
-      }
-    };
-
-    const schemas = {
-      validation: validationSchema,
-      sanitization: sanitizationSchema
-    };
-
     const event = {
       eventType: 'eventType',
       thing: 'string',
@@ -607,7 +534,7 @@ describe('gb-tracker-core tests', () => {
       }
     };
 
-    const validated = gbTrackerCore.__private.validateEvent(event, schemas);
+    const validated = gbTrackerCore.__private.validateEvent(event, schema);
 
     expect(validated.event.metadata).to.eql([{
       key: 'gbi-field-warning',
@@ -620,7 +547,7 @@ describe('gb-tracker-core tests', () => {
     gbTrackerCore.__private.sendEvent = () => {};
     gbTrackerCore.setVisitor('visitor', 'session');
 
-    const validationSchema = {
+    const schema = {
       type: 'object',
       strict: true,
       properties: {
@@ -633,19 +560,6 @@ describe('gb-tracker-core tests', () => {
       }
     };
 
-    const sanitizationSchema = {
-      strict: true,
-      properties: {
-        thing: {},
-        anotherThing: {}
-      }
-    };
-
-    const schemas = {
-      validation: validationSchema,
-      sanitization: sanitizationSchema
-    };
-
     const event = {
       thing: {
         shouldNotBeAnObject: 100
@@ -656,7 +570,7 @@ describe('gb-tracker-core tests', () => {
       }
     };
 
-    const invalidated = gbTrackerCore.__private.validateEvent(event, schemas);
+    const invalidated = gbTrackerCore.__private.validateEvent(event, schema);
 
     expect(invalidated.event).to.eql(null);
     expect(invalidated.error).to.eql('Property @.thing: must be string, but is object');
