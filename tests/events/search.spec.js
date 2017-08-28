@@ -71,7 +71,7 @@ describe('search tests', () => {
         return;
       }
 
-      expectedEvent.search.query = 'searchy searchface no angles or trailing spaces';
+      expectedEvent.search.query = 'searchy searchface   no angles or trailing spaces';
 
       expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.search).to.eql(expectedEvent.search);
@@ -148,7 +148,7 @@ describe('search tests', () => {
         return;
       }
 
-      expectedEvent.search.query = 'searchy searchface no angles or trailing spaces';
+      expectedEvent.search.query = 'searchy searchface   no angles or trailing spaces';
 
       expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.search).to.eql(expectedEvent.search);
@@ -1730,7 +1730,15 @@ const searchEvent = {
     },
     'relatedQueries': [],
     'rewrites': [],
-    'origin': {},
+    'origin': {
+      'dym': false,
+      'sayt': false,
+      'search': true,
+      'recommendations': false,
+      'navigation': false,
+      'collectionSwitcher': false,
+      'autosearch': false
+    },
     'query': 'something'
   }
 };

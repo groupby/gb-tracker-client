@@ -103,7 +103,7 @@ describe('gb-tracker-core index tests', () => {
         return;
       }
 
-      expectedEvent.search.query = 'searchy searchface no angles or trailing spaces';
+      expectedEvent.search.query = 'searchy searchface   no angles or trailing spaces';
 
       expect(event.clientVersion.raw).to.not.be.undefined;
       expect(event.search).to.eql(expectedEvent.search);

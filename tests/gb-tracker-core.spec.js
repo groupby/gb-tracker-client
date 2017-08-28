@@ -492,54 +492,14 @@ describe('gb-tracker-core tests', () => {
 
     const event = {
       thing: 'yo',
-      anotherThing: 190,
-      extraThing: {
-        subExtra: 'fo sho'
-      }
+      anotherThing: 190
     };
 
     const validated = gbTrackerCore.__private.validateEvent(event, schema);
 
     expect(validated.event.thing).to.eql('yo');
     expect(validated.event.anotherThing).to.eql(190);
-    expect(validated.event.extraThing).to.be.undefined;
     expect(validated.event.visit.generated.timezoneOffset).to.not.be.undefined;
-  });
-
-  it('appends warnings about stripped fields to metadata', () => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    const schema = {
-      type: 'object',
-      strict: true,
-      properties: {
-        eventType: {
-          type: 'string'
-        },
-        thing: {
-          type: 'string'
-        },
-        anotherThing: {
-          type: 'integer'
-        }
-      }
-    };
-
-    const event = {
-      eventType: 'eventType',
-      thing: 'string',
-      anotherThing: 190,
-      extraThing: {
-        subExtra: 'fo sho'
-      }
-    };
-
-    const validated = gbTrackerCore.__private.validateEvent(event, schema);
-
-    expect(validated.event.metadata).to.eql([{
-      key: 'gbi-field-warning',
-      value: 'extraThing'
-    }]);
   });
 
   it('should drop an invalid event', () => {
@@ -573,7 +533,7 @@ describe('gb-tracker-core tests', () => {
     const invalidated = gbTrackerCore.__private.validateEvent(event, schema);
 
     expect(invalidated.event).to.eql(null);
-    expect(invalidated.error).to.eql('Property @.thing: must be string, but is object');
+    expect(invalidated.error).to.eql('Property @: should not contains property ["extraThing"]\nProperty @.thing: must be string, but is object');
   });
 
   it('should sendEvent using sendSegment', (done) => {

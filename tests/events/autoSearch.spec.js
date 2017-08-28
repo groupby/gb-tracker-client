@@ -196,7 +196,13 @@ describe('autoSearch tests', () => {
       search: {
         id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         origin: {
-          sayt: true
+          sayt: true,
+          search: true,
+          dym: true,
+          recommendations: true,
+          navigation: true,
+          collectionSwitcher: true,
+          autosearch: true,
         }
       }
     });
