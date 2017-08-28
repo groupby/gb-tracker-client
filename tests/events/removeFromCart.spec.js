@@ -1,45 +1,43 @@
 /*eslint  no-global-assign: "off"*/
-const chai   = require('chai');
+const chai = require('chai');
 const expect = chai.expect;
 
-window                = false;
-document              = false;
-navigator             = {};
+window = false;
+document = false;
+navigator = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
-navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
+navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
 const GbTrackerCore = require('../../lib/gb-tracker-core');
 
 describe('addToCart tests', () => {
   it('should accept valid removeFromCart event', (done) => {
     const expectedEvent = {
-      cart:      {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+      cart: {
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       },
       eventType: 'removeFromCart',
-      customer:  {
-        id:   'testcustomer',
+      customer: {
+        id: 'testcustomer',
         area: 'area'
       },
-      visit:     {
+      visit: {
         customerData: {
           visitorId: 'visitor',
           sessionId: 'session'
         },
-        generated:    {
-          uri:            '',
+        generated: {
+          uri: '',
           timezoneOffset: 240,
-          localTime:      '2016-08-14T14:05:26.872Z'
+          localTime: '2016-08-14T14:05:26.872Z'
         }
       }
     };
@@ -92,17 +90,15 @@ describe('addToCart tests', () => {
     });
 
     gbTrackerCore.sendRemoveFromCartEvent({
-      items: [
-        {
-          productId:  'asdfasd',
-          category:   'boats',
-          collection: 'boatssrus',
-          title:      'boats',
-          sku:        'asdfasf98',
-          quantity:   10,
-          price:      100.21
-        }
-      ]
+      items: [{
+        productId: 'asdfasd',
+        category: 'boats',
+        collection: 'boatssrus',
+        title: 'boats',
+        sku: 'asdfasf98',
+        quantity: 10,
+        price: 100.21
+      }]
     });
   });
 
@@ -127,17 +123,15 @@ describe('addToCart tests', () => {
 
     gbTrackerCore.sendRemoveFromCartEvent({
       cart: {
-        items: [
-          {
-            // productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+        items: [{
+          // productId:  'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       }
     });
   });
@@ -163,17 +157,15 @@ describe('addToCart tests', () => {
 
     gbTrackerCore.sendRemoveFromCartEvent({
       cart: {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            // quantity:   10,
-            price:      100.21
-          }
-        ]
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          // quantity:   10,
+          price: 100.21
+        }]
       }
     });
   });
@@ -199,17 +191,15 @@ describe('addToCart tests', () => {
 
     gbTrackerCore.sendRemoveFromCartEvent({
       cart: {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            // price:      100.21
-          }
-        ]
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          // price:      100.21
+        }]
       }
     });
   });
@@ -235,17 +225,15 @@ describe('addToCart tests', () => {
 
     gbTrackerCore.sendRemoveFromCartEvent({
       cart: {
-        items: [
-          {
-            productId:  'asdfasd',
-            category:   'boats',
-            collection: 'boatssrus',
-            // title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+        items: [{
+          productId: 'asdfasd',
+          category: 'boats',
+          collection: 'boatssrus',
+          // title:      'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       }
     });
   });
@@ -258,17 +246,15 @@ describe('addToCart tests', () => {
         return;
       }
 
-      expect(event.cart.items).to.eql([
-        {
-          productId:  'asdfasd',
-          // category:   'boats',
-          collection: 'boatssrus',
-          title:      'boats',
-          sku:        'asdfasf98',
-          quantity:   10,
-          price:      100.21
-        }
-      ]);
+      expect(event.cart.items).to.eql([{
+        productId: 'asdfasd',
+        // category:   'boats',
+        collection: 'boatssrus',
+        title: 'boats',
+        sku: 'asdfasf98',
+        quantity: 10,
+        price: 100.21
+      }]);
 
       done();
     };
@@ -282,17 +268,15 @@ describe('addToCart tests', () => {
 
     gbTrackerCore.sendRemoveFromCartEvent({
       cart: {
-        items: [
-          {
-            productId:  'asdfasd',
-            // category:   'boats',
-            collection: 'boatssrus',
-            title:      'boats',
-            sku:        'asdfasf98',
-            quantity:   10,
-            price:      100.21
-          }
-        ]
+        items: [{
+          productId: 'asdfasd',
+          // category:   'boats',
+          collection: 'boatssrus',
+          title: 'boats',
+          sku: 'asdfasf98',
+          quantity: 10,
+          price: 100.21
+        }]
       }
     });
   });

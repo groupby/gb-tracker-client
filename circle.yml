@@ -23,6 +23,7 @@ deployment:
     commands:
       - gulp build
       - ./shipit.sh
+      - npm run build
       - echo "//registry.npmjs.org/:_authToken=${NPM_API_KEY}" > ~/.npmrc
       - npm publish
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS

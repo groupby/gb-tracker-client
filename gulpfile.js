@@ -1,19 +1,17 @@
-const gulp     = require('gulp');
-const mocha    = require('gulp-mocha');
-const eslint   = require('gulp-eslint');
+const gulp = require('gulp');
+const mocha = require('gulp-mocha');
+const eslint = require('gulp-eslint');
 const istanbul = require('gulp-istanbul');
-const gulpIf   = require('gulp-if');
+const gulpIf = require('gulp-if');
 
-const path          = require('path');
-const webpack       = require('webpack');
+const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
-const packageJson   = require('./package.json');
+const packageJson = require('./package.json');
 const webpackConfigs = require('./multi.webpack.config');
-const exec          = require('gulp-exec');
 
 gulp.task('build:minify', () => {
   const minConfig = Object.assign({}, webpackConfigs.browser, {
-    output:  {filename: packageJson.name + '-' + packageJson.version + '.min.js'},
+    output: { filename: `${packageJson.name}-${packageJson.version}.min.js}` },
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
         compress: {
@@ -33,8 +31,8 @@ gulp.task('build:normal', () => gulp.src(['lib/gb-tracker-window.js'])
   .pipe(gulp.dest('dist')));
 
 gulp.task('build:bin', () => gulp.src(['lib/gb-tracker-core.js'])
-    .pipe(webpackStream(webpackConfigs.node))
-    .pipe(gulp.dest('bin')));
+  .pipe(webpackStream(webpackConfigs.node))
+  .pipe(gulp.dest('bin')));
 
 gulp.task('build', [
   'build:normal',
@@ -50,21 +48,21 @@ const isFixed = (file) => {
 
 gulp.task('test:dirty', () => {
   return gulp.src('tests/**/*.spec.js')
-    .pipe(mocha({reporter: 'spec'}));
+    .pipe(mocha({ reporter: 'spec' }));
 });
 
 gulp.task('pre-test', ['build'], () => {
   return gulp.src([
-    'lib/gb-tracker-core.js',
-    'lib/utils.js'
-  ])
+      'lib/gb-tracker-core.js',
+      'lib/utils.js'
+    ])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
 
 gulp.task('test:coverage', ['pre-test'], () => {
   return gulp.src(['tests/**/*.spec.js'])
-    .pipe(mocha({reporter: 'spec'}))
+    .pipe(mocha({ reporter: 'spec' }))
     .pipe(istanbul.writeReports({
       reporters: [
         'text',
@@ -80,10 +78,10 @@ gulp.task('test:coverage', ['pre-test'], () => {
 
 const lint = () => {
   return gulp.src([
-    'lib/gb-tracker-core.js',
-    'lib/utils.js',
-    'tests/**/*.js'
-  ], {base: './'})
+      'lib/gb-tracker-core.js',
+      'lib/utils.js',
+      'tests/**/*.js'
+    ], { base: './' })
     .pipe(eslint({
       fix: true
     }))
@@ -93,7 +91,7 @@ const lint = () => {
     .once('error', () => {
       console.error('lint failed');
       process.exit(1);
-    })
+    });
 };
 
 gulp.task('test:lint', ['test:coverage'], () => {

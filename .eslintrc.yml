@@ -66,6 +66,7 @@ rules:
     - error
   object-curly-spacing:
     - error
+    - always
   space-infix-ops:
     - error
   arrow-parens:
