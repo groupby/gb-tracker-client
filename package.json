@@ -55,7 +55,7 @@
   "dependencies": {
     "cookies-js": "^1.2.3",
     "cuid": "^1.3.8",
-    "deep-diff": "^0.3.4",
+    "deep-diff": "0.3.4",
     "lz-string": "^1.4.4",
     "schema-inspector": "^1.6.8"
   }
