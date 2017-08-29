@@ -103,6 +103,15 @@ app.service('tracker', function () {
     tracker.sendOrderEvent(event);
   };
 
+  this.sendSessionChangeEvent = function (event) {
+    if (!tracker) {
+      console.error('Set customer ID, area, and key first');
+      return
+    }
+
+    tracker.__private.sendSessionChangeEvent(event);
+  };
+
   this.sendSearchEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
@@ -151,7 +160,8 @@ app.controller('SelectEventController', [
       'autoSearch',
       'search',
       'viewProduct',
-      'moreRefinements'
+      'moreRefinements',
+      'sessionChange'
     ];
     scope.selectedEvent = scope.eventTypes[0];
   }
@@ -245,6 +255,34 @@ app.controller('AddToCartController', [
 
     scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendAddToCartEvent');
+    }
+  }
+]);
+
+app.controller('SessionChangeController', [
+  '$scope',
+  'tracker',
+  function (scope, tracker) {
+    var sentTimeout = null;
+
+    scope.randomize = function () {
+      scope.event = {
+        session: {
+          previousSessionId: getUuid(),
+          newSessionId:      getUuid(),
+          previousVisitorId: getUuid(),
+          newVisitorId:      getUuid()
+        }
+      };
+    };
+
+    scope.randomize();
+
+    scope.eventString = JSON.stringify(scope.event, null, 2);
+    scope.error       = '';
+
+    scope.send = function () {
+      sendEvent(scope, sentTimeout, tracker, 'sendSessionChangeEvent');
     }
   }
 ]);
@@ -651,7 +689,7 @@ app.controller('MoreRefinementsController', [
         }
       };
 
-      scope.eventString     = JSON.stringify(scope.event, null, 2);
+      scope.eventString = JSON.stringify(scope.event, null, 2);
 
       scope.directMoreRefinementsBody = JSON.stringify({
         eventType:  'moreRefinements',
@@ -659,7 +697,7 @@ app.controller('MoreRefinementsController', [
         responseId: scope.event.moreRefinements.id,
         event:      {
           id:              scope.event.moreRefinements.id,
-          navigation:     {
+          navigation:      {
             name:        chance.word(),
             displayName: chance.word() + ' ' + chance.word(),
             or:          false,
@@ -675,8 +713,8 @@ app.controller('MoreRefinementsController', [
             ]
           },
           originalRequest: {
-            navigationName:    'brand',
-            originalQuery: {
+            navigationName: 'brand',
+            originalQuery:  {
               query: 'record'
             }
           }

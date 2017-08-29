@@ -49,11 +49,11 @@
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2",
     "webpack": "^3.0.0",
-    "webpack-stream": "^3.2.0"
+    "webpack-stream": "^4.0.0"
   },
   "dependencies": {
     "cookies-js": "^1.2.3",
-    "deep-diff": "^0.3.4",
+    "deep-diff": "0.3.4",
     "lz-string": "^1.4.4",
     "schema-inspector": "^1.6.8",
     "uuid": "^3.0.1"
