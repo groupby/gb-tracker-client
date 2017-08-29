@@ -13,7 +13,7 @@ navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trid
 
 const GbTracker = require('../index');
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const CUID_REGEX = /^c[0-9a-z]{8}[0-9a-z]{4}[0-9a-z]{4}[0-9a-z]{8}$/i;
 
 describe('gb-tracker-core index tests', () => {
   it('sets visitor and session cookies', () => {
@@ -29,8 +29,8 @@ describe('gb-tracker-core index tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.autoSetVisitor();
 
-    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(UUID_REGEX);
-    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(UUID_REGEX);
+    expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.match(CUID_REGEX);
+    expect(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
     expect(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY)).to.not.eql(CookiesLib.get(GbTracker.SESSION_COOKIE_KEY));
 
     expect(gbTrackerCore.getVisitorId()).to.eql(CookiesLib.get(GbTracker.VISITOR_COOKIE_KEY));

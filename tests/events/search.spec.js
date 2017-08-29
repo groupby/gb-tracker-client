@@ -10,7 +10,8 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTracker = require('../../lib/gb-tracker-core');
+const GbTracker = require('../../lib/gb-tracker-full');
+const GbTrackerSlim = require('../../lib/gb-tracker-slim');
 
 describe('search tests', () => {
   it('should accept valid search event without search id', (done) => {
@@ -84,6 +85,81 @@ describe('search tests', () => {
       expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
       expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
       expect(event.visit.generated.localTime).to.not.be.undefined;
+      done();
+    };
+
+    gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
+
+    gbTrackerCore.sendSearchEvent({
+      search: expectedEvent.search
+    });
+  });
+
+  it('should apply similar XSS filtering with slim tracker client', (done) => {
+    const expectedEvent = {
+      search:    {
+        totalRecordCount:   10,
+        pageInfo:           {
+          recordEnd:   10,
+          recordStart: 5
+        },
+        selectedNavigation: [
+          {
+            name:        'refined 1',
+            displayName: 'refined 1',
+            or:          false,
+            refinements: [
+              {
+                type:  'value',
+                value: 'something',
+                count: 9823
+              }
+            ]
+          }
+        ],
+        origin:             {
+          search:             true,
+          dym:                false,
+          sayt:               false,
+          recommendations:    false,
+          autosearch:         false,
+          navigation:         false,
+          collectionSwitcher: false
+        },
+        query:              'searchy searchface < > no angles or trailing spaces    '
+      },
+      eventType: 'search',
+      customer:  {
+        id:   'testcustomer',
+        area: 'area'
+      },
+      visit:     {
+        customerData: {
+          visitorId: 'visitor',
+          sessionId: 'session'
+        },
+        generated:    {
+          uri:            '',
+          timezoneOffset: 240,
+          localTime:      '2016-08-14T14:05:26.872Z'
+        }
+      }
+    };
+
+    const gbTrackerCore = new GbTrackerSlim(expectedEvent.customer.id, expectedEvent.customer.area);
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done('fail');
+    });
+
+    gbTrackerCore.__private.sendEvent = (event) => {
+      if (event.eventType === 'sessionChange') {
+        return;
+      }
+
+      expectedEvent.search.query = 'searchy searchface   no angles or trailing spaces';
+
+      expect(event.search).to.eql(expectedEvent.search);
       done();
     };
 
@@ -1978,8 +2054,8 @@ const searchEvent = {
         'child.PRODUCT_SIZE',
         'child.PRODCUT_AVAILABILITY',
         'child.SKUCOMPOSITEATTR',
-        'category1',
         'category2',
+        'category1',
         'category3',
         'child.REFINEMENT_GROUP_9',
         'child.PRODUCT_BRAND',

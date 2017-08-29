@@ -1,18 +1,17 @@
+const babel    = require('gulp-babel');
 const gulp     = require('gulp');
 const mocha    = require('gulp-mocha');
 const eslint   = require('gulp-eslint');
 const istanbul = require('gulp-istanbul');
 const gulpIf   = require('gulp-if');
 
-const path          = require('path');
 const webpack       = require('webpack');
 const webpackStream = require('webpack-stream');
 const packageJson   = require('./package.json');
-const webpackConfigs = require('./multi.webpack.config');
-const exec          = require('gulp-exec');
+const webpackConfig = require('./webpack.config');
 
 gulp.task('build:minify', () => {
-  const minConfig = Object.assign({}, webpackConfigs.browser, {
+  const minConfig = Object.assign({}, webpackConfig, {
     output:  {filename: packageJson.name + '-' + packageJson.version + '.min.js'},
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
@@ -29,16 +28,16 @@ gulp.task('build:minify', () => {
 });
 
 gulp.task('build:normal', () => gulp.src(['lib/gb-tracker-window.js'])
-  .pipe(webpackStream(webpackConfigs.browser))
+  .pipe(webpackStream(webpackConfig))
   .pipe(gulp.dest('dist')));
 
-gulp.task('build:bin', () => gulp.src(['lib/gb-tracker-core.js'])
-    .pipe(webpackStream(webpackConfigs.node))
-    .pipe(gulp.dest('bin')));
+gulp.task('build:node', () => gulp.src(['lib/*.js'])
+  .pipe(babel())
+  .pipe(gulp.dest('build')));
 
 gulp.task('build', [
   'build:normal',
-  'build:bin',
+  'build:node',
   'build:minify'
 ]);
 
@@ -55,7 +54,7 @@ gulp.task('test:dirty', () => {
 
 gulp.task('pre-test', ['build'], () => {
   return gulp.src([
-    'lib/gb-tracker-core.js',
+    'lib/gb-tracker-*.js',
     'lib/utils.js'
   ])
     .pipe(istanbul())
@@ -80,7 +79,7 @@ gulp.task('test:coverage', ['pre-test'], () => {
 
 const lint = () => {
   return gulp.src([
-    'lib/gb-tracker-core.js',
+    'lib/gb-tracker-*.js',
     'lib/utils.js',
     'tests/**/*.js'
   ], {base: './'})
@@ -93,7 +92,7 @@ const lint = () => {
     .once('error', () => {
       console.error('lint failed');
       process.exit(1);
-    })
+    });
 };
 
 gulp.task('test:lint', ['test:coverage'], () => {

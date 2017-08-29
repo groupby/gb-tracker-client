@@ -8,7 +8,7 @@ navigator             = {};
 navigator.appCodeName = 'Microsoft Internet Explorer';
 navigator.userAgent   = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-const GbTrackerCore = require('../../lib/gb-tracker-core');
+const GbTrackerCore = require('../../lib/gb-tracker-full');
 
 describe('autoMoreRefinements tests', () => {
   it('should accept valid moreRefinements event containing only origin and moreRefinements id', (done) => {
