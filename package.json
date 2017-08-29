@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/groupby/gb-tracker-client.git"
   },
-  "main": "bin/gb-tracker-client.js",
+  "main": "index.js",
   "scripts": {
     "test": "gulp test",
     "build": "babel lib --out-dir build",
@@ -32,6 +32,7 @@
     "eslint-plugin-no-only-tests": "^2.0.0",
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
     "gulp-eslint": "^4.0.0",
     "gulp-exec": "^2.1.3",
     "gulp-if": "^2.0.2",
@@ -53,9 +54,9 @@
   },
   "dependencies": {
     "cookies-js": "^1.2.3",
+    "cuid": "^1.3.8",
     "deep-diff": "0.3.4",
     "lz-string": "^1.4.4",
-    "schema-inspector": "^1.6.8",
-    "uuid": "^3.0.1"
+    "schema-inspector": "^1.6.8"
   }
 }
