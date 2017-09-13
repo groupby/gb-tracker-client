@@ -11,15 +11,12 @@ module.exports={
             optional: true
           },
           major: {
-            type: 'integer',
             optional: true
           },
           minor: {
-            type: 'integer',
             optional: true
           },
           patch: {
-            type: 'integer',
             optional: true
           },
           prerelease: {

@@ -10,15 +10,12 @@ module.exports={
             type: 'string'
           },
           major: {
-            type: 'integer',
             optional: true
           },
           minor: {
-            type: 'integer',
             optional: true
           },
           patch: {
-            type: 'integer',
             optional: true
           },
           prerelease: {
@@ -106,7 +103,6 @@ module.exports={
             minLength: 1
           },
           totalRecordCount: {
-            type: 'integer',
             optional: false
           },
           area: {
@@ -162,11 +158,9 @@ module.exports={
             type: 'object',
             properties: {
               recordStart: {
-                type: 'integer',
                 optional: false
               },
               recordEnd: {
-                type: 'integer',
                 optional: false
               }
             },
@@ -220,15 +214,12 @@ module.exports={
                   type: 'object',
                   properties: {
                     terms: {
-                      type: 'integer',
                       optional: true
                     },
                     termsGreaterThan: {
-                      type: 'integer',
                       optional: true
                     },
                     mustMatch: {
-                      type: 'integer',
                       optional: true
                     },
                     percentage: {
@@ -293,7 +284,6 @@ module.exports={
                         optional: true
                       },
                       count: {
-                        type: 'integer',
                         optional: true
                       },
                       exclude: {
@@ -389,7 +379,6 @@ module.exports={
                         optional: true
                       },
                       count: {
-                        type: 'integer',
                         optional: true
                       },
                       exclude: {
@@ -472,7 +461,6 @@ module.exports={
                               optional: true
                             },
                             count: {
-                              type: 'integer',
                               optional: true
                             }
                           }
@@ -579,15 +567,12 @@ module.exports={
                       type: 'object',
                       properties: {
                         terms: {
-                          type: 'integer',
                           optional: true
                         },
                         termsGreaterThan: {
-                          type: 'integer',
                           optional: true
                         },
                         mustMatch: {
-                          type: 'integer',
                           optional: true
                         },
                         percentage: {
@@ -616,7 +601,6 @@ module.exports={
                     optional: true
                   },
                   influence: {
-                    type: 'number',
                     optional: true
                   },
                   biases: {
@@ -644,11 +628,9 @@ module.exports={
                 optional: true
               },
               skip: {
-                type: 'integer',
                 optional: true
               },
               pageSize: {
-                type: 'integer',
                 optional: true
               },
               returnBinary: {
@@ -706,7 +688,6 @@ module.exports={
                     optional: true
                   },
                   count: {
-                    type: 'integer',
                     optional: true
                   }
                 },

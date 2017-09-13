@@ -10,15 +10,12 @@ module.exports={
             type: 'string'
           },
           major: {
-            type: 'integer',
             optional: true
           },
           minor: {
-            type: 'integer',
             optional: true
           },
           patch: {
-            type: 'integer',
             optional: true
           },
           prerelease: {
@@ -62,19 +59,15 @@ module.exports={
         type: 'object',
         properties: {
           totalItems: {
-            type: 'integer',
             optional: true
           },
           totalQuantity: {
-            type: 'integer',
             optional: true
           },
           totalPrice: {
-            type: 'number',
             optional: true
           },
           generatedTotalPrice: {
-            type: 'number',
             optional: true
           },
           id: {
@@ -109,12 +102,9 @@ module.exports={
                   optional: true
                 },
                 margin: {
-                  type: 'number',
                   optional: true
                 },
-                price: {
-                  type: 'number'
-                },
+                price: {},
                 metadata: {
                   type: 'array',
                   items: {
@@ -131,9 +121,7 @@ module.exports={
                   },
                   optional: true
                 },
-                quantity: {
-                  type: 'integer'
-                }
+                quantity: {}
               },
               strict: true
             }
