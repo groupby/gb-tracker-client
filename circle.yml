@@ -10,10 +10,9 @@ dependencies:
     - git config --global user.name "GroupBy Ops"
     - git config --global push.default simple
     - npm install --global gulp-cli minimatch npm
-  override:
-    - npm install --silent
 test:
   override:
+    - npm install --silent
     - gulp test
     - npm run coverage:codacy
 deployment:
