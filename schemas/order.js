@@ -113,7 +113,8 @@ module.exports={
                   optional: true
                 },
                 price: {
-                  type: 'number'
+                  type: 'number',
+                  optional: true
                 },
                 metadata: {
                   type: 'array',
@@ -361,7 +362,8 @@ module.exports={
                   optional: true
                 },
                 price: {
-                  type: 'number'
+                  type: 'number',
+                  optional: true
                 },
                 metadata: {
                   type: 'array',

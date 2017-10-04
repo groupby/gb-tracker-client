@@ -83,7 +83,9 @@ module.exports={
           margin: {
             optional: true
           },
-          price: {},
+          price: {
+            optional: true
+          },
           metadata: {
             type: 'array',
             items: {
