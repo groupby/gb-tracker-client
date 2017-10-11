@@ -9,7 +9,7 @@ dependencies:
     - git config --global user.email "ops@groubyinc.com"
     - git config --global user.name "GroupBy Ops"
     - git config --global push.default simple
-    - npm install --global gulp-cli npm
+    - npm install --global gulp npm
   override:
     - npm install --silent
 test:
