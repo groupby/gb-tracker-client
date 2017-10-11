@@ -131,14 +131,14 @@ describe('viewProduct tests', () => {
         return;
       }
 
-      done('fail');
+      done();
     };
 
     gbTrackerCore.setVisitor('visitor', 'session');
 
     gbTrackerCore.setInvalidEventCallback((event, error) => {
       expect(error).to.match(/price: is missing/);
-      done();
+      done('fail');
     });
     gbTrackerCore.sendViewProductEvent({
       product: {

@@ -184,7 +184,7 @@ describe('order tests', () => {
     });
   });
 
-  it('should reject invalid order event missing price', (done) => {
+  it('should not reject order event missing price', (done) => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -192,14 +192,14 @@ describe('order tests', () => {
         return;
       }
 
-      done('fail');
+      done();
     };
 
     gbTrackerCore.setVisitor('visitor', 'session');
 
     gbTrackerCore.setInvalidEventCallback((event, error) => {
       expect(error).to.match(/price: is missing/);
-      done();
+      done('fail');
     });
 
     gbTrackerCore.sendOrderEvent({

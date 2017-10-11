@@ -178,7 +178,7 @@ describe('addToCart tests', () => {
     });
   });
 
-  it('should reject invalid removeFromCart event that is missing price', (done) => {
+  it('should not reject removeFromCart event that is missing price', (done) => {
     const gbTrackerCore = new GbTrackerCore('testcustomer', 'area');
 
     gbTrackerCore.__private.sendEvent = (event) => {
@@ -186,7 +186,7 @@ describe('addToCart tests', () => {
         return;
       }
 
-      done('fail');
+      done();
     };
 
     gbTrackerCore.setVisitor('visitor', 'session');
@@ -194,7 +194,7 @@ describe('addToCart tests', () => {
 
     gbTrackerCore.setInvalidEventCallback((event, error) => {
       expect(error).to.match(/price: is missing/);
-      done();
+      done('fail');
     });
 
     gbTrackerCore.sendRemoveFromCartEvent({
