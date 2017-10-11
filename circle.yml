@@ -10,7 +10,7 @@ dependencies:
     - git config --global user.name "GroupBy Ops"
     - git config --global push.default simple
     - npm i -g npm gulp-cli
-    - npm uninstall -g gulp-cli
+    - npm uninstall -g gulp-cli # This looks dumb, but fixes a failing install
     - npm i -g gulp-cli
   override:
     - npm install --silent
