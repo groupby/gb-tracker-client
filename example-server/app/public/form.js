@@ -103,15 +103,6 @@ app.service('tracker', function () {
     tracker.sendOrderEvent(event);
   };
 
-  this.sendSessionChangeEvent = function (event) {
-    if (!tracker) {
-      console.error('Set customer ID, area, and key first');
-      return
-    }
-
-    tracker.__private.sendSessionChangeEvent(event);
-  };
-
   this.sendSearchEvent = function (event) {
     if (!tracker) {
       console.error('Set customer ID, area, and key first');
@@ -160,8 +151,7 @@ app.controller('SelectEventController', [
       'autoSearch',
       'search',
       'viewProduct',
-      'moreRefinements',
-      'sessionChange'
+      'moreRefinements'
     ];
     scope.selectedEvent = scope.eventTypes[0];
   }
@@ -244,7 +234,13 @@ app.controller('AddToCartController', [
               })
             }
           ]
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]  
       };
     };
 
@@ -255,34 +251,6 @@ app.controller('AddToCartController', [
 
     scope.send = function () {
       sendEvent(scope, sentTimeout, tracker, 'sendAddToCartEvent');
-    }
-  }
-]);
-
-app.controller('SessionChangeController', [
-  '$scope',
-  'tracker',
-  function (scope, tracker) {
-    var sentTimeout = null;
-
-    scope.randomize = function () {
-      scope.event = {
-        session: {
-          previousSessionId: getUuid(),
-          newSessionId:      getUuid(),
-          previousVisitorId: getUuid(),
-          newVisitorId:      getUuid()
-        }
-      };
-    };
-
-    scope.randomize();
-
-    scope.eventString = JSON.stringify(scope.event, null, 2);
-    scope.error       = '';
-
-    scope.send = function () {
-      sendEvent(scope, sentTimeout, tracker, 'sendSessionChangeEvent');
     }
   }
 ]);
@@ -331,7 +299,13 @@ app.controller('ViewCartController', [
               })
             }
           ]
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]  
       };
     };
 
@@ -390,7 +364,13 @@ app.controller('RemoveFromCartController', [
               })
             }
           ]
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]  
       };
     };
 
@@ -449,7 +429,13 @@ app.controller('OrderController', [
               })
             }
           ]
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]  
       };
     };
 
@@ -558,7 +544,13 @@ app.controller('SearchController', [
             recommendations: false
           },
           query:               chance.word() + ' ' + chance.word() + ' ' + chance.word() + ' ' + chance.word()
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]        
       };
     };
 
@@ -598,7 +590,13 @@ app.controller('AutoSearchController', [
             sayt:            false,
             recommendations: false
           }
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]  
       };
     };
 
@@ -718,7 +716,13 @@ app.controller('MoreRefinementsController', [
               query: 'record'
             }
           }
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]  
       }, null, 2);
     };
 
@@ -811,12 +815,14 @@ app.controller('ViewProductController', [
             min:   0,
             max:   100,
             fixed: 2
-          }),
-          quantity:   chance.integer({
-            min: 1,
-            max: 20
           })
-        }
+        },
+        metadata: [
+          {
+            key: 'type',
+            value: 'test beacon'
+          }
+        ]
       };
     };
 

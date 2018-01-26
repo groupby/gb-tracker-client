@@ -71,16 +71,6 @@
         <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
         <pre ng-show="sent" class="text-success">Sent {{event | json}}</pre>
       </div>
-      <div ng-controller="SessionChangeController" ng-show="selectedEvent ==='sessionChange'">
-        <form novalidate class="simple-form">
-          <H2>Order</H2>
-          <textarea ng-model="eventString" rows="20" cols="50"></textarea>
-          </br>
-          <input type="submit" ng-click="send(event)" value="Send"/>
-        </form>
-        <spen ng-show="error.length > 0" class="text-danger">{{error}}</spen>
-        <pre ng-show="sent" class="text-success">Sent {{event | json}}</pre>
-      </div>
       <div ng-controller="AutoSearchController" ng-show="selectedEvent ==='autoSearch'">
         <form novalidate class="simple-form">
           <H2>Auto Search</H2>
