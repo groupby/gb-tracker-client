@@ -133,6 +133,68 @@ describe('utils tests', () => {
     expect(result[4]).to.eql('thisIsALongString');
   });
 
+  it('should chunk a string using an encoder that expands strings', () => {
+    const s = 'AAA';
+    const shortString = s.repeat(5);
+    
+    const maxLength = 6;
+
+    const encoderStrPrefix = 'BBB';
+    const encoder = (str) => encoderStrPrefix + str;
+
+    const result = utils.chunkString(shortString, maxLength, encoder);
+
+    for (const chunk of result) {
+      expect(encoder(chunk).length).to.lte(maxLength);
+    }
+  });
+
+  it('should chunk an empty string without throwing errors', () => {
+    const shortString = '';
+    
+    const encoder = (str) => `BBB${ str}`;
+
+    const maxLength = 6;
+
+    const result = utils.chunkString(shortString, maxLength, encoder);
+
+    for (const chunk of result) {
+      expect(encoder(chunk).length).to.lte(maxLength);
+    }
+  });
+
+  it('should chunk a string with length 1 without throwing errors', () => {
+    const shortString = '1';
+    
+    const encoder = (str) => `BBB${ str}`;
+
+    const maxLength = 6;
+
+    const result = utils.chunkString(shortString, maxLength, encoder);
+    console.log(result);
+
+    for (const chunk of result) {
+      expect(encoder(chunk).length).to.lte(maxLength);
+    }
+  });
+
+  it('should retain the order of chunked pieces', () => {
+    const fullString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+    const maxLength = 6;
+
+    const encoderStrPrefix = '000';
+    const encoder = (str) => encoderStrPrefix + str;
+
+    const result = utils.chunkString(fullString, maxLength, encoder);
+
+    for (const chunk of result) {
+      expect(encoder(chunk).length).to.lte(maxLength);
+    }
+
+    expect(result.join('')).to.eql(fullString);
+  });
+
   it('should get IE version', () => {
     const appCodeName = 'Microsoft Internet Explorer';
     let userAgent     = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
