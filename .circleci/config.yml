@@ -59,7 +59,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /ken-testing-tag/
+              only: /test-ken/
 
 
 
