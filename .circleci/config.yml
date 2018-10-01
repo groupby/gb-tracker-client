@@ -1,9 +1,12 @@
-version: 2.1
+version: 2
 
-commands:
-  install:
-    description: "npm install"
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8
     steps:
+      - checkout
       - restore_cache:
           keys:
             - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
@@ -14,26 +17,13 @@ commands:
           paths:
             - ~/app/node_modules
           key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-
-executors:
-  node:
-    working_directory: ~/app
-    docker:
-      - image: circleci/node:8
-
-
-
-jobs:
-  build:
-    executor: node
-    steps:
-      - checkout
-      - install
       - run: npm run test
       - run: npm run coverage:codacy
 
   deploy:
-    executor: node
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8
     steps:
       - run:
           name: Configuring git
@@ -45,7 +35,16 @@ jobs:
           name: Updating apt-get then installing jq
           command: sudo apt-get update && sudo apt-get install jq -y
       - checkout
-      - install
+      - restore_cache:
+          keys:
+            - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-v1-{{ .Branch }}-
+            - node-v1-
+      - run: npm install
+      - save_cache:
+          paths:
+            - ~/app/node_modules
+          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run: npm run gulp -- build
 
 workflows:
