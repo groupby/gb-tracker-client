@@ -60,7 +60,7 @@ workflows:
             - build
           filters:
             tags:
-              only: /ken/
+              only: /v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/
 
