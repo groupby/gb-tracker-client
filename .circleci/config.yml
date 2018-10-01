@@ -5,19 +5,19 @@ jobs:
     docker:
       - image: circleci/node:8
 
-    - run:
-      name: Updating apt-get then installing jq
-      command: sudo apt-get update && sudo apt-get install jq -y
+    steps:
+      - run:
+          name: Updating apt-get then installing jq
+          command: sudo apt-get update && sudo apt-get install jq -y
 
-    - run:
-      name: Configuring git
-      command: |
-        git config --global user.email "ops@groubyinc.com"
-        git config --global user.name "GroupBy Ops"
-        git config --global push.default simple
+      - run:
+          name: Configuring git
+          command: |
+            git config --global user.email "ops@groubyinc.com"
+            git config --global user.name "GroupBy Ops"
+            git config --global push.default simple
 
-    - run:
-      command: npm install --silent
+      - run: npm install --silent
 
   test:
     docker:
@@ -25,37 +25,33 @@ jobs:
 
     steps:
       - run:
-        name: building for the test
-        command: npm run test
+          name: building for the test
+          command: npm run test
 
       - run:
-        command: npm run coverage:codacy
+          command: npm run coverage:codacy
 
   deploy:
-    environment:
-
     working_directory: ~/app
 
     docker:
       - image: circleci/node:8
 
     steps:
-      - checkout
-      - run:
-        command: |
-          - gulp build
+      - run: gulp build
 
 
 workflows:
   version: 2
-  jobs:
-    - setup
-    - test:
-      requires:
-        - setup
-    - deploy:
-      requires:
-        - setup
-        - test
+  build-and-deploy:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+      - deploy:
+          requires:
+            - setup
+            - test
 
 
