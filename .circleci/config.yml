@@ -46,6 +46,15 @@ jobs:
             - ~/app/node_modules
           key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run: npm run gulp -- build
+      - run: ./shipit.sh
+      - run:
+          name: creating .npmrc
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_API_KEY}" > ~/.npmrc
+      - run: npm publish
+      - run:
+          name: docker login
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: cd example-server/app && ./build-and-push.sh
 
 workflows:
   version: 2
