@@ -242,5 +242,3 @@ gbTracker.sendViewProductEvent({
 
 
 ```
-
-temp change
