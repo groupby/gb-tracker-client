@@ -9,7 +9,7 @@ Or it can be directly included from our CDN using:
 <script src="http://cdn.groupbycloud.com/dist/gb-tracker-client-3.min.js"></script>
 ```
 
-Including it directly from the CDN will create the global variable
+Including it directly from the CDN will create the global variable 
 `GbTracker` with the same API as below.
 
 Recommendations Request and API documentation can be found [here](http://docs.recommendations.groupbyinc.com/documentation.html?e=wisdom&topic=150_recommendations/01_RecommendationsRequests.md&cid=) (Requires your GroupBy documentation login)
@@ -47,7 +47,7 @@ gbTracker.sendAutoSearchEvent({
   ]
 });
 
-// NOTE: The 'sendSearchEvent' function is still available, but deprecated.
+// NOTE: The 'sendSearchEvent' function is still available, but deprecated. 
 // Please use 'sendAutoSearchEvent' instead as shown above.
 
 // Auto MoreRefinements events
@@ -67,7 +67,7 @@ gbTracker.sendMoreRefinementsEvent({
 gbTracker.sendAddToCartEvent({
  cart: {
    id: 'asfasdf',                     // Optional
-   items:[
+   items:[  
      {
         productId:  'asdfasd',
         title:      'super boat',
@@ -105,7 +105,7 @@ gbTracker.sendAddToCartEvent({
 gbTracker.sendViewCartEvent({
  cart: {
    id: 'asfasdf',                     // Optional
-   items:[
+   items:[  
      {
         productId:  'asdfasd',
         title:      'super boat',
@@ -142,7 +142,7 @@ gbTracker.sendViewCartEvent({
 gbTracker.sendRemoveFromCartEvent({
  cart: {
    id: 'asfasdf',                     // Optional
-   items:[
+   items:[  
      {
         productId:  'asdfasd',
         title:      'super boat',
@@ -182,7 +182,7 @@ gbTracker.sendOrderEvent({
    totalItems: 1,                     // Optional
    totalQuantity: 20,                 // Optional
    totalPrice: 1039.90,               // Optional
-   items:[
+   items:[  
      {
         productId:  'asdfasd',
         title:      'super boat',
@@ -242,4 +242,3 @@ gbTracker.sendViewProductEvent({
 
 
 ```
-some random change to trigger circleCI
