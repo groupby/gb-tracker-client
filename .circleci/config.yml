@@ -1,0 +1,78 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-v1-{{ .Branch }}-
+            - node-v1-
+      - run: npm install
+      - save_cache:
+          paths:
+            - ~/app/node_modules
+          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run: npm run test
+      - run: npm run coverage:codacy
+
+  deploy:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8
+    steps:
+      - run:
+          name: Configuring git
+          command: |
+            git config --global user.email "ops@groubyinc.com"
+            git config --global user.name "GroupBy Ops"
+            git config --global push.default simple
+      - run:
+          name: Updating apt-get then installing jq
+          command: sudo apt-get update && sudo apt-get install jq -y
+      - checkout
+      - restore_cache:
+          keys:
+            - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-v1-{{ .Branch }}-
+            - node-v1-
+      - run: npm install
+      - save_cache:
+          paths:
+            - ~/app/node_modules
+          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run: npm run gulp -- build
+      - run: ./shipit.sh
+      - run:
+          name: creating .npmrc
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_API_KEY}" > ~/.npmrc
+      - run: npm publish
+      - run:
+          name: docker login
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: cd example-server/app && ./build-and-push.sh
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+
+
+
+
