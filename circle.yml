@@ -1,0 +1,31 @@
+machine:
+  services:
+    - docker
+  node:
+    version: 8
+dependencies:
+  pre:
+    - sudo apt-get update && sudo apt-get install jq -y
+    - git config --global user.email "ops@groubyinc.com"
+    - git config --global user.name "GroupBy Ops"
+    - git config --global push.default simple
+    - npm i -g npm gulp-cli
+    - npm uninstall -g gulp-cli # This looks dumb, but fixes a failing install
+    - npm i -g gulp-cli
+  override:
+    - npm install --silent
+test:
+  override:
+    - gulp test
+    - npm run coverage:codacy
+deployment:
+  hub-and-npm:
+    tag: /v[0-9]+(\.[0-9]+)*/
+    owner: groupby
+    commands:
+      - gulp build
+      - ./shipit.sh
+      - echo "//registry.npmjs.org/:_authToken=${NPM_API_KEY}" > ~/.npmrc
+      - npm publish
+      - docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - cd example-server/app && ./build-and-push.sh
