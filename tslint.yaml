@@ -1,0 +1,35 @@
+extends: tslint:recommended
+rules:
+  max-line-length:
+    options: [180]
+  no-var-requires: true
+  new-parens: true
+  no-arg: true
+  member-ordering: [true, {order: fields-first}]
+  no-conditional-assignment: true
+  no-duplicate-variable: true
+  no-invalid-this: true
+  no-var-keyword: true
+  prefer-object-spread: true
+  object-literal-sort-keys: false
+  ordered-imports: false
+  prefer-const: true
+  no-misused-new: true
+  align: [true, parameters, statements]
+  arrow-parens: true
+  semicolon: [true, always]
+  quotemark: [true, single, avoid-escape]
+  linebreak-style: [true, LF]
+  indent: [true, spaces, 2]
+  eofline: true
+  interface-name: [false]
+  no-duplicate-imports: true
+  no-default-export: false
+  only-arrow-functions: false
+  trailing-comma: [true, {multiline: always, singleline: never}]
+  array-type: [true, array]
+  no-angle-bracket-type-assertion: false
+  space-before-function-paren: [true, {anonymous: always, named: never, asyncArrow: always, method: never, constructor: never}]
+  whitespace: [true, check-branch, check-operator, check-decl, check-module, check-separator, check-rest-spread, check-type, check-typecas, check-type-operator, check-preblock]
+  curly: false
+  no-console: false

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es5",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "keyofStringsOnly": true,
+    "resolveJsonModule": true,
+    "outDir": "dist-test"
+  },
+  "include": [
+    "./src",
+    "./test"
+  ]
+}
