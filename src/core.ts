@@ -25,8 +25,8 @@ import {
     AutoMoreRefinementsEvent,
     ViewProductEvent,
     EventSegment,
-    EventCustomer,
 } from './models';
+import { EventCustomer } from '@groupby/beacon-models/partials/customer';
 
 /**
  * Describes the "visit" object being built up by the tracker before it is
