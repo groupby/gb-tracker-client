@@ -1,0 +1,1 @@
+This file exists so that the `dist` directory is not excluded when the repo is cloned. The example-server setup process requires the directory to exist.
