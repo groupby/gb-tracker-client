@@ -16,11 +16,11 @@
         "addVersion": "node -p '\"export const version = \\\"\" + require(\"./package.json\").version + \"\\\";\"' > ./src/version.ts",
         "compileTs": "tsc --project tsconfig.prod.json",
         "arrangeForNpm": "mv dist/* . && rm -r dist",
-        "buildForNpm": "npm run clean 2> /dev/null; npm run addVersion && npm run generateSchemas; npm run compileTs && npm run arrangeForNpm",
-        "buildForBrowser": "npm run clean 2> /dev/null; npm run addVersion && npm run generateSchemas; npm run compileTs && webpack --config ./config/webpack.config.dev.js && webpack --config ./config/webpack.config.prod.js",
-        "generateSchemas": "npm run clean 2> /dev/null; tsc --project tsconfig.srcgen.json && node dist-tools/buildSchemas.js",
+        "buildForNpm": "npm run addVersion && npm run generateSchemas; npm run compileTs && npm run arrangeForNpm",
+        "buildForBrowser": "npm run addVersion && npm run generateSchemas; npm run compileTs && webpack --config ./config/webpack.config.dev.js && webpack --config ./config/webpack.config.prod.js",
+        "generateSchemas": "tsc --project tsconfig.srcgen.json && node dist-tools/buildSchemas.js",
         "startExampleServer": "npm run buildForBrowser && cp ./build/* ./example-server/app/dist && node example-server/app/index.js",
-        "build:test": "npm run clean 2> /dev/null; npm run generateSchemas && tsc --project tsconfig.test.json",
+        "build:test": "npm run buildForBrowser && tsc --project tsconfig.test.json",
         "test": "npm run clean 2> /dev/null; npm run build:test && nyc --reporter=text --reporter=lcov mocha -r jsdom-global/register --exit 'dist-test/test/**/*.test.js'"
     },
     "author": "GroupBy Inc.",
@@ -43,6 +43,7 @@
         "jsdom": "^15.0.0",
         "jsdom-global": "^3.0.2",
         "json-loader": "^0.5.7",
+        "mocha": "^6.1.4",
         "moment": "^2.24.0",
         "nyc": "^14.0.0",
         "regexpu-core": "^4.5.4",
@@ -61,7 +62,6 @@
         "cuid": "^2.1.6",
         "deep-diff": "^1.0.2",
         "lz-string": "^1.4.4",
-        "mocha": "^6.1.4",
         "schema-inspector": "^1.6.8"
     }
 }
