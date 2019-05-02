@@ -57,3 +57,6 @@ documentation
 yarn.lock
 *.js
 *.d.ts
+
+# Whitelist needed files
+!tools/**/*
