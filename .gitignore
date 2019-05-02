@@ -60,3 +60,4 @@ yarn.lock
 
 # Whitelist needed files
 !tools/**/*
+!config/**/*
