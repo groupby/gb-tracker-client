@@ -21,7 +21,8 @@
         "generateSchemas": "tsc --project tsconfig.srcgen.json && node dist-tools/buildSchemas.js",
         "startExampleServer": "npm run buildForBrowser && cp ./build/* ./example-server/app/dist && node example-server/app/index.js",
         "build:test": "npm run buildForBrowser && tsc --project tsconfig.test.json",
-        "test": "npm run clean 2> /dev/null; npm run build:test && nyc --reporter=text --reporter=lcov mocha -r jsdom-global/register --exit 'dist-test/test/**/*.test.js'"
+        "test": "npm run clean 2> /dev/null; npm run build:test && nyc --reporter=text --reporter=lcov mocha -r jsdom-global/register --exit 'dist-test/test/**/*.test.js'",
+        "prepublishOnly": "npm test && npm run clean 2> /dev/null; npm run buildForNpm"
     },
     "author": "GroupBy Inc.",
     "license": "MIT",
