@@ -21,6 +21,7 @@ Add the CDN `<script>` to each page, above where the tracker is instantiated and
     <script src="http://cdn.groupbycloud.com/gb-tracker-client-3.min.js"></script>
     <script>
         var tracker = new GbTracker('customer_id', 'area');
+        tracker.autoSetVisitor();
 
         tracker.sendAddToCartEvent({ ... });
     </script>
@@ -41,6 +42,7 @@ import { GbTracker } from 'gb-tracker-client';
 import { AddToCartEvent } from 'gb-tracker-client/models';
 
 const tracker = new GbTracker('customer_id', 'area');
+tracker.autoSetVisitor();
 
 const a: AddToCartEvent = { ... };
 tracker.sendAddToCartEvent(a);
