@@ -329,15 +329,18 @@ describe('gb-tracker-core tests', () => {
   it('should use document\'s protocol, but only if known', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     [
-      { arg: undefined, expected: 'https' },
-      { arg: {}, expected: 'https' },
-      { arg: { location: undefined }, expected: 'https' },
-      { arg: { location: {} }, expected: 'https' },
-      { arg: { location: { protocol: undefined } }, expected: 'https' },
-      { arg: { location: { protocol: 'https' } }, expected: 'https' },
-      { arg: { location: { protocol: 'http' } }, expected: 'http' },
-      { arg: { location: { protocol: 'about' } }, expected: 'https' },
-      { arg: { location: { protocol: 123456 } }, expected: 'https' },
+      { arg: undefined, expected: 'https:' },
+      { arg: {}, expected: 'https:' },
+      { arg: { location: undefined }, expected: 'https:' },
+      { arg: { location: {} }, expected: 'https:' },
+      { arg: { location: { protocol: undefined } }, expected: 'https:' },
+      { arg: { location: { protocol: 'https:' } }, expected: 'https:' },
+      { arg: { location: { protocol: 'http:' } }, expected: 'http:' },
+      { arg: { location: { protocol: 'about:' } }, expected: 'https:' },
+      { arg: { location: { protocol: 'https' } }, expected: 'https:' },
+      { arg: { location: { protocol: 'http' } }, expected: 'http:' },
+      { arg: { location: { protocol: 'about' } }, expected: 'https:' },
+      { arg: { location: { protocol: 123456 } }, expected: 'https:' },
     ].forEach(({ arg, expected }) => {
       const got = gbTrackerCore.__getInternals().getProtocol(arg as any);
       expect(got).to.eql(expected);

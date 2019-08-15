@@ -378,8 +378,8 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 const protocol = (document && document.location && document.location.protocol) || 'https';
 
                 // Only allowed protocols. Default to https
-                if (protocol !== 'http' && protocol !== 'https') {
-                    return 'https';
+                if (protocol !== 'http:' && protocol !== 'https:') {
+                    return 'https:';
                 }
 
                 return protocol;
