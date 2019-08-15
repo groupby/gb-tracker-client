@@ -113,6 +113,7 @@ export interface TrackerInternals {
     VISITOR_SETTINGS_SOURCE?: string;
     MAX_QUERY_STRING_LENGTH: number;
     IGNORED_FIELD_PREFIXES: string[];
+    getProtocol(document?: { location?: { protocol?: string }}): string;
     overrideCookiesLib(cookies: any): void;
     overridePixelPath(path?: string): void;
     sendEvent(event: FullSendableEvent, sendSegment: (segment: EventSegment) => void): void;
@@ -373,12 +374,23 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 return getUnique(removedFields);
             },
 
+            getProtocol: (document) => {
+                const protocol = (document && document.location && document.location.protocol) || 'https';
+
+                // Only allowed protocols. Default to https
+                if (protocol !== 'http' && protocol !== 'https') {
+                    return 'https';
+                }
+
+                return protocol;
+            },
+
             /**
              * Use pixel endpoint to upload string to event-tracker
              * @param segment
              */
             sendSegment: (segment) => {
-                const protocol = (document && document.location && document.location.protocol) || 'https';
+                const protocol = internals.getProtocol(document);
                 const host = `${protocol}//${customerId}.groupbycloud.com`;
                 let params = `?random\x3d${Math.random()}`; // To bust the cache
                 params += `&m=${encodeURIComponent(JSON.stringify(segment))}`;
