@@ -338,7 +338,7 @@ describe('gb-tracker-core tests', () => {
       { arg: { location: { protocol: 'http:' } }, expected: 'http:' },
       { arg: { location: { protocol: 'about:' } }, expected: 'https:' },
       { arg: { location: { protocol: 'https' } }, expected: 'https:' },
-      { arg: { location: { protocol: 'http' } }, expected: 'http:' },
+      { arg: { location: { protocol: 'http' } }, expected: 'https:' },
       { arg: { location: { protocol: 'about' } }, expected: 'https:' },
       { arg: { location: { protocol: 123456 } }, expected: 'https:' },
     ].forEach(({ arg, expected }) => {
