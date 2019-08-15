@@ -375,7 +375,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             getProtocol: (document) => {
-                const protocol = (document && document.location && document.location.protocol) || 'https';
+                const protocol = document && document.location && document.location.protocol;
 
                 // Only allowed protocols. Default to https
                 if (protocol !== 'http:' && protocol !== 'https:') {
