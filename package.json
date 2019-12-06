@@ -2,6 +2,7 @@
   "name": "gb-tracker-client",
   "version": "3.7.2",
   "description": "GroupBy client-side event tracker",
+  "main": "index.js",
   "keywords": [
     "groupby",
     "tracker",
