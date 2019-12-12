@@ -13,7 +13,6 @@ import search from './schemas/search';
 import viewProduct from './schemas/viewProduct';
 
 import { TrackerCore, AnySendableEvent, Schemas } from './core';
-import { SanitizeEventFn } from '.';
 
 /**
  * The origin the event. Each property is optional but one of them must be set

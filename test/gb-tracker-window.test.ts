@@ -20,7 +20,7 @@ describe('browser version tests', () => {
   });
 
   it('first file loads onto the window object and can send event', (done) => {
-    window = new jsdom.JSDOM().window;
+    window = new jsdom.JSDOM().window as any;
     const filedata = fs.readFileSync(buildFiles[0], 'utf8');
     // tslint:disable-next-line:no-eval
     eval(filedata);
@@ -90,7 +90,7 @@ describe('browser version tests', () => {
   });
 
   it('second file loads onto the window object and can send event', (done) => {
-    window = new jsdom.JSDOM().window;
+    window = new jsdom.JSDOM().window as any;
     const filedata = fs.readFileSync(buildFiles[1], 'utf8');
     // tslint:disable-next-line:no-eval
     eval(filedata);
