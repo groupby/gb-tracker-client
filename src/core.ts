@@ -113,14 +113,13 @@ export interface TrackerInternals {
     VISITOR_SETTINGS_SOURCE?: string;
     MAX_QUERY_STRING_LENGTH: number;
     IGNORED_FIELD_PREFIXES: string[];
-    getProtocol(document?: { location?: { protocol?: string }}): string;
+    getProtocol(document?: { location?: { protocol?: string } }): string;
     overrideCookiesLib(cookies: any): void;
     overridePixelPath(path?: string): void;
-    sendEvent(event: FullSendableEvent, sendSegment: (segment: EventSegment) => void): void;
+    sendEvent(event: FullSendableEvent): void;
     prepareAndSendEvent(event: AnySendableEvent, eventType: keyof Schemas): void;
     validateEvent(event: FullSendableEvent, schemas: { validation?: any, sanitization?: any }): { event?: FullSendableEvent, error?: any };
     getRemovedFields(sanitizedEvent: Record<any, any>, originalEvent: Record<any, any>): string[];
-    sendSegment(segment: EventSegment): void;
 }
 
 export interface Tracker {
@@ -209,33 +208,11 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
             /**
              * Take event, convert to string, split by max length, and send along with uuid and customer info
-             * @param event
-             * @param sendSegment
+             * @param event The event to send.
              */
-            sendEvent: (event, sendSegment) => {
+            sendEvent: (event: any) => {
                 if (event && event.eventType === 'sessionChange') {
                     // This event is deprecated
-                    return;
-                }
-
-                const eventString = JSON.stringify(event);
-                const uuidString = cuid();
-
-                const segmentTemplate = {
-                    uuid: uuidString,
-                    id: internals.MAX_SEGMENT_COUNT,
-                    total: internals.MAX_SEGMENT_COUNT,
-                    customer: event.customer,
-                    clientVersion: internals.VERSION,
-                };
-
-                const SEGMENT_WRAPPER_OVERHEAD = encodeURIComponent(JSON.stringify(segmentTemplate)).length;
-
-                // Double encode here to account for double-encoding at the end
-                const eventStringSegments = chunkString(eventString, internals.MAX_QUERY_STRING_LENGTH - SEGMENT_WRAPPER_OVERHEAD, LZString.compressToEncodedURIComponent);
-
-                if (eventStringSegments.length > internals.MAX_SEGMENT_COUNT) {
-                    console.error(`cannot send: ${eventStringSegments} event segments, as that exceeds the max of: ${internals.MAX_SEGMENT_COUNT}`);
                     return;
                 }
 
@@ -243,16 +220,25 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     console.log(`Beaconing event: ${JSON.stringify(event, null, 2)}`);
                 }
 
-                for (let i = 0; i < eventStringSegments.length; i++) {
-                    sendSegment({
-                        uuid: uuidString,
-                        segment: LZString.compressToEncodedURIComponent(eventStringSegments[i]), // To prevent double-encoding, it'll be re-encoded before sending
-                        id: i,
-                        total: eventStringSegments.length,
-                        customer: event.customer,
-                        clientVersion: internals.VERSION,
-                    });
+                const protocol = internals.getProtocol(document);
+                const host = `${protocol}//${customerId}.groupbycloud.com`;
+                const path = `/wisdom/v2/pixel/beacon`;
+                let url: string;
+
+                if (internals.OVERRIDEN_PIXEL_URL && (typeof internals.OVERRIDEN_PIXEL_URL === 'string') && internals.OVERRIDEN_PIXEL_URL.length > 0) {
+                    url = internals.OVERRIDEN_PIXEL_URL;
+                } else {
+                    url = host + path;
                 }
+
+                const oReq = new XMLHttpRequest();
+                oReq.open("POST", url);
+
+                // Prevent the need for CORS pre-flight OPTIONS requests by overriding Content-Type from
+                // application/json to text/plain. Server understands this was done and parses accordingly.
+                oReq.setRequestHeader('Content-Type', 'text/plain');
+
+                oReq.send(JSON.stringify(event));
             },
 
             /**
@@ -265,7 +251,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 const schema = internals.SCHEMAS[eventType];
                 const validated = internals.validateEvent(fullEvent, schema || {});
                 if (validated && validated.event) {
-                    internals.sendEvent(validated.event, internals.sendSegment);
+                    internals.sendEvent(validated.event);
                 } else {
                     if (internals.INVALID_EVENT_CALLBACK) {
                         internals.INVALID_EVENT_CALLBACK(fullEvent, validated.error);
@@ -322,12 +308,12 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     }
                 }
 
-                sanitizedEvent.visit.generated.uri = (typeof window !== 'undefined' && window.location) ? window.location.href : '';
-                sanitizedEvent.visit.generated.timezoneOffset = new Date().getTimezoneOffset();
-                sanitizedEvent.visit.generated.localTime = new Date().toISOString();
+                sanitizedEvent.visit.generatedBrowserSide.uri = (typeof window !== 'undefined' && window.location) ? window.location.href : '';
+                sanitizedEvent.visit.generatedBrowserSide.timezoneOffset = new Date().getTimezoneOffset();
+                sanitizedEvent.visit.generatedBrowserSide = new Date().toISOString();
 
                 if (document && document.referrer) {
-                    sanitizedEvent.visit.generated.referer = document.referrer;
+                    sanitizedEvent.visit.generatedBrowserSide.referer = document.referrer;
                 }
 
                 return { event: sanitizedEvent };
@@ -383,31 +369,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 }
 
                 return protocol;
-            },
-
-            /**
-             * Use pixel endpoint to upload string to event-tracker
-             * @param segment
-             */
-            sendSegment: (segment) => {
-                const protocol = internals.getProtocol(document);
-                const host = `${protocol}//${customerId}.groupbycloud.com`;
-                let params = `?random\x3d${Math.random()}`; // To bust the cache
-                params += `&m=${encodeURIComponent(JSON.stringify(segment))}`;
-
-                const path = `/wisdom/v2/pixel/${params}`;
-
-                if (path.length > internals.MAX_PATH_LENGTH) {
-                    console.error(`cannot send request with path exceeding max length of: ${internals.MAX_PATH_LENGTH} path is: ${path.length}`);
-                    return;
-                }
-
-                const im = new Image();
-                if (internals.OVERRIDEN_PIXEL_URL && (typeof internals.OVERRIDEN_PIXEL_URL === 'string') && internals.OVERRIDEN_PIXEL_URL.length > 0) {
-                    im.src = internals.OVERRIDEN_PIXEL_URL + params;
-                } else {
-                    im.src = host + path;
-                }
             },
         };
 
