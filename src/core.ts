@@ -24,7 +24,6 @@ import {
     AutoSearchEvent,
     AutoMoreRefinementsEvent,
     ViewProductEvent,
-    EventSegment,
 } from './models';
 import { EventCustomer } from '@groupby/beacon-models/partials/customer';
 
@@ -96,7 +95,6 @@ export interface TrackerInternals {
     SESSION_TIMEOUT_SEC: number;
     VERSION: string;
     VISITOR_TIMEOUT_SEC: number;
-    MAX_SEGMENT_COUNT: number;
     MAX_PATH_LENGTH: number;
     MAX_PATHNAME_LENGTH: number;
     COOKIES_LIB: any;
@@ -164,7 +162,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             SESSION_TIMEOUT_SEC: 30 * 60,
             VERSION: pkgVersion,
             VISITOR_TIMEOUT_SEC: 60 * 60 * 24 * 365 * 10,
-            MAX_SEGMENT_COUNT: 100,
 
             SCHEMAS: schemas,
             SANITIZE_EVENT: sanitizeEvent,

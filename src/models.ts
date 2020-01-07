@@ -24,15 +24,6 @@ import {
 } from '@groupby/beacon-models/partials/product';
 import { Metadata } from '@groupby/beacon-models/partials/metadata';
 
-export interface EventSegment {
-    uuid: string;
-    segment: string;
-    id: number;
-    total: number;
-    customer: EventCustomer;
-    clientVersion?: string;
-}
-
 export interface SendableOrigin {
     sayt?: boolean;
     dym?: boolean;
