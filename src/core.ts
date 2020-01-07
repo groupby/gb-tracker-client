@@ -308,12 +308,12 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     }
                 }
 
-                sanitizedEvent.visit.generatedBrowserSide.uri = (typeof window !== 'undefined' && window.location) ? window.location.href : '';
-                sanitizedEvent.visit.generatedBrowserSide.timezoneOffset = new Date().getTimezoneOffset();
-                sanitizedEvent.visit.generatedBrowserSide = new Date().toISOString();
+                sanitizedEvent.visit.generated.uri = (typeof window !== 'undefined' && window.location) ? window.location.href : '';
+                sanitizedEvent.visit.generated.timezoneOffset = new Date().getTimezoneOffset();
+                sanitizedEvent.visit.generated.localTime = new Date().toISOString();
 
                 if (document && document.referrer) {
-                    sanitizedEvent.visit.generatedBrowserSide.referer = document.referrer;
+                    sanitizedEvent.visit.generated.referer = document.referrer;
                 }
 
                 return { event: sanitizedEvent };

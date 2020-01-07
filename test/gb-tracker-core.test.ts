@@ -306,26 +306,6 @@ describe('gb-tracker-core tests', () => {
     expect(visit.customerData.sessionId).to.eql('5');
   });
 
-  it('should sendEvent using sendSegment', (done) => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    const sendSegment = (segment: any) => {
-      expect(segment.segment).to.eql(LZString.compressToEncodedURIComponent(JSON.stringify(event)));
-      expect(segment.id).to.eql(0);
-      expect(segment.total).to.eql(1);
-      expect(segment.clientVersion).to.not.be.undefined;
-      expect(segment.uuid).to.match(CUID_REGEX);
-      done();
-    };
-
-    const event: any = {
-      first: 'this',
-      second: 'that',
-    };
-
-    gbTrackerCore.__getInternals().sendEvent(event, sendSegment);
-  });
-
   it('should use document\'s protocol, but only if known', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     [
