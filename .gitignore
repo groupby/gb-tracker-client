@@ -60,4 +60,4 @@ yarn.lock
 # Generated during integration tests
 receivedBeacon.json
 test-integration/apps/site/index.html
-test-integration/apps/site/gb-tracker-client*
+test-integration/apps/site/gb-tracker-client*.js
