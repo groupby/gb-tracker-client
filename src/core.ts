@@ -213,7 +213,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     return;
                 }
 
-                if ((window as any).DEBUG || internals.COOKIES_LIB.get(internals.DEBUG_COOKIE_KEY)) {
+                if ((window as any).GROUPBY_BEACON_DEBUG || internals.COOKIES_LIB.get(internals.DEBUG_COOKIE_KEY)) {
                     console.log(`Beaconing event: ${JSON.stringify(event, null, 2)}`);
                 }
 
