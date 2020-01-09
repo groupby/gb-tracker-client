@@ -49,15 +49,17 @@ cdn
 api-javascript
 documentation
 yarn.lock
-*.js
+./*.js
 *.d.ts
 
 # Whitelist needed files
 !tools/**/*
 !config/**/*
 !example-server/app/dist
+!test-integration/apps
 
 # Generated during integration tests
 receivedBeacon.json
+test-integration/version.js
 test-integration/apps/site/index.html
 test-integration/apps/site/gb-tracker-client*.js
