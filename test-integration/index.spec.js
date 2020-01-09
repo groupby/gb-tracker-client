@@ -24,7 +24,7 @@ const UTF8 = 'utf8';
 const TIMEOUT_MS = 10000;
 const trackerVersion = require('./version');
 
-log(`Detected tracker version: ${version}`);
+log(`Detected tracker version: ${trackerVersion}`);
 
 // Cleanup required after tests.
 let closables;
@@ -137,7 +137,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
         fs.removeSync(PATH_RECEIVED_BEACON);
         fs.removeSync(PATH_BUILT_SITE);
-        log('Deleted previously received beacon and previously built AMP sites from disk.');
+        log('Deleted previously received beacon and previously built site from disk.');
     });
 
     afterEach(async () => {
