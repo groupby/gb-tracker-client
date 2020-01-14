@@ -58,6 +58,9 @@ tsconfig.srcgen.json
 tsconfig.test.json
 tslint.yaml
 
+# Non-TS test code
+test-integration
+
 # Dev stuff
 example-server
 
