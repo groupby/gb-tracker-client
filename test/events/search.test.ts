@@ -408,37 +408,6 @@ describe('search tests', () => {
     });
   });
 
-  it('should partition and properly compress large search event', (done) => {
-    const expectedEvent = searchEvent;
-
-    const gbTrackerCore = new GbTracker('customerId', 'specialArea');
-
-    gbTrackerCore.setInvalidEventCallback(() => {
-      done('fail');
-    });
-
-    let segmentCounter = 0;
-
-    gbTrackerCore.__getInternals().sendSegment = (segment: any) => {
-
-      segmentCounter++;
-
-      expect(segment.clientVersion).to.not.be.undefined;
-      expect(LZString.decompressFromEncodedURIComponent(segment.segment)).to.not.eql(null);
-
-      // 3 for search
-      if (segmentCounter > 3) {
-        done();
-      }
-    };
-
-    gbTrackerCore.setVisitor('visitorId', 'sessionId');
-
-    gbTrackerCore.sendSearchEvent({
-      search: expectedEvent.search,
-    });
-  });
-
   it('should reject invalid search event that is not nested in search', (done) => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
