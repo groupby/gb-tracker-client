@@ -219,7 +219,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 const protocol = internals.getProtocol(document);
                 const host = `${protocol}//${customerId}.groupbycloud.com`;
-                const path = `/wisdom/v2/pixel/beacon`;
+                const path = `/wisdom/v2/pixel`;
                 let url: string;
 
                 if (internals.OVERRIDEN_PIXEL_URL && (typeof internals.OVERRIDEN_PIXEL_URL === 'string') && internals.OVERRIDEN_PIXEL_URL.length > 0) {
