@@ -94,10 +94,6 @@ export interface ViewProductEvent {
     product: Product;
 }
 
-export interface Variation {
-
-}
-
 /**
  * Comment for GroupBy internal:
  * 
@@ -126,6 +122,11 @@ export interface VariationGroupEvent {
     metadata?: Metadata;
 }
 
+/**
+ * The sanitization code for the VariationGroup event. If you are sending a
+ * beacon, you don't need to import this from your application. Import the type
+ * "VariationGroupEvent" for your application.
+ */
 export const variationGroupEventSan = {
     type: 'object',
     properties: {
@@ -153,6 +154,11 @@ export const variationGroupEventSan = {
     },
 };
 
+/**
+ * The validation code for the VariationGroup event. If you are sending a
+ * beacon, you don't need to import this from your application. Import the type
+ * "VariationGroupEvent" for your application.
+ */
 export const variationGroupEventVal = {
     type: 'object',
     properties: {
