@@ -134,14 +134,14 @@ export const variationGroupEventSan = {
             strict: true,
             properties: {
                 type: {
-                    type: 'string',
+                    type: 'string',                    
                     maxLength: MAX_STR_LENGTH,
                     rules: [
                         'trim',
                     ],
                 },
                 groupName: {
-                    type: 'string',
+                    type: 'string',                    
                     maxLength: MAX_STR_LENGTH,
                     rules: [
                         'trim',
@@ -161,10 +161,12 @@ export const variationGroupEventVal = {
             properties: {
                 type: {
                     type: 'string',
+                    minLength: 1,
                     optional: false,
                 },
                 groupName: {
                     type: 'string',
+                    minLength: 1,
                     optional: false,
                 },
             },
