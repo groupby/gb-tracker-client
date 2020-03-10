@@ -13,6 +13,7 @@ import search from './schemas/search';
 import viewProduct from './schemas/viewProduct';
 
 import { TrackerCore, AnySendableEvent, Schemas } from './core';
+import { variationGroupEventSan, variationGroupEventVal } from './models';
 
 /**
  * The origin the event. Each property is optional but one of them must be set
@@ -65,6 +66,10 @@ const SCHEMAS: Schemas = {
         sanitization: viewProduct.sanitization,
         validation: viewProduct.validation,
     },
+    variationGroup: {
+        sanitization: variationGroupEventSan,
+        validation: variationGroupEventVal,
+    }
 };
 
 /**
