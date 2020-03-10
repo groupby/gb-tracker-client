@@ -2,10 +2,8 @@ import cuid from 'cuid';
 import { diff } from 'deep-diff';
 import cookiesjs from 'cookies-js';
 import inspector from 'schema-inspector';
-import LZString from 'lz-string';
 
 import {
-    chunkString,
     startsWithOneOf,
     getUnique,
     deepCopy,
