@@ -46,7 +46,6 @@
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
-    "http-server": "^0.12.1",
     "jsdom": "^15.2.1",
     "jsdom-global": "^3.0.2",
     "json-diff": "^0.5.4",
