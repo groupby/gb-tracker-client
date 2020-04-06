@@ -4,14 +4,14 @@ const packageJson = require('../package.json');
 const version = packageJson.version;
 
 /**
- * No minification, use "beta.0" version suffix in filename.
+ * No minification.
  */
 module.exports = {
   mode: "development",
   entry:  ['./dist/window.js'],
   output: {
     path: path.resolve(__dirname, '../build'),
-    filename: `${packageJson.name}-${version}-beta.0.js`
+    filename: `${packageJson.name}-${version}.js`
   },
   module: {
     rules: [
