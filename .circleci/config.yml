@@ -47,20 +47,6 @@ jobs:
       - run: ./scripts/deploy_prod.sh
 workflows:
   version: 2.1
-  test_and_deploy:
+  test:
     jobs:
       - test
-      - deploy_dev:
-          filters:
-            branches:
-              only:
-                - develop
-          requires:
-            - test
-      - deploy_prod:
-          filters:
-            branches:
-              only:
-                - production
-          requires:
-            - test
