@@ -8,6 +8,15 @@
  */
 
 import {
+    MAX_STR_LENGTH,
+} from '@groupby/beacon-models/constants';
+
+import {
+    sanitization as metadataSan,
+    validation as metadataVal,
+} from '@groupby/beacon-models/partials/metadata/schema';
+
+import {
     AutoMoreRefinements as AutoMoreRefinementsPartial,
 } from '@groupby/beacon-models/partials/autoMoreRefinements';
 import {
@@ -84,3 +93,91 @@ export interface AutoMoreRefinementsEvent {
 export interface ViewProductEvent {
     product: Product;
 }
+
+/**
+ * Comment for GroupBy internal:
+ * 
+ * Notice how the VariationGroup event, partial, and sanitization & validation
+ * schemas are in this package instead of the "common models" package. This is
+ * because many interfaces were moved into a public "common models" package
+ * when GroupBy still relied on Node.js for most of its server code. We no
+ * longer need to use Node.js on the server so we don't need this new beacon
+ * type to be in a common public package. It only needs to be here. In the
+ * future, the original beacon types can also have all of their JS code moved
+ * here to simplify things.
+ * 
+ * Keep this comment separate from the JSDoc comments so that TypeScript
+ * tooling doesn't pick up on it. It isn't relevant for GroupBy customers
+ * implementing beacons.
+ */
+
+/**
+ * The data for a VariationGroup event.
+ */
+export interface VariationGroupEvent {
+    variation: {
+        type: string;
+        groupName: string;
+    },
+    metadata?: Metadata;
+}
+
+/**
+ * The sanitization code for the VariationGroup event. If you are sending a
+ * beacon, you don't need to import this from your application. Import the type
+ * "VariationGroupEvent" for your application.
+ */
+export const variationGroupEventSan = {
+    type: 'object',
+    properties: {
+        variation: {
+            type: 'object',
+            strict: true,
+            properties: {
+                type: {
+                    type: 'string',                    
+                    maxLength: MAX_STR_LENGTH,
+                    rules: [
+                        'trim',
+                    ],
+                },
+                groupName: {
+                    type: 'string',                    
+                    maxLength: MAX_STR_LENGTH,
+                    rules: [
+                        'trim',
+                    ],
+                },
+            },
+        },
+        metadata: metadataSan,
+    },
+};
+
+/**
+ * The validation code for the VariationGroup event. If you are sending a
+ * beacon, you don't need to import this from your application. Import the type
+ * "VariationGroupEvent" for your application.
+ */
+export const variationGroupEventVal = {
+    type: 'object',
+    properties: {
+        variation: {
+            type: 'object',
+            properties: {
+                type: {
+                    type: 'string',
+                    minLength: 1,
+                    optional: false,
+                },
+                groupName: {
+                    type: 'string',
+                    minLength: 1,
+                    optional: false,
+                },
+            },
+            optional: false,
+        },
+        metadata: metadataVal,
+    },
+};
