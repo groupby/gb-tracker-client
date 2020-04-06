@@ -3,6 +3,9 @@ const packageJson = require('../package.json');
 
 const version = packageJson.version;
 
+/**
+ * No minification.
+ */
 module.exports = {
   mode: "development",
   entry:  ['./dist/window.js'],

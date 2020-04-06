@@ -1,7 +1,6 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
 import _ from 'lodash';
-import LZString from 'lz-string';
 import jsdom from 'jsdom';
 import moment from 'moment';
 import cuid from 'cuid';

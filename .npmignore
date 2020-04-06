@@ -69,7 +69,6 @@ config
 
 # Docs
 RELEASING.md
-shipit.sh
 
 # non-common-js compiled code
 window.d.ts
@@ -79,3 +78,6 @@ window.js
 receivedBeacon.json
 test-integration/apps/site/index.html
 test-integration/apps/site/gb-tracker-client*.js
+
+# Deploy scripts
+scripts
