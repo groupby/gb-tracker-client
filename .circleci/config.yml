@@ -51,10 +51,12 @@ workflows:
     jobs:
       - test
       - deploy_dev:
-          branches:
-            only:
-              - develop
+          filters:
+            branches:
+              only:
+                - develop
       - deploy_prod:
-        branches:
-          only:
-            - production
+          filters:
+            branches:
+              only:
+                - production
