@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: groupbyinc/circleci-node:1.1
     steps:
@@ -15,3 +15,46 @@ jobs:
           paths:
             - ./node_modules
       - run: npm test
+  deploy_dev:
+    docker:
+      - image: groupbyinc/circleci-node:1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: ./scripts/deploy_dev.sh
+  deploy_prod:
+    docker:
+      - image: groupbyinc/circleci-node:1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: ./scripts/deploy_prod.sh
+workflows:
+  version: 2.1
+  test_and_deploy:
+    jobs:
+      - test
+      - deploy_dev:
+          branches:
+            only:
+              - develop
+      - deploy_prod:
+        branches:
+          only:
+            - production
