@@ -23,11 +23,13 @@ CURRENT_VERSION_MAJOR="$(cat package.json | jq -r .version | cut -d '.' -f 1)"
 
 ## Create current version
 cp "build/${NAME}-${CURRENT_VERSION}.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION}.js"
+cp "build/${NAME}-${CURRENT_VERSION}.min.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION}.min.js"
 
 ## Update latest major version
 cp "build/${NAME}-${CURRENT_VERSION}.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION_MAJOR}.js"
+cp "build/${NAME}-${CURRENT_VERSION}.min.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION_MAJOR}.min.js"
 
 cd cdn
 git add "static/javascript/${NAME}-*.js"
-git commit -m "Release ${NAME} v${CURRENT_VERSION} (prod)"
+git commit -m "Release ${NAME} v${CURRENT_VERSION}"
 git push
