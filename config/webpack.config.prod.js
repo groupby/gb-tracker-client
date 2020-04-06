@@ -3,6 +3,9 @@ const packageJson = require('../package.json')
 
 const version = packageJson.version;
 
+/**
+ * Use minification (by using "production" mode) and no "beta.0" suffix on file name.
+ */
 module.exports = {
   mode: "production",
   entry:  ['./dist/window.js'],

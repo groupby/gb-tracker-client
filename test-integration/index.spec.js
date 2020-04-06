@@ -7,11 +7,11 @@ const chai = require('chai');
 const expect = chai.expect;
 const jsonDiff = require('json-diff');
 const http = require('http');
-const createHttpServer = require('http-server').createServer;
+const express = require('express');
 const fs = require('fs-extra');
 const puppeteer = require('puppeteer');
 
-const beaconConsumerApp = require('./apps/beacon-consumer/app');
+const beaconConsumerAppCtor = require('./apps/beacon-consumer/app');
 const utils = require('./utils');
 const log = utils.log;
 
@@ -38,19 +38,27 @@ function build() {
     fs.writeFileSync(`test-integration/apps/site/index.html`, site);
 };
 
+/**
+ * Creates Express apps for the fake consumer and site server, and stores references to them so that they can be closed
+ * when the tests are complete.
+ */
 async function startServersAndBrowser() {
-    const beaconConsumerAppServer = http.createServer(beaconConsumerApp({
+    const beaconConsumerApp = beaconConsumerAppCtor({
         beaconFilePath: 'receivedBeacon.json',
         logger: utils.logBeaconConsumer,
-    }));
-    closables.push(beaconConsumerAppServer);
-    beaconConsumerAppServer.listen(PORT_BEACON_CONSUMER, () => log(`Beacon consumer app server listening on ${PORT_BEACON_CONSUMER}.`));
-
-    const siteServer = createHttpServer({
-        root: `./test-integration/apps/site`,
     });
-    closables.push(siteServer);
-    siteServer.listen(PORT_SITE, () => log(`Site server listening on ${PORT_SITE}.`));
+    const beaconConsumerAppServer = beaconConsumerApp.listen(PORT_BEACON_CONSUMER, () => {
+        log(`Beacon consumer app server listening on ${PORT_BEACON_CONSUMER}.`);
+    });
+    closables.push(beaconConsumerAppServer);
+
+    const siteApp = express();
+    siteApp.use(express.static('test-integration/apps/site'));
+    const siteAppServer = siteApp.listen(PORT_SITE, () => {
+        log(`Site server listening on ${PORT_SITE}.`);
+    });
+    closables.push(siteAppServer);
+    
 
     const browser = await puppeteer.launch({
         headless: true,
