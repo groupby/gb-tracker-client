@@ -55,8 +55,12 @@ workflows:
             branches:
               only:
                 - develop
+          requires:
+            - test
       - deploy_prod:
           filters:
             branches:
               only:
                 - production
+          requires:
+            - test
