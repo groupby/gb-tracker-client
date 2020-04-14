@@ -66,6 +66,6 @@
     "cookies-js": "^1.2.3",
     "cuid": "^2.1.8",
     "deep-diff": "^1.0.2",
-    "schema-inspector": "^1.6.9"
+    "schema-inspector": "1.6.8"
   }
 }
