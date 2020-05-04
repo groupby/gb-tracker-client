@@ -13,7 +13,7 @@
     "url": "git+https://github.com/groupby/gb-tracker-client.git"
   },
   "scripts": {
-    "clean": "rm -r src/schemas dist dist-tools dist-test schemas utils build 2> /dev/null; rm *.d.ts 2> /dev/null; rm *.js 2> /dev/null",
+    "clean": "rm -r dist dist-tools dist-test utils build 2> /dev/null; rm *.d.ts 2> /dev/null; rm *.js 2> /dev/null",
     "addVersion": "node -p '\"export const version = \\\"\" + require(\"./package.json\").version + \"\\\";\"' > ./src/version.ts",
     "addVersionJs": "node -p '\"module.exports = \\\"\" + require(\"./package.json\").version + \"\\\";\"' > ./test-integration/version.js",
     "compileTs": "tsc --project tsconfig.prod.json",
