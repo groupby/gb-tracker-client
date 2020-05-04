@@ -13,14 +13,13 @@
     "url": "git+https://github.com/groupby/gb-tracker-client.git"
   },
   "scripts": {
-    "clean": "rm -r src/schemas dist dist-tools dist-test schemas utils build 2> /dev/null; rm *.d.ts 2> /dev/null; rm *.js 2> /dev/null",
+    "clean": "rm -r dist dist-tools dist-test utils build 2> /dev/null; rm *.d.ts 2> /dev/null; rm *.js 2> /dev/null",
     "addVersion": "node -p '\"export const version = \\\"\" + require(\"./package.json\").version + \"\\\";\"' > ./src/version.ts",
     "addVersionJs": "node -p '\"module.exports = \\\"\" + require(\"./package.json\").version + \"\\\";\"' > ./test-integration/version.js",
     "compileTs": "tsc --project tsconfig.prod.json",
     "arrangeForNpm": "mv dist/* . && rm -r dist",
-    "buildForNpm": "npm run addVersion && npm run generateSchemas; npm run compileTs && npm run arrangeForNpm",
-    "buildForBrowser": "npm run addVersion && npm run generateSchemas; npm run compileTs && webpack --config ./config/webpack.config.dev.js && webpack --config ./config/webpack.config.prod.js",
-    "generateSchemas": "tsc --project tsconfig.srcgen.json && node dist-tools/buildSchemas.js",
+    "buildForNpm": "npm run addVersion ; npm run compileTs && npm run arrangeForNpm",
+    "buildForBrowser": "npm run addVersion ; npm run compileTs && webpack --config ./config/webpack.config.dev.js && webpack --config ./config/webpack.config.prod.js",
     "startExampleServer": "npm run buildForBrowser && cp ./build/* ./example-server/app/dist && node example-server/app/index.js",
     "build:test": "npm run buildForBrowser && tsc --project tsconfig.test.json",
     "test": "npm run clean 2> /dev/null; npm run build:test && mocha -r jsdom-global/register --exit 'dist-test/test/**/*.test.js' && cp build/gb-tracker-client-* test-integration/apps/site && npm run addVersionJs && mocha test-integration/index.spec.js",

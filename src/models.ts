@@ -7,31 +7,187 @@
  * a large bundle size.
  */
 
-import {
-    MAX_STR_LENGTH,
-} from '@groupby/beacon-models/constants';
+const MAX_STR_LENGTH = 10000;
 
-import {
-    sanitization as metadataSan,
-    validation as metadataVal,
-} from '@groupby/beacon-models/partials/metadata/schema';
+type Id = string;
+interface AutoMoreRefinementsPartial {
+    id: Id;
+}
 
-import {
-    AutoMoreRefinements as AutoMoreRefinementsPartial,
-} from '@groupby/beacon-models/partials/autoMoreRefinements';
-import {
-    Cart,
-} from '@groupby/beacon-models/partials/cart';
-import {
-    DirectSearch as DirectSearchPartial,
-} from '@groupby/beacon-models/partials/directSearch';
-import {
-    EventCustomer,
-} from '@groupby/beacon-models/partials/customer';
-import {
-    Product,
-} from '@groupby/beacon-models/partials/product';
-import { Metadata } from '@groupby/beacon-models/partials/metadata';
+type Metadata = { key: string, value: string }[];
+
+interface Item {
+    category?: string;
+    collection: string;
+    title: string;
+    sku?: string;
+    productId: string;
+    parentId?: string;
+    margin?: number;
+    price?: number;
+    quantity: number;
+    metadata?: Metadata;
+}
+
+interface Cart {
+    id?: string;
+    items: Item[];
+    metadata?: Metadata;
+}
+
+interface SearchNavigation {
+    name: string;
+    displayName?: string;
+    range?: boolean;
+    or?: boolean;
+    ignored?: boolean;
+    _id?: string;
+    type?: string;
+    metadata?: Metadata;
+    refinements: {
+        type: string,
+        _id?: string,
+        count?: number,
+        exclude?: boolean,
+        value?: string,
+        high?: string,
+        low?: string,
+    }[];
+    moreRefinements?: boolean;
+};
+type SearchNavigationList = SearchNavigation[];
+
+interface SearchQuery {
+    collection?: string;
+    area?: string;
+    sessionId?: string;
+    visitorId?: string;
+    biasingProfile?: string;
+    language?: string;
+    customUrlParams?: { [key: string]: string }[];
+    query?: string;
+    refinementQuery?: string;
+    matchStrategyName?: string;
+    matchStrategy: {
+        name: string,
+        rules: {
+            terms: number,
+            termsGreaterThan: number,
+            mustMatch: number,
+            percentage: boolean,
+        }[],
+    };
+    biasing?: {
+        bringToTop?: string[],
+        augmentBiases?: boolean,
+        influence?: number,
+        biases?: {
+            name?: string,
+            content?: string,
+            strength?: string,
+        }[],
+    };
+    skip?: number;
+    pageSize?: number;
+    returnBinary?: boolean;
+    disableAutocorrection?: boolean;
+    pruneRefinements?: boolean;
+    sort?: {
+        field?: string,
+        order?: string,
+    }[];
+    fields?: string[];
+    orFields?: string[];
+    wildcardSearchEnabled?: boolean;
+    restrictNavigation?: {
+        name?: string,
+        count?: number,
+    };
+    includedNavigations?: string[];
+    excludedNavigations?: string[];
+    refinements?: {
+        navigationName?: string,
+        type?: string,
+        _id?: string,
+        exclude?: boolean,
+        value?: string,
+        high?: string,
+        low?: string,
+    }[];
+};
+
+interface DirectSearchPartial {
+    id: Id;
+    totalRecordCount: number;
+    area?: string;
+    biasingProfile?: string;
+    query: string;
+    originalQuery?: string;
+    correctedQuery?: string;
+    warnings?: string[];
+    errors?: string;
+    template?: {
+        name?: string,
+        ruleName?: string,
+        _id?: string,
+    };
+    pageInfo: {
+        recordStart: number,
+        recordEnd: number,
+    };
+    relatedQueries?: string[];
+    rewrites?: string[];
+    redirect?: string;
+    siteParams?: { [idx: string]: string }[];
+    matchStrategy?: {
+        name?: string,
+        rules?: {
+            terms?: number,
+            termsGreaterThan?: number,
+            mustMatch?: number,
+            percentage?: boolean,
+        }[],
+    };
+    availableNavigation?: SearchNavigationList;
+    selectedNavigation?: SearchNavigationList;
+    records?: {
+        allMeta?: {
+            sku?: string,
+            productId?: string,
+        },
+        refinementMatches?: {
+            name?: string,
+            values?: {
+                value?: string,
+                count?: number,
+            }[],
+        }[],
+        _id?: string,
+        _u?: string,
+        _t?: string,
+        collection?: string,
+    }[];
+    didYouMean?: string[];
+    originalRequest?: SearchQuery;
+}
+
+interface EventCustomer {
+    id: string;
+    area: string;
+}
+
+interface Product {
+    category?: string;
+    collection: string;
+    title: string;
+    sku?: string;
+    productId: string;
+    parentId?: string;
+    margin?: number;
+    price?: number;
+    metadata?: Metadata;
+}
+
 
 export interface SendableOrigin {
     sayt?: boolean;
@@ -95,8 +251,38 @@ export interface ViewProductEvent {
 }
 
 /**
+ * metadata Sanitzation and Validation
+ */
+
+export const metadataSan = {
+    type: 'array',
+    optional: true,
+    items: {
+        strict: true,
+        type: 'object',
+        properties: {
+            key: { type: 'string', rules: ['trim', 'lower'], maxLength: MAX_STR_LENGTH },
+            value: { type: 'string', rules: ['trim', 'lower'], maxLength: MAX_STR_LENGTH },
+        },
+    },
+};
+
+export const metadataVal = {
+    type: 'array',
+    optional: true,
+    items: {
+        strict: true,
+        type: 'object',
+        properties: {
+            key: { type: 'string' },
+            value: { type: 'string' },
+        },
+    },
+};
+
+/**
  * Comment for GroupBy internal:
- * 
+ *
  * Notice how the VariationGroup event, partial, and sanitization & validation
  * schemas are in this package instead of the "common models" package. This is
  * because many interfaces were moved into a public "common models" package
@@ -105,7 +291,7 @@ export interface ViewProductEvent {
  * type to be in a common public package. It only needs to be here. In the
  * future, the original beacon types can also have all of their JS code moved
  * here to simplify things.
- * 
+ *
  * Keep this comment separate from the JSDoc comments so that TypeScript
  * tooling doesn't pick up on it. It isn't relevant for GroupBy customers
  * implementing beacons.
@@ -135,14 +321,14 @@ export const variationGroupEventSan = {
             strict: true,
             properties: {
                 type: {
-                    type: 'string',                    
+                    type: 'string',
                     maxLength: MAX_STR_LENGTH,
                     rules: [
                         'trim',
                     ],
                 },
                 groupName: {
-                    type: 'string',                    
+                    type: 'string',
                     maxLength: MAX_STR_LENGTH,
                     rules: [
                         'trim',
