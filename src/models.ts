@@ -9,19 +9,12 @@
 
 const MAX_STR_LENGTH = 10000;
 
-// import {
-//     AutoMoreRefinements as AutoMoreRefinementsPartial,
-// } from '@groupby/beacon-models/partials/autoMoreRefinements';
 type Id = string;
 interface AutoMoreRefinementsPartial {
     id: Id;
 }
 
-//import { Metadata } from '@groupby/beacon-models/partials/metadata';
 type Metadata = { key: string, value: string }[];
-// import {
-//     Cart,
-// } from '@groupby/beacon-models/partials/cart';
 
 interface Item {
     category?: string;
@@ -41,10 +34,6 @@ interface Cart {
     items: Item[];
     metadata?: Metadata;
 }
-
-// import {
-//     DirectSearch as DirectSearchPartial,
-// } from '@groupby/beacon-models/partials/directSearch';
 
 interface SearchNavigation {
     name: string;
@@ -181,19 +170,11 @@ interface DirectSearchPartial {
     didYouMean?: string[];
     originalRequest?: SearchQuery;
 }
-// import {
-//     EventCustomer,
-// } from '@groupby/beacon-models/partials/customer';
 
 interface EventCustomer {
     id: string;
     area: string;
 }
-
-//
-// import {
-//     Product,
-// } from '@groupby/beacon-models/partials/product';
 
 interface Product {
     category?: string;
