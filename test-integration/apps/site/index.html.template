@@ -18,7 +18,13 @@
                 origin: {
                     search: true
                 }
-            }
+            },
+            experiments: [
+                {
+                    experimentId: 'testexperimentid',
+                    experimentVariant: 'testexperimentvariant',
+                },
+            ],
         });
     </script>
 </head>

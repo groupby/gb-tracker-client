@@ -187,6 +187,12 @@ describe('gb-tracker-client, running in a web browser', () => {
                     uri: `http://localhost:${PORT_SITE}/`,
                 },
             },
+            experiments: [
+                {
+                    experimentId: 'testexperimentid',
+                    experimentVariant: 'testexperimentvariant',
+                },
+            ],
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);
