@@ -4,8 +4,6 @@
 
 This is the JavaScript SDK used to send beacons to GroupBy. It can only run in the browser. A bundled UMD build is available from our CDN (see GroupBy docs for CDN link) and a CommonJS build is available for linking into NPM build processes with a bundler. E.g. React, Angular.
 
-Docs: https://docs.groupbyinc.com/documentation.html?e=wisdom&b=searchandiser&topic=100_EventTracking/00_OverviewAndInstallation.md
-
 ## Usage from CDN
 
 Add the CDN `<script>` to each page, above where the tracker is instantiated and used:
@@ -33,12 +31,22 @@ Add the CDN `<script>` to each page, above where the tracker is instantiated and
 
 ## Usage with NPM
 
-To import and use the tracker, and types:
+To import and use the tracker:
+
+```javascript
+import { GbTracker } from 'gb-tracker-client';
+
+const tracker = new GbTracker('customer_id', 'area');
+tracker.autoSetVisitor();
+
+tracker.sendAddToCartEvent({ ... });
+```
+
+If you're using TypeScript, you can also use the types for each event type. Each
+function has a corresponding TypeScript type that can be imported:
 
 ```typescript
 import { GbTracker } from 'gb-tracker-client';
-
-// all beacon types in 'models'
 import { AddToCartEvent } from 'gb-tracker-client/models';
 
 const tracker = new GbTracker('customer_id', 'area');
@@ -47,3 +55,9 @@ tracker.autoSetVisitor();
 const a: AddToCartEvent = { ... };
 tracker.sendAddToCartEvent(a);
 ```
+
+## More Usage Details
+
+See the docs for more detailed information about implementing beacons:
+
+https://docs.groupbycloud.com/gb-docs/gb-implementation/beacons/overview
