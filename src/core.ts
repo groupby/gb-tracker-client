@@ -22,7 +22,6 @@ import {
     AutoSearchEvent,
     AutoMoreRefinementsEvent,
     ViewProductEvent,
-    VariationGroupEvent,
 } from './models';
 
 interface EventCustomer {
@@ -54,10 +53,9 @@ type SendableVisit = {
     }
 }
 
-export type AnySendableEvent = AddToCartEvent | ViewCartEvent |
-    RemoveFromCartEvent | OrderEvent | SearchEvent |
-    AutoSearchEvent | AutoMoreRefinementsEvent | ViewProductEvent |
-    VariationGroupEvent;
+export type AnySendableEvent = AddToCartEvent | ViewCartEvent
+    | RemoveFromCartEvent | OrderEvent | SearchEvent | AutoSearchEvent
+    | AutoMoreRefinementsEvent | ViewProductEvent;
 
 export type FullSendableEvent = AnySendableEvent & {
     eventType: string,
@@ -77,7 +75,6 @@ export interface Schemas {
     autoMoreRefinements?: { validation?: object, sanitization?: object };
     search?: { validation?: object, sanitization?: object };
     viewProduct?: { validation?: object, sanitization?: object };
-    variationGroup?: { validation?: object, sanitization?: object };
 }
 
 export interface TrackerCoreFactory {
@@ -145,7 +142,6 @@ export interface Tracker {
     sendAutoSearchEvent: (event: AutoSearchEvent) => void;
     sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => void;
     sendViewProductEvent: (event: ViewProductEvent) => void;
-    sendVariationGroupEvent: (event: VariationGroupEvent) => void;
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
@@ -561,14 +557,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
             sendViewProductEvent: (event: ViewProductEvent) => {
                 internals.prepareAndSendEvent(event, 'viewProduct');
-            },
-
-            /**
-             * Validate and send variationGroup event
-             * @param event
-             */
-            sendVariationGroupEvent: (event: VariationGroupEvent) => {
-                internals.prepareAndSendEvent(event, 'variationGroup');
             },
         };
 
