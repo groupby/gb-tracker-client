@@ -6,7 +6,6 @@
 const chai = require('chai');
 const expect = chai.expect;
 const jsonDiff = require('json-diff');
-const http = require('http');
 const express = require('express');
 const fs = require('fs-extra');
 const puppeteer = require('puppeteer');
@@ -29,18 +28,25 @@ log(`Detected tracker version: ${trackerVersion}`);
 // Cleanup required after tests.
 let closables;
 
-function build() {
-    // Prepare test version of site. Fill in template with values for test.
-    const siteTemplate = fs.readFileSync(`test-integration/apps/site/index.html.template`, UTF8);
-    let site = siteTemplate.replace('{{gbTrackerClientSrc}}', `gb-tracker-client-${trackerVersion}.js`);
+/**
+ * Prepares the test version of each site before the test starts. Builds a site
+ * for each event type one at a time, specified by the parameter.
+ * @param {string} eventType 
+ */
+function build(eventType) {
+    const siteTemplate = fs.readFileSync(
+        `test-integration/apps/sites/${eventType}.template.html`, UTF8);
+
+    let site = siteTemplate.replace(
+        '{{gbTrackerClientSrc}}', `gb-tracker-client-${trackerVersion}.js`);
     site = site.replace('{{beaconConsumerPort}}', `${PORT_BEACON_CONSUMER}`);
-    log(`Complete site:\n\n${site}`);
-    fs.writeFileSync(`test-integration/apps/site/index.html`, site);
-};
+
+    fs.writeFileSync(`test-integration/apps/sites/index.html`, site);
+}
 
 /**
- * Creates Express apps for the fake consumer and site server, and stores references to them so that they can be closed
- * when the tests are complete.
+ * Creates Express apps for the fake consumer and site server, and stores
+ * references to them so that they can be closed when the tests are complete.
  */
 async function startServersAndBrowser() {
     const beaconConsumerApp = beaconConsumerAppCtor({
@@ -53,12 +59,12 @@ async function startServersAndBrowser() {
     closables.push(beaconConsumerAppServer);
 
     const siteApp = express();
-    siteApp.use(express.static('test-integration/apps/site'));
+    siteApp.use(express.static('test-integration/apps/sites'));
     const siteAppServer = siteApp.listen(PORT_SITE, () => {
         log(`Site server listening on ${PORT_SITE}.`);
     });
     closables.push(siteAppServer);
-    
+
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -84,14 +90,14 @@ async function visitSiteAndAssert(page, expectedReceivedBeacon) {
         waitUntil: NETWORK_IDLE,
     });
 
-    // Read beacon from disk and assert
-    const receivedBeacon = JSON.parse(fs.readFileSync(PATH_RECEIVED_BEACON, UTF8));
+    // Read beacon from disk and assert.
+    const receivedBeacon = JSON.parse(
+        fs.readFileSync(PATH_RECEIVED_BEACON, UTF8));
 
     // The following properties will be different each time a beacon is sent,
     // so we remove them before performing the "equal to" assertion, and just
     // assert that they are the right type and format:
     // - clientVersion.raw
-    // - search.id
     // - visit.customerData.sessionId
     // - visit.customerData.visitorId
     // - visit.generated.localTime
@@ -99,11 +105,6 @@ async function visitSiteAndAssert(page, expectedReceivedBeacon) {
 
     expect(receivedBeacon.clientVersion.raw).to.not.be.undefined;
     expect(receivedBeacon.clientVersion.raw).to.be.a('string');
-
-    expect(receivedBeacon.search).to.not.be.undefined;
-
-    expect(receivedBeacon.search.id).to.not.be.undefined;
-    expect(receivedBeacon.search.id).to.be.a('string');
 
     expect(receivedBeacon.visit).to.not.be.undefined;
     expect(receivedBeacon.visit).to.be.a('object');
@@ -131,12 +132,50 @@ async function visitSiteAndAssert(page, expectedReceivedBeacon) {
 
     // Delete nondeterministic properties and assert on rest of beacon.
     delete receivedBeacon.clientVersion.raw;
-    delete receivedBeacon.search.id;
     delete receivedBeacon.visit.customerData.sessionId;
     delete receivedBeacon.visit.customerData.visitorId;
     delete receivedBeacon.visit.generated.localTime;
 
-    expect(jsonDiff.diffString(receivedBeacon, expectedReceivedBeacon)).eql('');
+    const jsonDiffStr = jsonDiff.diffString(
+        receivedBeacon, expectedReceivedBeacon);
+
+    if (jsonDiffStr !== '') {
+        console.log(`Received beacon doesn't match expected. Diff:`,
+            jsonDiffStr);
+        throw new Error('JSON diff revealed difference in actual received '
+            + 'beacon vs. expected received beacon.')
+    }
+}
+
+/**
+ * Creates the base expected received beacon. Each test builds upon it to
+ * include the event type specific data.
+ * @param {string} eventType 
+ */
+function expectedReceivedBeaconBase(eventType) {
+    // Some data will have been removed before the assert because it is
+    // different each time a beacon is sent, like visitorId.
+    return {
+        clientVersion: {},
+        customer: {
+            area: 'testarea',
+            id: 'testcustomer',
+        },
+        eventType,
+        visit: {
+            customerData: {},
+            generated: {
+                timezoneOffset: 0,
+                uri: `http://localhost:${PORT_SITE}/`,
+            },
+        },
+        experiments: [
+            {
+                experimentId: 'testexperimentid',
+                experimentVariant: 'testexperimentvariant',
+            },
+        ],
+    };
 }
 
 describe('gb-tracker-client, running in a web browser', () => {
@@ -153,23 +192,30 @@ describe('gb-tracker-client, running in a web browser', () => {
             await c.close();
         }
         log('Servers and headless browser closed.');
+
+        // Wait a bit before next test - helps with ports still in use.
+        async function waitMs(ms) {
+            return new Promise((accept, _) => {
+                setTimeout(() => {
+                    accept();
+                }, ms);
+            });
+        }
+        await waitMs(100);
     });
 
-    it('sends a beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        build();
+    // AutoSearch
+    it('sends a valid AutoSearch beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        const eventType = 'autoSearch';
+
+        build(eventType);
 
         const page = await startServersAndBrowser();
 
-        // Some data will have been removed before the "eql" assert because it
-        // is different each time a beacon is sent, like visitorId.
         const expectedReceivedBeacon = {
-            clientVersion: {},
-            customer: {
-                area: 'testarea',
-                id: 'testcustomer',
-            },
-            eventType: 'autoSearch',
+            ...expectedReceivedBeaconBase(eventType),
             search: {
+                id: 'e30a4611-64b0-49a1-ad56-ab8fa2ffcc10',
                 origin: {
                     autosearch: false,
                     collectionSwitcher: false,
@@ -180,19 +226,182 @@ describe('gb-tracker-client, running in a web browser', () => {
                     search: true,
                 },
             },
-            visit: {
-                customerData: {},
-                generated: {
-                    timezoneOffset: 0,
-                    uri: `http://localhost:${PORT_SITE}/`,
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
+    // Search
+    it('sends a valid Search beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        const eventType = 'search';
+
+        build(eventType);
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase(eventType),
+            search: {
+                query: "beacon",
+                originalQuery: "beacon",
+                correctedQuery: "beacon",
+                totalRecordCount: 3,
+                pageInfo: {
+                    recordStart: 1,
+                    recordEnd: 3
                 },
+                area: "Dev",
+                selectedNavigation: [
+                    {
+                        name: "Survival Equipment",
+                        displayName: "Survival Equipment",
+                        refinements: [
+                            {
+                                type: "value",
+                                value: "Survival Equipment"
+                            }
+                        ],
+                        range: false,
+                        or: false,
+                    },
+                ],
+                records: [
+                    {
+                        _u: "http://www.example.co.uk/23PY",
+                        collection: "test",
+                    },
+                    {
+                        _u: "http://www.example.com/F20R"
+                    },
+                ],
+                origin: {
+                    search: true,
+                    autosearch: false,
+                    collectionSwitcher: false,
+                    dym: false,
+                    navigation: false,
+                    recommendations: false,
+                    sayt: false,
+                }
+            }
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
+    // ViewProduct
+    it('sends a valid ViewProduct beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        build('viewProduct');
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase('viewProduct'),
+            product: {
+                productId: 'testproductid',
+                title: 'testtitle',
+                collection: 'default',
             },
-            experiments: [
-                {
-                    experimentId: 'testexperimentid',
-                    experimentVariant: 'testexperimentvariant',
-                },
-            ],
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
+    // AddToCart
+    it('sends a valid AddToCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        const eventType = 'addToCart';
+
+        build(eventType);
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase(eventType),
+            cart: {
+                items: [
+                    {
+                        productId: 'testproductid',
+                        title: 'testtitle',
+                        collection: 'default',
+                        quantity: 1,
+                    },
+                ],
+            },
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
+    // ViewCart
+    it('sends a valid ViewCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        const eventType = 'viewCart';
+
+        build(eventType);
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase(eventType),
+            cart: {
+                items: [
+                    {
+                        productId: 'testproductid',
+                        title: 'testtitle',
+                        collection: 'default',
+                        quantity: 1,
+                    },
+                ],
+            },
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
+    // RemoveFromCart
+    it('sends a valid RemoveFromCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        const eventType = 'removeFromCart';
+
+        build(eventType);
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase(eventType),
+            cart: {
+                items: [
+                    {
+                        productId: 'testproductid',
+                        title: 'testtitle',
+                        collection: 'default',
+                        quantity: 1,
+                    },
+                ],
+            },
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
+    // Order
+    it('sends a valid Order beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        const eventType = 'order';
+
+        build(eventType);
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase(eventType),
+            cart: {
+                items: [
+                    {
+                        productId: 'testproductid',
+                        title: 'testtitle',
+                        collection: 'default',
+                        quantity: 1,
+                    },
+                ],
+            },
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);

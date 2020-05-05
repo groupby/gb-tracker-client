@@ -22,7 +22,7 @@
     "buildForBrowser": "npm run addVersion ; npm run compileTs && webpack --config ./config/webpack.config.dev.js && webpack --config ./config/webpack.config.prod.js",
     "startExampleServer": "npm run buildForBrowser && cp ./build/* ./example-server/app/dist && node example-server/app/index.js",
     "build:test": "npm run buildForBrowser && tsc --project tsconfig.test.json",
-    "test": "npm run clean 2> /dev/null; npm run build:test && mocha -r jsdom-global/register --exit 'dist-test/test/**/*.test.js' && cp build/gb-tracker-client-* test-integration/apps/site && npm run addVersionJs && mocha test-integration/index.spec.js",
+    "test": "npm run clean 2> /dev/null; npm run build:test && mocha -r jsdom-global/register --exit 'dist-test/test/**/*.test.js' && cp build/gb-tracker-client-* test-integration/apps/sites && npm run addVersionJs && mocha test-integration/index.spec.js",
     "prepublishOnly": "npm test && npm run clean 2> /dev/null; npm run buildForNpm",
     "test:integration": "npm run clean 2> /dev/null; npm run buildForBrowser; cp build/gb-tracker-client-*.js test-integration/apps/site/gb-tracker-client.js && mocha test-integration/index.spec.js"
   },
