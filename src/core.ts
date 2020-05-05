@@ -24,7 +24,11 @@ import {
     ViewProductEvent,
     VariationGroupEvent,
 } from './models';
-import { EventCustomer } from '@groupby/beacon-models/partials/customer';
+
+interface EventCustomer {
+    id: string;
+    area: string;
+}
 
 /**
  * Describes the "visit" object being built up by the tracker before it is

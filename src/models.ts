@@ -1,20 +1,21 @@
+import { MAX_STR_LENGTH } from './schemas/utils';
+
 /**
- * This file contains types exported for consuming libraries. Normally this
- * would be exported from the library root, but for legacy reasons, the full
- * tracker is currently exported from the library root. Therefore, consumers
- * importing from the library root will have a large bundle size. Therefore,
- * the types are here instead so that consumers can import them without causing
- * a large bundle size.
+ * Metadata that can be attached to any event, and often to partials within
+ * each event (for example, metadata for an event can be "gbi:true" and
+ * metadata for a product can be "summersale2020:true"). Metadata is never
+ * required except for certain situations such as comparing GroupBy Search vs.
+ * non-GroupBy Search, or custom solutions created with help from a GroupBy
+ * Customer's TC on the Customer Success team.
  */
+type Metadata = {
+    key: string,
+    value: string
+}[];
 
-const MAX_STR_LENGTH = 10000;
-
-type Id = string;
 interface AutoMoreRefinementsPartial {
-    id: Id;
+    id: string;
 }
-
-type Metadata = { key: string, value: string }[];
 
 interface Item {
     category?: string;
@@ -55,6 +56,7 @@ interface SearchNavigation {
     }[];
     moreRefinements?: boolean;
 };
+
 type SearchNavigationList = SearchNavigation[];
 
 interface SearchQuery {
@@ -117,7 +119,7 @@ interface SearchQuery {
 };
 
 interface DirectSearchPartial {
-    id: Id;
+    id: string;
     totalRecordCount: number;
     area?: string;
     biasingProfile?: string;
@@ -171,11 +173,6 @@ interface DirectSearchPartial {
     originalRequest?: SearchQuery;
 }
 
-interface EventCustomer {
-    id: string;
-    area: string;
-}
-
 interface Product {
     category?: string;
     collection: string;
@@ -188,7 +185,6 @@ interface Product {
     metadata?: Metadata;
 }
 
-
 export interface SendableOrigin {
     sayt?: boolean;
     dym?: boolean;
@@ -199,61 +195,96 @@ export interface SendableOrigin {
     collectionSwitcher?: boolean;
 }
 
-interface CartEvent {
-    cart: Cart;
+/**
+ * Used for A/B testing experiments.
+ */
+interface Experiment {
+    experimentId: string;
+    experimentVariant: string;
+}
+
+/**
+ * The base event. All event types support optional experiment tracking and
+ * event-level metadata.
+ */
+interface BaseEvent {
+    experiments?: Experiment[];
     metadata?: Metadata;
 }
 
 /**
- * The data for an Add to Cart event.
+ * The base cart type event.
  */
-export interface AddToCartEvent extends CartEvent {}
+interface BaseCartEvent extends BaseEvent {
+    cart: Cart;
+}
+
 /**
- * The data for a View Cart event.
+ * The data for an AddToCart event.
  */
-export interface ViewCartEvent extends CartEvent {}
+export interface AddToCartEvent extends BaseCartEvent { }
+
 /**
- * The data for a Remove from Cart event.
+ * The data for a ViewCart event.
  */
-export interface RemoveFromCartEvent extends CartEvent {};
+export interface ViewCartEvent extends BaseCartEvent { }
+
+/**
+ * The data for a RemoveFromCart event.
+ */
+export interface RemoveFromCartEvent extends BaseCartEvent { };
+
 /**
  * The data for an Order event.
  */
-export interface OrderEvent extends CartEvent {};
+export interface OrderEvent extends BaseCartEvent { };
+
 /**
- * The data for a Search event.
+ * The data for a Search event. This should be used only until you are
+ * using only GroupBy Search, at which point you should only beacon the
+ * AutoSearch event because it is less error prone and more effient. See
+ * AutoSearch for more info.
  */
-export interface SearchEvent {
+export interface SearchEvent extends BaseEvent {
     search: DirectSearchPartial & {
         origin: SendableOrigin;
     };
 }
+
 /**
- * The data for an AutoSearch event.
+ * The data for an AutoSearch event. AutoSearch should be used instead of
+ * Search once you have moved all of your search usage to GroupBy Search. It is
+ * more efficient than using the Search event because you are not required to
+ * include all the data from the search results in the function call. Instead,
+ * you include the search ID and GroupBy joins the search results with the
+ * search ID in the AutoSearch event. This is less error prone and results in
+ * less data being uploaded from the shopper's web browser to GroupBy for each
+ * beacon.
  */
-export interface AutoSearchEvent {
+export interface AutoSearchEvent extends BaseEvent {
     search: {
         id: string;
         origin: SendableOrigin;
     };
 }
+
 /**
  * The data for an AutoMoreRefinements event.
  */
-export interface AutoMoreRefinementsEvent {
+export interface AutoMoreRefinementsEvent extends BaseEvent {
     moreRefinements: AutoMoreRefinementsPartial;
 }
+
 /**
- * The data for a View Product event.
+ * The data for a ViewProduct event.
  */
-export interface ViewProductEvent {
+export interface ViewProductEvent extends BaseEvent {
     product: Product;
 }
 
 /**
  * metadata Sanitzation and Validation
  */
-
 export const metadataSan = {
     type: 'array',
     optional: true,
@@ -295,23 +326,26 @@ export const metadataVal = {
  * Keep this comment separate from the JSDoc comments so that TypeScript
  * tooling doesn't pick up on it. It isn't relevant for GroupBy customers
  * implementing beacons.
+ * 
+ * @deprecated since version 3.9.0
  */
 
 /**
  * The data for a VariationGroup event.
+ * @deprecated since version 3.9.0
  */
-export interface VariationGroupEvent {
+export interface VariationGroupEvent extends BaseEvent {
     variation: {
         type: string;
         groupName: string;
     },
-    metadata?: Metadata;
 }
 
 /**
  * The sanitization code for the VariationGroup event. If you are sending a
  * beacon, you don't need to import this from your application. Import the type
- * "VariationGroupEvent" for your application.
+ * "VariationGroupEvent" for your application. * 
+ * @deprecated since version 3.9.0
  */
 export const variationGroupEventSan = {
     type: 'object',
@@ -343,7 +377,8 @@ export const variationGroupEventSan = {
 /**
  * The validation code for the VariationGroup event. If you are sending a
  * beacon, you don't need to import this from your application. Import the type
- * "VariationGroupEvent" for your application.
+ * "VariationGroupEvent" for your application. * 
+ * @deprecated since version 3.9.0
  */
 export const variationGroupEventVal = {
     type: 'object',
