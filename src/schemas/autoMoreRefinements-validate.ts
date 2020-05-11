@@ -1,4 +1,7 @@
-var utils = require('./utils'); const BLACKLIST_STRIPING_REGEX = utils.regex.BLACKLIST_STRIPING_REGEX; 
+import {
+  validation as experimentsVal,
+} from './partials/experiments';
+
 export default {
   validation: {
     type: 'object',
@@ -104,7 +107,8 @@ export default {
             minLength: 1
           }
         }
-      }
+      },
+      experiments: experimentsVal,
     }
   }
 }

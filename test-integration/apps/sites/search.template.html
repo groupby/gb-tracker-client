@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="{{gbTrackerClientSrc}}"></script>
+    <script>
+        // call autoSetVisitor before using the tracker instance
+        var gbTracker = new GbTracker('testcustomer', 'testarea', 'http://localhost:{{beaconConsumerPort}}');
+        gbTracker.autoSetVisitor();
+
+        gbTracker.sendSearchEvent({
+            "search": {
+                "query": "beacon",
+                "originalQuery": "beacon",
+                "correctedQuery": "beacon",
+                "totalRecordCount": "3",
+                "pageInfo": {
+                    "recordStart": "1",
+                    "recordEnd": "3"
+                },
+                "area": "Dev",
+                "selectedNavigation": [
+                    {
+                        "name": "Survival Equipment",
+                        "displayName": "Survival Equipment",
+                        "refinements": [
+                            {
+                                "type": "Value",
+                                "value": "Survival Equipment"
+                            }
+                        ],
+                        "range": false,
+                        "or": false
+                    },
+                ],
+                "records": [
+                    {
+                        "_u": "http://www.example.co.uk/23PY",
+                        "collection": "test",
+                    },
+                    {
+                        "_u": "http://www.example.com/F20R"
+                    },
+                ],
+                "origin": {
+                    "search": true
+                }
+            },
+            experiments: [
+                {
+                    experimentId: 'testexperimentid',
+                    experimentVariant: 'testexperimentvariant',
+                },
+            ],
+        });
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

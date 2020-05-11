@@ -5,8 +5,10 @@ module.exports = ({ beaconFilePath, logger }) => {
         logger(`Beacon consumer received request. Instructed to write beacon to ${beaconFilePath}.`);
 
         const beacon = req.body;
-        logger(`Received beacon:`);
-        logger(JSON.stringify(beacon, null, 2));
+
+        // UNCOMMENT FOR MORE LOGGING FOR TROUBLESHOOTING TESTS
+        // logger(`Received beacon:`);
+        // logger(JSON.stringify(beacon, null, 2));
     
         fs.writeFileSync(beaconFilePath, JSON.stringify(beacon));
         logger(`Wrote beacon to disk at: ${beaconFilePath}`);

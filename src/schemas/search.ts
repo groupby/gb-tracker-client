@@ -1,4 +1,12 @@
-var utils = require('./utils'); const BLACKLIST_STRIPING_REGEX = utils.regex.BLACKLIST_STRIPING_REGEX; 
+import {
+  validation as experimentsVal,
+  sanitization as experimentsSan,
+} from './partials/experiments';
+
+import { regex } from './utils';
+
+const BLACKLIST_STRIPING_REGEX = regex.BLACKLIST_STRIPING_REGEX; 
+
 export default {
   validation: {
     type: 'object',
@@ -830,7 +838,8 @@ export default {
             }
           }
         }
-      }
+      },
+      experiments: experimentsVal,
     }
   },
   sanitization: {
@@ -1576,8 +1585,7 @@ export default {
                   type: 'string',
                   maxLength: 10000,
                   rules: [
-                    'trim',
-                    'lower'
+                    'trim'
                   ]
                 },
                 _t: {
@@ -1999,7 +2007,8 @@ export default {
             }
           }
         }
-      }
+      },
+      experiments: experimentsSan,
     }
   }
 }
