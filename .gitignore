@@ -64,3 +64,5 @@ receivedBeacon.json
 test-integration/version.js
 test-integration/apps/sites/index.html
 test-integration/apps/sites/gb-tracker-client*.js
+
+schemas/**/*.js

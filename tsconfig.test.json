@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es5",
+    "target": "ESNext",
     "lib": [
       "es2017",
       "dom"
