@@ -1,11 +1,8 @@
 const path = require('path');
-const packageJson = require('../package.json')
 
+const packageJson = require('../package.json');
 const version = packageJson.version;
 
-// Based on:
-// - https://webpack.js.org/guides/asset-management/ (for base Webpack config)
-// - https://babeljs.io/docs/en/usage (for Babel config for babel-loader)
 module.exports = {
   mode: 'development',
   entry: './dist/window.js',
@@ -17,22 +14,30 @@ module.exports = {
     rules: [
       {
         test: /\.m?js$/,
-        exclude: /core-js|core-js-compat/,
+        exclude: [
+          /\bcore-js\b/,
+          /\bwebpack\b/,
+          /\bregenerator-runtime\b/,
+        ],
         use: {
           loader: 'babel-loader',
           options: {
+            sourceType: 'unambiguous',
             presets: [
               [
-                '@babel/preset-env',
+                '@babel/env',
                 {
-                  "useBuiltIns": "entry"
+                  targets: {
+                    ie: '11',
+                  },
+                  useBuiltIns: 'usage',
+                  corejs: '3',
                 }
               ]
             ],
-            plugins: ['@babel/plugin-transform-regenerator']
           }
         }
       }
-    ],
+    ]
   }
 };
