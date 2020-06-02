@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: node:14
+      - image: circleci/node:latest-browsers
     steps:
       - checkout
       - restore_cache:
