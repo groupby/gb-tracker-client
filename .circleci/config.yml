@@ -36,7 +36,7 @@ workflows:
   version: 2.1
   main:
     jobs:
-      - test
+      - run-tests
       - deploy_to_dev_cdn:
           context: org-global
           requires:
