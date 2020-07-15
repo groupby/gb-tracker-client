@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  test:
+  run-tests:
     docker:
       - image: groupbyinc/circleci-node:1.1
     steps:
@@ -15,8 +15,34 @@ jobs:
           paths:
             - ./node_modules
       - run: npm test
+  deploy_to_dev_cdn:
+    docker:
+      - image: groupbyinc/circleci-node:1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: deploy to CDN
+          command: scripts/deploy_browser_dev.sh
 workflows:
   version: 2.1
-  test:
+  main:
     jobs:
       - test
+      - deploy_to_dev_cdn:
+          context: org-global
+          requires:
+            - run-tests
+          filters:
+            branches:
+              only:
+                - develop
+                - WIS-2034
