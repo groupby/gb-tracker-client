@@ -67,3 +67,5 @@ test-integration/apps/sites/gb-tracker-client*.js
 
 # Top level code after the arrangeForNpm build step
 schemas
+
+staged_for_deploy
