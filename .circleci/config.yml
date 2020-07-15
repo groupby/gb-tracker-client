@@ -17,8 +17,12 @@ jobs:
       - run: npm test
   deploy-dev-cdn:
     docker:
-      - image: groupbyinc/circleci-node:1.1
+      - image: circleci/node:14
     steps:
+      - gcp-cli/install
+      - deployment/gcloud-login:
+          keyfile-path: ${HOME}/app
+          keyfile-filename: devKeyFile.json
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -28,7 +32,7 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - ./node_modules
+            - ./node_modules      
       - run:
           name: deploy to CDN
           command: scripts/deploy_browser_dev.sh
@@ -46,3 +50,6 @@ workflows:
               only:
                 - develop
                 - WIS-2034
+orbs:
+  gcp-cli: circleci/gcp-cli@1
+  deployment: groupbyinc/deployment@0
