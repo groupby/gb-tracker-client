@@ -15,7 +15,7 @@ jobs:
           paths:
             - ./node_modules
       - run: npm test
-  deploy_to_dev_cdn:
+  deploy-dev-cdn:
     docker:
       - image: groupbyinc/circleci-node:1.1
     steps:
@@ -37,7 +37,7 @@ workflows:
   main:
     jobs:
       - run-tests
-      - deploy_to_dev_cdn:
+      - deploy-dev-cdn:
           context: org-global
           requires:
             - run-tests
