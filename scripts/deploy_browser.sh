@@ -10,6 +10,8 @@ GCS_BUCKET=$1
 npm run clean
 npm run buildForBrowser
 
+MKDIR ${DEPLOY_DIR}
+
 # Make major version and specific version files, for both full and minified.
 cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.js"
 cp "build/${NAME}-${CURRENT_VERSION}.min.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.min.js"
