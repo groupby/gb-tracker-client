@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAME="gb-tracker-client"
+NAME="gb-tracker-client-cicd-test"
 CURRENT_VERSION="$(cat package.json | jq -r .version)"
 CURRENT_VERSION_MAJOR="$(cat package.json | jq -r .version | cut -d '.' -f 1)"
 DEPLOY_DIR="staged_for_deploy"
@@ -10,7 +10,7 @@ GCS_BUCKET=$1
 npm run clean
 npm run buildForBrowser
 
-MKDIR ${DEPLOY_DIR}
+mkdir ${DEPLOY_DIR}
 
 # Make major version and specific version files, for both full and minified.
 cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.js"
