@@ -21,8 +21,8 @@ cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT
 cp "build/${NAME}-${CURRENT_VERSION}.min.js" "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.min.js"
 
 # Then, copy to bucket.
-gsutil cp -z js "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.js" "gs://${GCS_BUCKET}"
-gsutil cp -z js  "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.min.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION}.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js  "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION}.min.js" "gs://${GCS_BUCKET}"
 
-gsutil cp -z js "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION_MAJOR}.js" "gs://${GCS_BUCKET}"
-gsutil cp -z js "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION_MAJOR}.min.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.min.js" "gs://${GCS_BUCKET}"
