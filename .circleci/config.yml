@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   run-tests:
     docker:
-      - image: groupbyinc/circleci-node:1.1
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
@@ -82,7 +82,6 @@ workflows:
               only:
                 - production
                 - develop
-                - WIS-2034
       - deploy-npm:
           context: org-global
           requires:
@@ -92,7 +91,6 @@ workflows:
               only:
                 - production
                 - develop
-                - WIS-2034
 orbs:
   gcp-cli: circleci/gcp-cli@1
   deployment: groupbyinc/deployment@0

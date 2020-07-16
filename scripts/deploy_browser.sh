@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NAME="gb-tracker-client"
-NAME_ON_CDN="gb-tracker-client-cicd-test"
+NAME_ON_CDN=${NAME}
 CURRENT_VERSION="$(cat package.json | jq -r .version)"
 CURRENT_VERSION_MAJOR="$(cat package.json | jq -r .version | cut -d '.' -f 1)"
 DEPLOY_DIR="staged_for_deploy"
