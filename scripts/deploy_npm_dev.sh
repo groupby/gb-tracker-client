@@ -9,4 +9,4 @@ cp package.json.new package.json
 rm package.json.new
 
 npm run buildForNpm
-npm publish --beta
+npm publish --tag beta
