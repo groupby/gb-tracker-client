@@ -3,4 +3,5 @@
 npm run clean
 npm run buildForNpm
 
-npm publish
+# *Remove dry-run when it's ready*
+npm publish --dry-run
