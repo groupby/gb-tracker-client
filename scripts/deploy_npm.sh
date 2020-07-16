@@ -1,6 +1,5 @@
 #!/bin/bash
 
-npm run clean
 npm run buildForNpm
 
 # *Remove dry-run when it's ready*

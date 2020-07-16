@@ -8,7 +8,6 @@ DEPLOY_DIR="staged_for_deploy"
 
 GCS_BUCKET=$1
 
-npm run clean
 npm run buildForBrowser
 
 mkdir ${DEPLOY_DIR}
