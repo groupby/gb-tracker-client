@@ -1,0 +1,25 @@
+#!/bin/bash
+
+NAME="gb-tracker-client"
+CURRENT_VERSION="$(cat package.json | jq -r .version)"
+CURRENT_VERSION_MAJOR="$(cat package.json | jq -r .version | cut -d '.' -f 1)"
+DEPLOY_DIR="staged_for_deploy"
+
+GCS_BUCKET=$1
+
+npm run clean
+npm run buildForBrowser
+
+# Make major version and specific version files, for both full and minified.
+cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.js"
+cp "build/${NAME}-${CURRENT_VERSION}.min.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.min.js"
+
+cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION_MAJOR}.js"
+cp "build/${NAME}-${CURRENT_VERSION}.min.js" "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION_MAJOR}.min.js"
+
+# Then, copy to bucket.
+gsutil cp -z js "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js  "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION}.min.js" "gs://${GCS_BUCKET}"
+
+gsutil cp -z js "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION_MAJOR}.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js "${DEPLOY_DIR}/${NAME}-${CURRENT_VERSION_MAJOR}.min.js" "gs://${GCS_BUCKET}"
