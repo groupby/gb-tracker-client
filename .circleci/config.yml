@@ -15,14 +15,12 @@ jobs:
           paths:
             - ./node_modules
       - run: npm test
-  deploy-dev-cdn:
+  deploy-cdn:
     docker:
       - image: circleci/node:14
     steps:
       - gcp-cli/install
-      - deployment/gcloud-login:
-          keyfile-path: ${HOME}/app
-          keyfile-filename: devKeyFile.json
+      - deployment/gcloud-login
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -32,32 +30,18 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - ./node_modules      
+            - ./node_modules
       - run:
           name: deploy to CDN
-          command: scripts/deploy_browser_dev.sh
-  deploy-prod-cdn:
-    docker:
-      - image: circleci/node:14
-    steps:
-      - gcp-cli/install
-      - deployment/gcloud-login:
-          keyfile-path: ${HOME}/app
-          keyfile-filename: devKeyFile.json
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: install app dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules      
-      - run:
-          name: deploy to CDN
-          command: scripts/deploy_browser_prod.sh
-  deploy-dev-npm:
+          command: |
+            if [ "$CIRCLE_BRANCH" == "develop" ]
+            then
+              scripts/deploy_browser_dev.sh
+            elif [ "$CIRCLE_BRANCH" == "production" ]
+            then
+              scripts/deploy_browser_prod.sh
+            fi
+  deploy-npm:
     docker:
       - image: circleci/node:14
     steps:
@@ -76,68 +60,39 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
       - run:
           name: deploy to NPM
-          command: scripts/deploy_npm_dev.sh
-  deploy-prod-npm:
-    docker:
-      - image: circleci/node:14
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: install app dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: Authenticate with NPM registry
-          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-      - run:
-          name: deploy to NPM
-          command: scripts/deploy_npm_prod.sh
+          command: |
+            if [ "$CIRCLE_BRANCH" == "develop" ]
+            then
+              scripts/deploy_npm_dev.sh
+            elif [ "$CIRCLE_BRANCH" == "production" ]
+            then
+              scripts/deploy_npm_prod.sh
+            fi
 workflows:
   version: 2.1
   main:
     jobs:
       - run-tests
-      - deploy-dev-cdn:
+      - deploy-cdn:
           context: org-global
           requires:
             - run-tests
           filters:
             branches:
               only:
+                - production
                 - develop
                 - WIS-2034
-      - deploy-prod-cdn:
+      - deploy-npm:
           context: org-global
           requires:
             - run-tests
           filters:
             branches:
               only:
+                - production
                 - develop
                 - WIS-2034
-      - deploy-dev-npm:
-          context: org-global
-          requires:
-            - run-tests
-          filters:
-            branches:
-              only:
-                - develop
-                - WIS-2034
-      - deploy-prod-npm:
-          context: org-global
-          requires:
-            - run-tests
-          filters:
-            branches:
-              only:
-                - develop
-                - WIS-2034      
 orbs:
   gcp-cli: circleci/gcp-cli@1
   deployment: groupbyinc/deployment@0
