@@ -1,8 +1,8 @@
 version: 2.1
 jobs:
-  test:
+  run-tests:
     docker:
-      - image: groupbyinc/circleci-node:1.1
+      - image: circleci/node:14-browsers
     steps:
       - checkout
       - restore_cache:
@@ -15,8 +15,82 @@ jobs:
           paths:
             - ./node_modules
       - run: npm test
+  deploy-cdn:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - gcp-cli/install
+      - deployment/gcloud-login
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: deploy to CDN
+          command: |
+            if [ "$CIRCLE_BRANCH" == "develop" ]
+            then
+              scripts/deploy_browser_dev.sh
+            elif [ "$CIRCLE_BRANCH" == "production" ]
+            then
+              scripts/deploy_browser_prod.sh
+            fi
+  deploy-npm:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Authenticate with NPM registry
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      - run:
+          name: deploy to NPM
+          command: |
+            if [ "$CIRCLE_BRANCH" == "develop" ]
+            then
+              scripts/deploy_npm_dev.sh
+            elif [ "$CIRCLE_BRANCH" == "production" ]
+            then
+              scripts/deploy_npm_prod.sh
+            fi
 workflows:
   version: 2.1
-  test:
+  main:
     jobs:
-      - test
+      - run-tests
+      - deploy-cdn:
+          context: org-global
+          requires:
+            - run-tests
+          filters:
+            branches:
+              only:
+                - production
+                - develop
+      - deploy-npm:
+          context: org-global
+          requires:
+            - run-tests
+          filters:
+            branches:
+              only:
+                - production
+                - develop
+orbs:
+  gcp-cli: circleci/gcp-cli@1
+  deployment: groupbyinc/deployment@0
