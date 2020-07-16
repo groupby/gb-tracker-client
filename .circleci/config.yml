@@ -57,6 +57,48 @@ jobs:
       - run:
           name: deploy to CDN
           command: scripts/deploy_browser_prod.sh
+  deploy-dev-npm:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - gcp-cli/install
+      - deployment/gcloud-login:
+          keyfile-path: ${HOME}/app
+          keyfile-filename: devKeyFile.json
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules      
+      - run:
+          name: deploy to NPM
+          command: scripts/deploy_npm_dev.sh
+  deploy-prod-npm:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - gcp-cli/install
+      - deployment/gcloud-login:
+          keyfile-path: ${HOME}/app
+          keyfile-filename: devKeyFile.json
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install app dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules      
+      - run:
+          name: deploy to NPM
+          command: scripts/deploy_npm_prod.sh
 workflows:
   version: 2.1
   main:
@@ -80,6 +122,24 @@ workflows:
               only:
                 - develop
                 - WIS-2034
+      - deploy-dev-npm:
+          context: org-global
+          requires:
+            - run-tests
+          filters:
+            branches:
+              only:
+                - develop
+                - WIS-2034
+      - deploy-prod-npm:
+          context: org-global
+          requires:
+            - run-tests
+          filters:
+            branches:
+              only:
+                - develop
+                - WIS-2034      
 orbs:
   gcp-cli: circleci/gcp-cli@1
   deployment: groupbyinc/deployment@0
