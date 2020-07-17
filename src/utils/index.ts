@@ -176,7 +176,7 @@ function decodeAmpLinkerParam(value: string): string {
  * string params.
  * @param documentLocationSearch The "document.location.search" string. Can be an empty string (if no query string params).
  */
-export function visitorIdFromAmpHref(documentLocationSearch: string): string {
+export function visitorIdFromAmpLocationSearch(documentLocationSearch: string): string {
     if (!documentLocationSearch) {
         return '';
     }

@@ -44,13 +44,11 @@ describe('utils tests', () => {
     });
   });
 
-  describe('visitorIdFromAmpHref', () => {
-    it('should return a visitor ID from an href with a visitor ID encoded in an AMP Linker value', () => {
-      // Example for an AMP page with two configured AMP Linkers - one for
-      // GroupBy and one for Google Analytics.
-      const href = "https://www.zales.com/customize-your-vera-wang-love-engagement-ring/p/V-20298826?gbi=1*1u74ubq*gbivid*LU55Q2M3TkQyT2Y2VU5rMjlNekxpMXJjQ2g0MEYtNnRjbFhoaFhzLTQ0NDVYc0pXVWhiclFvNUNUbFNUMDFjSA..&_gl=1*18t1sx1*_ga*YW1wLXR0LXVWeHEzMjFzRExFcGVuYndNQWp5bDVUbm9ZSWo0eEZqR251TkFCazBMSE5oWjVHdVZpUm9qXzJvdXpaaDM.";
+  describe('visitorIdFromAmpLocationSearch', () => {
+    it('should return a visitor ID from an href with a visitor ID encoded in an AMP Linker value, ignoring non-GroupBy AMP Linker params', () => {
+      const search = "?gbi=1*1u74ubq*gbivid*LU55Q2M3TkQyT2Y2VU5rMjlNekxpMXJjQ2g0MEYtNnRjbFhoaFhzLTQ0NDVYc0pXVWhiclFvNUNUbFNUMDFjSA..&_gl=1*18t1sx1*_ga*YW1wLXR0LXVWeHEzMjFzRExFcGVuYndNQWp5bDVUbm9ZSWo0eEZqR251TkFCazBMSE5oWjVHdVZpUm9qXzJvdXpaaDM.";
 
-      const visitorId = utils.visitorIdFromAmpHref(href);
+      const visitorId = utils.visitorIdFromAmpLocationSearch(search);
 
       expect(visitorId).to.not.be.null;
       expect(visitorId).to.not.be.undefined;
