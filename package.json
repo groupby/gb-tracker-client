@@ -21,7 +21,7 @@
     "arrangeForNpm": "mv dist/* . && rm -r dist",
     "buildForNpm": "npm run clean 2> /dev/null; npm run addVersion; npm run compile:prod && npm run arrangeForNpm",
     "buildForBrowser": "npm run addVersion; npm run compile:prod && npm run webpack",
-    "build:test": "npm run compile:test && npm run buildForBrowser",
+    "build:test": "npm run addVersion && npm run compile:test && npm run buildForBrowser",
     "test": "npm run clean 2> /dev/null; npm run build:test && cp build/gb-tracker-client-* test-integration/apps/sites && npm run addVersionJs && npm run test:unit && npm run test:integration",
     "test:unit": "ts-mocha -p tsconfig.test.json -r jsdom-global/register test/**/*.spec.ts",
     "test:integration": "ts-mocha -p tsconfig.test.json test-integration/**/*.spec.js",
