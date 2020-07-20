@@ -23,6 +23,7 @@ import {
     AutoMoreRefinementsEvent,
     ViewProductEvent,
 } from './models';
+import { visitorIdFromAmpLocationSearch } from './amputils';
 
 interface EventCustomer {
     id: string;
@@ -411,8 +412,12 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Initialize visitor data from cookies, or create those cookies if they do not exist
-             * @param loginId
+             * Initialize visitor data. Uses the following sources in this
+             * order:
+             * - AMP Linker param "gbi" (and sets this in 1st-party cookie)
+             * - 1st-party cookies
+             * - generated within this code (and sets this in 1st-party cookie)
+             * @param loginId The optional login ID for the shopper.
              */
             autoSetVisitor: (loginId) => {
                 if (internals.VISITOR_SETTINGS_SOURCE && internals.VISITOR_SETTINGS_SOURCE !== internals.SET_FROM_COOKIES) {
@@ -432,6 +437,16 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 }
 
                 internals.VISIT.customerData.sessionId = internals.COOKIES_LIB.get(internals.SESSION_COOKIE_KEY);
+
+                let ampLinkerVid: string;
+
+                // Check for AMP Linker param for visitor ID:
+                try {
+                    ampLinkerVid = visitorIdFromAmpLocationSearch(document.location.search, atob);
+                } catch (e) {
+
+                }
+
                 internals.VISIT.customerData.visitorId = internals.COOKIES_LIB.get(internals.VISITOR_COOKIE_KEY);
 
                 if (!internals.VISIT.customerData.sessionId || internals.VISIT.customerData.sessionId.length < 1) {

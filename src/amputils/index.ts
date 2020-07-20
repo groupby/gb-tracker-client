@@ -1,5 +1,7 @@
 import qs from 'query-string';
 
+// AMP-related utils separate to isolate AMP HTML Authors copyright notice.
+
 /**
  * Copyright 2020 The AMP HTML Authors. All Rights Reserved.
  *
@@ -15,6 +17,7 @@ import qs from 'query-string';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Decodes an AMP Linker parameter. Code sampled from
  * https://github.com/ampproject/amphtml. AMP Linker has a particular pattern
@@ -23,7 +26,7 @@ import qs from 'query-string';
  * @param param The AMP Linker encoded param.
  */
 function decodeAmpLinkerParam(value: string, atob: any): string {
-    console.log(`decodeAmpLinkerParam - value = ${value}`);
+    const base64UrlDecodeSubs = { '-': '+', '_': '/', '.': '=' };
 
     function stringToBytes(str) {
         const bytes = new Uint8Array(str.length);
@@ -35,9 +38,7 @@ function decodeAmpLinkerParam(value: string, atob: any): string {
             bytes[i] = charCode;
         }
         return bytes;
-    }
-
-    const base64UrlDecodeSubs = { '-': '+', '_': '/', '.': '=' };
+    }    
 
     function base64UrlDecodeToBytes(str) {
         console.log(`str = ${str}`);
