@@ -438,14 +438,10 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 internals.VISIT.customerData.sessionId = internals.COOKIES_LIB.get(internals.SESSION_COOKIE_KEY);
 
-                let ampLinkerVid: string;
-
                 // Check for AMP Linker param for visitor ID:
-                try {
-                    ampLinkerVid = visitorIdFromAmpLocationSearch(document.location.search, atob);
-                } catch (e) {
+                const vidFromAmp = visitorIdFromAmpLocationSearch(document.location.search, atob);
 
-                }
+                vidFromAmp.toString();
 
                 internals.VISIT.customerData.visitorId = internals.COOKIES_LIB.get(internals.VISITOR_COOKIE_KEY);
 

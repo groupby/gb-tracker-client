@@ -1,4 +1,5 @@
 import qs from 'query-string';
+import { Optional } from '../utils';
 
 // AMP-related utils separate to isolate AMP HTML Authors copyright notice.
 
@@ -70,30 +71,34 @@ function decodeAmpLinkerParam(value: string, atob: any): string {
 /**
  * Parses a visitor ID from an AMP Linker value. AMP Linker is used to pass the
  * visitor ID from AMP pages on domains other than the GroupBy customer's
- * domain to non-AMP pages on the GroupBy customer's domain. Returns an empty
- * string if no visitor ID is present in an AMP Linker value in any query
- * string params. The function "atob" is provided so that unit tests in a
- * Node.js environment can test this function.
- * @param documentLocationSearch The "document.location.search" string. Can be an empty string (if no query string params).
+ * domain to non-AMP pages on the GroupBy customer's domain. Returns null if no
+ * visitor ID is present in an AMP Linker value in any query string params. The
+ * function "atob" is provided so that unit tests in a Node.js environment can
+ * test this function.
+ * @param document The DOM document.
  */
-export function visitorIdFromAmpLocationSearch(documentLocationSearch: string, atob: any): string {
-    const qParams = qs.parse(documentLocationSearch);
+export function visitorIdFromAmpLocationSearch(document: Document, atob: any): string | null {
+    if (!document || !document.location || !document.location.search) {
+        return null;
+    }
+
+    const qParams = qs.parse(document.location.search);
 
     if (!qParams.gbi) {
-        throw new Error('gbi query string param not found');
+        return null;
     }
 
     const split = qParams.gbi.split('*');
 
-    if (split.length !== 4) {
-        throw new Error('query string param did not have 4 components');
+    if (split.length !== 4 || split[3].length === 0) {
+        return null;
     }
 
     const encodedVisitorId = split[3];
 
-    if (!encodedVisitorId) {
-        throw new Error('no ')
+    try {
+        return decodeAmpLinkerParam(encodedVisitorId, atob);
+    } catch (_) {
+        return null;
     }
-
-    return decodeAmpLinkerParam(encodedVisitorId, atob);
 }
