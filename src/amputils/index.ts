@@ -41,7 +41,6 @@ function decodeAmpLinkerParam(value: string, atob: any): string {
     }    
 
     function base64UrlDecodeToBytes(str) {
-        console.log(`str = ${str}`);
         const encoded = atob(str.replace(/[-_.]/g, (ch) => base64UrlDecodeSubs[ch]));
         return stringToBytes(encoded);
     }
