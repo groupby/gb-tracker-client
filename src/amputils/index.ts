@@ -1,5 +1,4 @@
 import qs from 'query-string';
-import { Optional } from '../utils';
 
 // AMP-related utils separate to isolate AMP HTML Authors copyright notice.
 
@@ -39,7 +38,7 @@ function decodeAmpLinkerParam(value: string, atob: any): string {
             bytes[i] = charCode;
         }
         return bytes;
-    }    
+    }
 
     function base64UrlDecodeToBytes(str) {
         const encoded = atob(str.replace(/[-_.]/g, (ch) => base64UrlDecodeSubs[ch]));
@@ -72,12 +71,10 @@ function decodeAmpLinkerParam(value: string, atob: any): string {
  * Parses a visitor ID from an AMP Linker value. AMP Linker is used to pass the
  * visitor ID from AMP pages on domains other than the GroupBy customer's
  * domain to non-AMP pages on the GroupBy customer's domain. Returns null if no
- * visitor ID is present in an AMP Linker value in any query string params. The
- * function "atob" is provided so that unit tests in a Node.js environment can
- * test this function.
+ * visitor ID is present in an AMP Linker value in any query string params.
  * @param document The DOM document.
  */
-export function visitorIdFromAmpLocationSearch(document: Document, atob: any): string | null {
+export function visitorIdFromAmpLinker(document: Document): string | null {
     if (!document || !document.location || !document.location.search) {
         return null;
     }

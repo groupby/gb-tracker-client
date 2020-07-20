@@ -23,7 +23,7 @@ import {
     AutoMoreRefinementsEvent,
     ViewProductEvent,
 } from './models';
-import { visitorIdFromAmpLocationSearch } from './amputils';
+import { visitorIdFromAmpLinker } from './amputils';
 
 interface EventCustomer {
     id: string;
@@ -100,6 +100,7 @@ export interface TrackerInternals {
     VISITOR_TIMEOUT_SEC: number;
     MAX_PATH_LENGTH: number;
     MAX_PATHNAME_LENGTH: number;
+    WINDOW: Window;
     COOKIES_LIB: any;
     SCHEMAS: Schemas;
     SANITIZE_EVENT: SanitizeEventFn;
@@ -173,6 +174,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             MAX_PATH_LENGTH: __MAX_PATH_LENGTH, // Thanks NGINX
             MAX_PATHNAME_LENGTH: __MAX_PATHNAME_LENGTH, // '/v2/pixel/?random=0.5405421565044588&m=' plus extra for luck
 
+            WINDOW: window,
             COOKIES_LIB: cookiesjs,
 
             CUSTOMER_ID: customerId,
@@ -216,7 +218,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     return;
                 }
 
-                if ((window as any).GROUPBY_BEACON_DEBUG || internals.COOKIES_LIB.get(internals.DEBUG_COOKIE_KEY)) {
+                if ((internals.WINDOW as any).GROUPBY_BEACON_DEBUG || internals.COOKIES_LIB.get(internals.DEBUG_COOKIE_KEY)) {
                     console.log(`Beaconing event: ${JSON.stringify(event, null, 2)}`);
                 }
 
@@ -308,7 +310,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     }
                 }
 
-                sanitizedEvent.visit.generated.uri = (typeof window !== 'undefined' && window.location) ? window.location.href : '';
+                sanitizedEvent.visit.generated.uri = (typeof internals.WINDOW !== 'undefined' && internals.WINDOW.location) ? internals.WINDOW.location.href : '';
                 sanitizedEvent.visit.generated.timezoneOffset = new Date().getTimezoneOffset();
                 sanitizedEvent.visit.generated.localTime = new Date().toISOString();
 
@@ -438,21 +440,30 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 internals.VISIT.customerData.sessionId = internals.COOKIES_LIB.get(internals.SESSION_COOKIE_KEY);
 
-                // Check for AMP Linker param for visitor ID:
-                const vidFromAmp = visitorIdFromAmpLocationSearch(document.location.search, atob);
+                // Check for AMP Linker param for visitor ID:   
+                internals.VISIT.customerData.visitorId = visitorIdFromAmpLinker(internals.WINDOW.document);
 
-                vidFromAmp.toString();
+                const noVisitorSet = () => {
+                    return !internals.VISIT.customerData.visitorId || internals.VISIT.customerData.visitorId.length < 1;
+                };
 
-                internals.VISIT.customerData.visitorId = internals.COOKIES_LIB.get(internals.VISITOR_COOKIE_KEY);
+                // Fall back to visitor ID from cookie if no visitor ID from AMP Linker.
+                if (noVisitorSet()) {
+                    internals.VISIT.customerData.visitorId = internals.COOKIES_LIB.get(internals.VISITOR_COOKIE_KEY);
+                }
 
                 if (!internals.VISIT.customerData.sessionId || internals.VISIT.customerData.sessionId.length < 1) {
                     internals.VISIT.customerData.sessionId = cuid();
                 }
                 internals.COOKIES_LIB.set(internals.SESSION_COOKIE_KEY, internals.VISIT.customerData.sessionId, { expires: internals.SESSION_TIMEOUT_SEC });
 
-                if (!internals.VISIT.customerData.visitorId || internals.VISIT.customerData.visitorId.length < 1) {
+                // Fall back to visitor ID from new generated ID if no visitor ID from AMP Linker or cookie.
+                if (noVisitorSet()) {
                     internals.VISIT.customerData.visitorId = cuid();
                 }
+
+                // Set cookie for visitor ID. This resets the expiry time if it
+                // was a cookie already set before.
                 internals.COOKIES_LIB.set(internals.VISITOR_COOKIE_KEY, internals.VISIT.customerData.visitorId, { expires: internals.VISITOR_TIMEOUT_SEC });
             },
 
