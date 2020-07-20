@@ -1,35 +1,27 @@
 #!/bin/bash
 
-# For prod, we deploy the specific version of the artifact, ex. "1.2.3", and we
-# replace the major version of the artifact with the specific version, ex.
-# replace "1" with the contents of "1.2.3". This enables the artifact to be
-# automatically picked up by CDN users. It is effectively "pushed to prod".
-
-# Build first
-npm run clean
-npm run buildForBrowser
-
-# Then deploy
-set -e
-rm -rf cdn
-
-set -e
-git clone https://github.com/groupby/cdn.git cdn
-
 NAME="gb-tracker-client"
-
+NAME_ON_CDN=${NAME}
 CURRENT_VERSION="$(cat package.json | jq -r .version)"
 CURRENT_VERSION_MAJOR="$(cat package.json | jq -r .version | cut -d '.' -f 1)"
+DEPLOY_DIR="staged_for_deploy"
 
-## Create current version
-cp "build/${NAME}-${CURRENT_VERSION}.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION}.js"
-cp "build/${NAME}-${CURRENT_VERSION}.min.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION}.min.js"
+GCS_BUCKET=$1
 
-## Update latest major version
-cp "build/${NAME}-${CURRENT_VERSION}.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION_MAJOR}.js"
-cp "build/${NAME}-${CURRENT_VERSION}.min.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION_MAJOR}.min.js"
+npm run buildForBrowser
 
-cd cdn
-git add "static/javascript/${NAME}-*.js"
-git commit -m "Release ${NAME} v${CURRENT_VERSION}"
-git push
+mkdir ${DEPLOY_DIR}
+
+# Make major version and specific version files, for both full and minified.
+cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION}.js"
+cp "build/${NAME}-${CURRENT_VERSION}.min.js" "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION}.min.js"
+
+cp "build/${NAME}-${CURRENT_VERSION}.js" "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.js"
+cp "build/${NAME}-${CURRENT_VERSION}.min.js" "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.min.js"
+
+# Then, copy to bucket.
+gsutil cp -z js "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION}.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js  "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION}.min.js" "gs://${GCS_BUCKET}"
+
+gsutil cp -z js "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.js" "gs://${GCS_BUCKET}"
+gsutil cp -z js "${DEPLOY_DIR}/${NAME_ON_CDN}-${CURRENT_VERSION_MAJOR}.min.js" "gs://${GCS_BUCKET}"

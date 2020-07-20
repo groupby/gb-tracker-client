@@ -81,3 +81,5 @@ test-integration/apps/site/gb-tracker-client*.js
 
 # Deploy scripts
 scripts
+
+staged_for_deploy
