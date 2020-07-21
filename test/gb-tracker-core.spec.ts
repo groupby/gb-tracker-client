@@ -232,7 +232,7 @@ describe('gb-tracker-core tests', () => {
     expect(moment((visitorCookie as any).expires).year()).to.eql(moment().add(gbTrackerCore.__getInternals().VISITOR_TIMEOUT_SEC, 'seconds').year());
   });
 
-  it('autoSetVisitor overrides setVisitor', () => {
+  it('autoSetVisitor overrides setVisitor with cuid if no AMP Linker param provided and no cookie set', () => {
     const cookieJar = new jsdom.CookieJar();
 
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
@@ -246,6 +246,96 @@ describe('gb-tracker-core tests', () => {
 
     expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.match(CUID_REGEX);
     expect(CookiesLib.get(gbTrackerCore.__getInternals().SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
+  });
+
+  it('autoSetVisitor overrides setVisitor with cookie if no AMP Linker param provided but visitor ID cookie set', () => {
+    const cookieJar = new jsdom.CookieJar();
+    const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+
+    const visitorCookieKey = gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY;
+
+    CookiesLib._document = window.document;
+
+    CookiesLib.set(visitorCookieKey, 'abc123');
+
+    gbTrackerCore.setVisitor(1 as any, 1 as any);
+    gbTrackerCore.autoSetVisitor();
+
+    expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.eql('abc123');
+    expect(CookiesLib.get(gbTrackerCore.__getInternals().SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
+  });
+
+  it('autoSetVisitor overrides setVisitor with AMP Linker param if AMP linker param provided and visitor ID cookie set', () => {
+    const cookieJar = new jsdom.CookieJar();
+    const window = new jsdom.JSDOM(undefined, {
+      url: 'http://exampleampsite.com/products/red-boat?gbi=1*1u74ubq*gbivid*LU55Q2M3TkQyT2Y2VU5rMjlNekxpMXJjQ2g0MEYtNnRjbFhoaFhzLTQ0NDVYc0pXVWhiclFvNUNUbFNUMDFjSA..',
+      cookieJar,
+    }).window;
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
+    const internals = gbTrackerCore.__getInternals();
+    internals.WINDOW = window as unknown as Window;
+    const CookiesLib = internals.COOKIES_LIB;
+
+    const visitorCookieKey = internals.VISITOR_COOKIE_KEY;
+
+    CookiesLib._document = window.document;
+
+    CookiesLib.set(visitorCookieKey, 'abc123');
+
+    gbTrackerCore.setVisitor(1 as any, 1 as any);
+    gbTrackerCore.autoSetVisitor();
+
+    expect(CookiesLib.get(internals.VISITOR_COOKIE_KEY)).to.eql('-NyCc7ND2Of6UNk29MzLi1rcCh40F-6tclXhhXs-4445XsJWUhbrQo5CTlST01cH');
+    expect(CookiesLib.get(internals.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
+  });
+
+  it('autoSetVisitor overrides setVisitor with AMP Linker param if AMP linker param provided and no visitor ID cookie set', () => {
+    const cookieJar = new jsdom.CookieJar();
+    const window = new jsdom.JSDOM(undefined, {
+      url: 'http://exampleampsite.com/products/red-boat?gbi=1*1u74ubq*gbivid*LU55Q2M3TkQyT2Y2VU5rMjlNekxpMXJjQ2g0MEYtNnRjbFhoaFhzLTQ0NDVYc0pXVWhiclFvNUNUbFNUMDFjSA..',
+      cookieJar,
+    }).window;
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
+    const internals = gbTrackerCore.__getInternals();
+    internals.WINDOW = window as unknown as Window;
+    const CookiesLib = internals.COOKIES_LIB;
+
+    CookiesLib._document = window.document;
+
+    const visitorCookieKey = internals.VISITOR_COOKIE_KEY;
+
+    CookiesLib.set(visitorCookieKey, 'abc123');
+
+    gbTrackerCore.setVisitor(1 as any, 1 as any);
+    gbTrackerCore.autoSetVisitor();
+
+    expect(CookiesLib.get(internals.VISITOR_COOKIE_KEY)).to.eql('-NyCc7ND2Of6UNk29MzLi1rcCh40F-6tclXhhXs-4445XsJWUhbrQo5CTlST01cH');
+    expect(CookiesLib.get(internals.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
+  });
+
+  it('autoSetVisitor overrides setVisitor with cookie without throwing an error if malformed AMP Linker param set and visitor ID cookie set', () => {
+    const cookieJar = new jsdom.CookieJar();
+    const window = new jsdom.JSDOM(undefined, {
+      url: 'http://exampleampsite.com/products/red-boat?gbi=1*1u74ubq*gbivid*LU55Q2M3TkQyT2Y2VU5rMjlNekxpMXJjQ2g0MEYtNnRjbFhoaFhzLTQ0NDVYc0pXVWhiclFvNUNUbFNUMDFjSA.',
+      cookieJar,
+    }).window;
+    const gbTrackerCore = new GbTracker('testcustomer', 'area');
+    const internals = gbTrackerCore.__getInternals();
+    internals.WINDOW = window as unknown as Window;
+    const CookiesLib = internals.COOKIES_LIB;
+
+    CookiesLib._document = window.document;
+    CookiesLib.set(internals.VISITOR_COOKIE_KEY, 'abc123');
+
+    gbTrackerCore.setVisitor(1 as any, 1 as any);
+
+    expect(() => {
+      gbTrackerCore.autoSetVisitor();
+      expect(CookiesLib.get(internals.VISITOR_COOKIE_KEY)).to.eql('abc123');
+      expect(CookiesLib.get(internals.SESSION_COOKIE_KEY)).to.match(CUID_REGEX);
+    }).to.not.throw();
   });
 
   it('autoSetVisitor ignores setVisitor', () => {
