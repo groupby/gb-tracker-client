@@ -351,8 +351,7 @@ export default {
                 type: 'string',
                 maxLength: 10000,
                 rules: [
-                  'trim',
-                  'lower'
+                  'trim'
                 ]
               },
               sessionId: {
@@ -367,8 +366,7 @@ export default {
                 type: 'string',
                 maxLength: 10000,
                 rules: [
-                  'trim',
-                  'lower'
+                  'trim'
                 ]
               }
             }
