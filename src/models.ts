@@ -32,6 +32,7 @@ interface Item {
 
 interface Cart {
     id?: string;
+    cartType?: string;
     items: Item[];
     metadata?: Metadata;
 }

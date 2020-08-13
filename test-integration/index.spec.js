@@ -318,6 +318,7 @@ describe('gb-tracker-client, running in a web browser', () => {
         const expectedReceivedBeacon = {
             ...expectedReceivedBeaconBase(eventType),
             cart: {
+                cartType: 'mario cart',
                 items: [
                     {
                         productId: 'testproductid',
@@ -343,6 +344,7 @@ describe('gb-tracker-client, running in a web browser', () => {
         const expectedReceivedBeacon = {
             ...expectedReceivedBeaconBase(eventType),
             cart: {
+                cartType: 'mario cart',
                 items: [
                     {
                         productId: 'testproductid',
@@ -368,6 +370,7 @@ describe('gb-tracker-client, running in a web browser', () => {
         const expectedReceivedBeacon = {
             ...expectedReceivedBeaconBase(eventType),
             cart: {
+                cartType: 'mario cart',
                 items: [
                     {
                         productId: 'testproductid',
@@ -393,6 +396,7 @@ describe('gb-tracker-client, running in a web browser', () => {
         const expectedReceivedBeacon = {
             ...expectedReceivedBeaconBase(eventType),
             cart: {
+                cartType: 'mario cart',
                 items: [
                     {
                         productId: 'testproductid',
