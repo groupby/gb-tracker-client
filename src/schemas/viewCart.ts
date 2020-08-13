@@ -16,6 +16,10 @@ export default {
             type: 'string',
             optional: true
           },
+          cartType: {
+            type: 'string',
+            optional: true
+          },
           items: {
             type: 'array',
             items: {
@@ -206,6 +210,11 @@ export default {
               'trim',
               'lower'
             ],
+            optional: true
+          },
+          cartType: {
+            type: 'string',
+            maxLength: 10000,
             optional: true
           },
           items: {
