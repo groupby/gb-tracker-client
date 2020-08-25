@@ -15,6 +15,10 @@ export default {
             type: 'string',
             optional: true
           },
+          cartType: {
+            type: 'string',
+            optional: true
+          },
           items: {
             type: 'array',
             items: {
