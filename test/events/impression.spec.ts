@@ -92,7 +92,7 @@ describe('impression tests', () => {
         } as any);
     });
 
-    it('should reject invalid viewProduct event missing product ID', (done) => {
+    it('should reject invalid Impression event missing product ID', (done) => {
         const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
         gbTrackerCore.__getInternals().sendEvent = (event: any) => {
@@ -121,7 +121,7 @@ describe('impression tests', () => {
         } as any);
     });
 
-    it('should reject invalid viewProduct event missing price', (done) => {
+    it('should reject invalid impression event missing price', (done) => {
         const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
         gbTrackerCore.__getInternals().sendEvent = (event: any) => {
@@ -150,7 +150,7 @@ describe('impression tests', () => {
         } as any);
     });
 
-    it('should reject invalid viewProduct event missing title', (done) => {
+    it('should reject invalid impression event missing title', (done) => {
         const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
         gbTrackerCore.__getInternals().sendEvent = (event: any) => {
@@ -165,55 +165,17 @@ describe('impression tests', () => {
             done();
         });
         gbTrackerCore.sendImpressionEvent({
-            impression:{
+            impression: {
                 impressionType: 'recommendation',
                 product: {
                     productId:  'asdfasd',
                     category: 'boats',
-                    collection: 'boatssrus',
-                    //title: 'boats',
-                    sku: 'asdfasf98',
-                    price: 100.21,
-                },
-            },
-        } as any);
-    });
-
-    it('should NOT reject viewProduct event missing category', (done) => {
-        const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-        gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-
-            expect(event.product).to.eql({
-                productId: 'asdfasd',
-                // category:   'boats',
-                collection: 'boatssrus',
-                title: 'boats',
-                sku: 'asdfasf98',
-                price: 100.21,
-            });
-
-            done();
-        };
-
-        gbTrackerCore.setVisitor('visitor', 'session');
-
-        gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-            done(error || 'fail');
-        });
-        gbTrackerCore.sendImpressionEvent({
-            impression:{
-                impressionType: 'recommendation',
-                product: {
-                    productId:  'asdfasd',
-                    //category: 'boats',
                     collection: 'boatssrus',
                     title: 'boats',
                     sku: 'asdfasf98',
                     price: 100.21,
                 },
             },
-
         } as any);
     });
 });
