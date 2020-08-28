@@ -22,6 +22,7 @@ import {
     AutoSearchEvent,
     AutoMoreRefinementsEvent,
     ViewProductEvent,
+    ImpressionEvent,
 } from './models';
 import { visitorIdFromAmpLinker } from './amputils';
 
@@ -56,7 +57,7 @@ type SendableVisit = {
 
 export type AnySendableEvent = AddToCartEvent | ViewCartEvent
     | RemoveFromCartEvent | OrderEvent | SearchEvent | AutoSearchEvent
-    | AutoMoreRefinementsEvent | ViewProductEvent;
+    | AutoMoreRefinementsEvent | ViewProductEvent | ImpressionEvent;
 
 export type FullSendableEvent = AnySendableEvent & {
     eventType: string,
@@ -76,6 +77,7 @@ export interface Schemas {
     autoMoreRefinements?: { validation?: object, sanitization?: object };
     search?: { validation?: object, sanitization?: object };
     viewProduct?: { validation?: object, sanitization?: object };
+    impression?: {validation?: object, sanitization?: object};
 }
 
 export interface TrackerCoreFactory {
@@ -144,6 +146,7 @@ export interface Tracker {
     sendAutoSearchEvent: (event: AutoSearchEvent) => void;
     sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => void;
     sendViewProductEvent: (event: ViewProductEvent) => void;
+    sendImpressionEvent: (event: ImpressionEvent) => void;
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
@@ -579,6 +582,15 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
             sendViewProductEvent: (event: ViewProductEvent) => {
                 internals.prepareAndSendEvent(event, 'viewProduct');
+            },
+
+            /**
+             * Validate and send Impression event
+             * @param event
+             */
+
+            sendImpressionEvent: (event: ImpressionEvent) => {
+                internals.prepareAndSendEvent(event, 'impression');
             },
         };
 

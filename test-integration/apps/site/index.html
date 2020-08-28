@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="gb-tracker-client-3.8.2.js"></script>
+    <script>
+        // call autoSetVisitor before using the tracker instance
+        var gbTracker = new GbTracker('testcustomer', 'testarea', 'http://localhost:8080');
+        gbTracker.autoSetVisitor();
+
+        gbTracker.sendAutoSearchEvent({
+            search: {
+                id: 'e30a4611-64b0-49a1-ad56-ab8fa2ffcc10',
+                origin: {
+                    search: true
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

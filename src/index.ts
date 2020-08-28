@@ -11,6 +11,7 @@ import autoSearch from './schemas/autoSearch';
 import autoMoreRefinements from './schemas/autoMoreRefinements';
 import search from './schemas/search';
 import viewProduct from './schemas/viewProduct';
+import impression from './schemas/impression';
 
 import { TrackerCore, AnySendableEvent, Schemas } from './core';
 
@@ -64,6 +65,10 @@ const SCHEMAS: Schemas = {
     viewProduct: {
         sanitization: viewProduct.sanitization,
         validation: viewProduct.validation,
+    },
+    impression: {
+        sanitization: impression.sanitization,
+        validation: impression.validation,
     },
 };
 

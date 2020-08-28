@@ -282,3 +282,11 @@ export interface AutoMoreRefinementsEvent extends BaseEvent {
 export interface ViewProductEvent extends BaseEvent {
     product: Product;
 }
+
+/**
+ * The data for a Impression event.
+ */
+export interface ImpressionEvent extends BaseEvent {
+    impressionType: "search"|"recommendation";
+    product: Product;
+}
