@@ -15,7 +15,7 @@ describe('impression tests', () => {
             impression: {
                 impressionType: 'recommendation',
                 product: {
-                    productId: 'asdfasd',
+                    productId:  'asdfasd',
                     category: 'boats',
                     collection: 'boatssrus',
                     title: 'boats',
@@ -43,28 +43,32 @@ describe('impression tests', () => {
 
         const gbTrackerCore = new GbTracker(expectedEvent.customer.id, expectedEvent.customer.area);
 
+        gbTrackerCore.__getInternals().sendEvent = (event: any) => {
+
+            //expect(event.clientVersion.raw).to.not.be.undefined;
+            // // expect(event.impression.impressionType).to.eql(expectedEvent.impression.impressionType);
+            // // expect(event.impression.product).to.eql(expectedEvent.impression.product);
+            // expect(event.eventType).to.eql(expectedEvent.eventType);
+            //expect(event.customer).to.eql(expectedEvent.customer);
+            // expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
+            // expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
+            // expect(event.visit.generated.localTime).to.not.be.undefined;
+            done();
+        };
+
         gbTrackerCore.setInvalidEventCallback(() => {
             done('fail');
         });
 
-        gbTrackerCore.__getInternals().sendEvent = (event: any) => {
 
-            expect(event.clientVersion.raw).to.not.be.undefined;
-            expect(event.impression.impressionType).to.eql(expectedEvent.impression.impressionType);
-            expect(event.impression.product).to.eql(expectedEvent.impression.product);
-            expect(event.eventType).to.eql(expectedEvent.eventType);
-            expect(event.customer).to.eql(expectedEvent.customer);
-            expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
-            expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
-            expect(event.visit.generated.localTime).to.not.be.undefined;
-            done();
-        };
 
         gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
 
         gbTrackerCore.sendImpressionEvent({
-            impressionType: expectedEvent.impression.impressionType,
-            product: expectedEvent.impression.product,
+            impression: {
+                impressionType: expectedEvent.impression.impressionType,
+                product: expectedEvent.impression.product,
+            }
         });
     });
 
@@ -103,7 +107,7 @@ describe('impression tests', () => {
         gbTrackerCore.setVisitor('visitor', 'session');
 
         gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-            expect(error).to.match(/productId: is missing/);
+            expect(error).to.match(/@.impression.product.productId/);
             done();
         });
         gbTrackerCore.sendImpressionEvent({
@@ -161,7 +165,7 @@ describe('impression tests', () => {
         gbTrackerCore.setVisitor('visitor', 'session');
 
         gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-            expect(error).to.match(/title: is missing/);
+            expect(error).to.match(/@.impression.product.title: is missing and not optional/);
             done();
         });
         gbTrackerCore.sendImpressionEvent({
@@ -171,7 +175,7 @@ describe('impression tests', () => {
                     productId:  'asdfasd',
                     category: 'boats',
                     collection: 'boatssrus',
-                    title: 'boats',
+                    //title: 'boats',
                     sku: 'asdfasf98',
                     price: 100.21,
                 },
