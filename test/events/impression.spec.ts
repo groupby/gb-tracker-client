@@ -46,14 +46,14 @@ describe('impression tests', () => {
 
         gbTrackerCore.__getInternals().sendEvent = (event: any) => {
 
-            //expect(event.clientVersion.raw).to.not.be.undefined;
-            // // expect(event.impression.impressionType).to.eql(expectedEvent.impression.impressionType);
-            // // expect(event.impression.product).to.eql(expectedEvent.impression.product);
-            // expect(event.eventType).to.eql(expectedEvent.eventType);
-            //expect(event.customer).to.eql(expectedEvent.customer);
-            // expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
-            // expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
-            // expect(event.visit.generated.localTime).to.not.be.undefined;
+            expect(event.clientVersion.raw).to.not.be.undefined;
+            expect(event.impression.impressionType).to.eql(expectedEvent.impression.impressionType);
+            expect(event.impression.products).to.eql(expectedEvent.impression.products);
+            expect(event.eventType).to.eql(expectedEvent.eventType);
+            expect(event.customer).to.eql(expectedEvent.customer);
+            expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
+            expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
+            expect(event.visit.generated.localTime).to.not.be.undefined;
             done();
         };
 
