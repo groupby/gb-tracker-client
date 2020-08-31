@@ -288,5 +288,5 @@ export interface ViewProductEvent extends BaseEvent {
  */
 export interface ImpressionEvent extends BaseEvent {
     impressionType: "search"|"recommendation";
-    product: Product;
+    products: Product[];
 }

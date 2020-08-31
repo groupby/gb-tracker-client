@@ -14,59 +14,64 @@ export default {
                 properties: {
                     impressionType: {
                         type: 'string',
-                        optional: true
+                        optional: false
                     },
-                    product: {
-                        type: 'object',
+                    products: {
+                        type: 'array',
+                        optional: false,
                         strict: true,
-                        properties: {
-                            category: {
-                                type: 'string',
-                                optional: true
-                            },
-                            collection: {
-                                type: 'string',
-                                optional: false
-                            },
-                            title: {
-                                type: 'string'
-                            },
-                            sku: {
-                                type: 'string',
-                                optional: true
-                            },
-                            productId: {
-                                type: 'string'
-                            },
-                            parentId: {
-                                type: 'string',
-                                optional: true
-                            },
-                            margin: {
-                                type: 'number',
-                                optional: true
-                            },
-                            price: {
-                                type: 'number',
-                                optional: true
-                            },
-                            metadata: {
-                                type: 'array',
-                                optional: true,
-                                items: {
-                                    strict: true,
-                                    type: 'object',
-                                    properties: {
-                                        key: {
-                                            type: 'string'
-                                        },
-                                        value: {
-                                            type: 'string'
+                        items: {
+                            type: 'object',
+                            strict: true,
+                            properties: {
+                                    category: {
+                                        type: 'string',
+                                        optional: true
+                                    },
+                                    collection: {
+                                        type: 'string',
+                                        optional: false
+                                    },
+                                    title: {
+                                        type: 'string'
+                                    },
+                                    sku: {
+                                        type: 'string',
+                                        optional: true
+                                    },
+                                    productId: {
+                                        type: 'string'
+                                    },
+                                    parentId: {
+                                        type: 'string',
+                                        optional: true
+                                    },
+                                    margin: {
+                                        type: 'number',
+                                        optional: true
+                                    },
+                                    price: {
+                                        type: 'number',
+                                        optional: false
+                                    },
+                                    metadata: {
+                                        type: 'array',
+                                        optional: true,
+                                        items: {
+                                            strict: true,
+                                            type: 'object',
+                                            properties: {
+                                                key: {
+                                                    type: 'string'
+                                                },
+                                                value: {
+                                                    type: 'string'
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
                     },
                 }
             },
@@ -183,93 +188,99 @@ export default {
                         ],
                         optional: true
                     },
-                    product: {
-                        type: 'object',
+                    products: {
+                        type: 'array',
+                        optional: false,
                         strict: true,
-                        properties: {
-                            category: {
-                                type: 'string',
-                                maxLength: 10000,
-                                rules: [
-                                    'trim',
-                                    'lower'
-                                ],
-                                optional: true
-                            },
-                            collection: {
-                                type: 'string',
-                                maxLength: 10000,
-                                rules: [
-                                    'trim'
-                                ],
-                                optional: false,
-                                def: 'default'
-                            },
-                            title: {
-                                type: 'string',
-                                maxLength: 10000,
-                                rules: [
-                                    'trim',
-                                    'lower'
-                                ]
-                            },
-                            sku: {
-                                type: 'string',
-                                maxLength: 10000,
-                                rules: [
-                                    'trim'
-                                ],
-                                optional: true
-                            },
-                            productId: {
-                                type: 'string',
-                                maxLength: 10000,
-                                rules: [
-                                    'trim'
-                                ]
-                            },
-                            parentId: {
-                                type: 'string',
-                                maxLength: 10000,
-                                rules: [
-                                    'trim'
-                                ],
-                                optional: true
-                            },
-                            margin: {
-                                type: 'number',
-                                optional: true
-                            },
-                            price: {
-                                type: 'number',
-                                optional: true
-                            },
-                            metadata: {
-                                type: 'array',
-                                optional: true,
-                                items: {
-                                    strict: true,
-                                    type: 'object',
-                                    properties: {
-                                        key: {
-                                            type: 'string',
-                                            rules: [
-                                                'trim',
-                                                'lower'
-                                            ],
-                                            maxLength: 10000
-                                        },
-                                        value: {
-                                            type: 'string',
-                                            rules: [
-                                                'trim',
-                                                'lower'
-                                            ],
-                                            maxLength: 10000
+                        items: {
+                            type: 'object',
+                            optional: false,
+                            strict: true,
+                            properties: {
+                                    category: {
+                                        type: 'string',
+                                        maxLength: 10000,
+                                        rules: [
+                                            'trim',
+                                            'lower'
+                                        ],
+                                        optional: true
+                                    },
+                                    collection: {
+                                        type: 'string',
+                                        maxLength: 10000,
+                                        rules: [
+                                            'trim'
+                                        ],
+                                        optional: false,
+                                        def: 'default'
+                                    },
+                                    title: {
+                                        type: 'string',
+                                        maxLength: 10000,
+                                        rules: [
+                                            'trim',
+                                            'lower'
+                                        ]
+                                    },
+                                    sku: {
+                                        type: 'string',
+                                        maxLength: 10000,
+                                        rules: [
+                                            'trim'
+                                        ],
+                                        optional: true
+                                    },
+                                    productId: {
+                                        type: 'string',
+                                        maxLength: 10000,
+                                        rules: [
+                                            'trim'
+                                        ]
+                                    },
+                                    parentId: {
+                                        type: 'string',
+                                        maxLength: 10000,
+                                        rules: [
+                                            'trim'
+                                        ],
+                                        optional: true
+                                    },
+                                    margin: {
+                                        type: 'number',
+                                        optional: true
+                                    },
+                                    price: {
+                                        type: 'number',
+                                        optional: false
+                                    },
+                                    metadata: {
+                                        type: 'array',
+                                        optional: true,
+                                        items: {
+                                            strict: true,
+                                            type: 'object',
+                                            properties: {
+                                                key: {
+                                                    type: 'string',
+                                                    rules: [
+                                                        'trim',
+                                                        'lower'
+                                                    ],
+                                                    maxLength: 10000
+                                                },
+                                                value: {
+                                                    type: 'string',
+                                                    rules: [
+                                                        'trim',
+                                                        'lower'
+                                                    ],
+                                                    maxLength: 10000
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
                         }
                     },
                 },

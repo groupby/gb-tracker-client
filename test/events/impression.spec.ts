@@ -14,14 +14,15 @@ describe('impression tests', () => {
         const expectedEvent = {
             impression: {
                 impressionType: 'recommendation',
-                product: {
+                products: [
+                    {
                     productId:  'asdfasd',
                     category: 'boats',
                     collection: 'boatssrus',
                     title: 'boats',
                     sku: 'asdfasf98',
                     price: 100.21,
-                },
+                }],
             },
             eventType: 'impression',
             customer: {
@@ -67,7 +68,7 @@ describe('impression tests', () => {
         gbTrackerCore.sendImpressionEvent({
             impression: {
                 impressionType: expectedEvent.impression.impressionType,
-                product: expectedEvent.impression.product,
+                products: expectedEvent.impression.products,
             }
         });
     });
@@ -107,20 +108,21 @@ describe('impression tests', () => {
         gbTrackerCore.setVisitor('visitor', 'session');
 
         gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-            expect(error).to.match(/@.impression.product.productId/);
+            expect(error).to.match(/productId/);
             done();
         });
         gbTrackerCore.sendImpressionEvent({
             impression:{
                 impressionType: 'recommendation',
-                product: {
-                    // productId:  'asdfasd',
-                    category: 'boats',
-                    collection: 'boatssrus',
-                    title: 'boats',
-                    sku: 'asdfasf98',
-                    price: 100.21,
-                },
+                products: [
+                    {
+                            //productId:  'asdfasd',
+                            category: 'boats',
+                            collection: 'boatssrus',
+                            title: 'boats',
+                            sku: 'asdfasf98',
+                            price: 100.21,
+                        }],
             },
         } as any);
     });
@@ -130,26 +132,26 @@ describe('impression tests', () => {
 
         gbTrackerCore.__getInternals().sendEvent = (event: any) => {
 
-            done();
+            done('fail');
         };
 
         gbTrackerCore.setVisitor('visitor', 'session');
 
         gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
             expect(error).to.match(/price: is missing/);
-            done('fail');
+            done();
         });
         gbTrackerCore.sendImpressionEvent({
             impression:{
                 impressionType: 'recommendation',
-                product: {
+                products: [ {
                     productId:  'asdfasd',
                     category: 'boats',
                     collection: 'boatssrus',
                     title: 'boats',
                     sku: 'asdfasf98',
                     //price: 100.21,
-                },
+                }],
             },
         } as any);
     });
@@ -165,20 +167,20 @@ describe('impression tests', () => {
         gbTrackerCore.setVisitor('visitor', 'session');
 
         gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-            expect(error).to.match(/@.impression.product.title: is missing and not optional/);
+            expect(error).to.match(/title: is missing and not optional/);
             done();
         });
         gbTrackerCore.sendImpressionEvent({
             impression: {
                 impressionType: 'recommendation',
-                product: {
+                products: [ {
                     productId:  'asdfasd',
                     category: 'boats',
                     collection: 'boatssrus',
                     //title: 'boats',
                     sku: 'asdfasf98',
                     price: 100.21,
-                },
+                }],
             },
         } as any);
     });
