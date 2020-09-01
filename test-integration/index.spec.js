@@ -410,4 +410,30 @@ describe('gb-tracker-client, running in a web browser', () => {
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);
     }).timeout(TIMEOUT_MS);
+
+    // Impression
+    it('sends a valid Impression beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        build('impression');
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase('impression'),
+            impression: {
+                impressionType: 'recommendation',
+                products: [{
+                    productId: 'asdfasd',
+                    category: 'boats',
+                    collection: 'boatssrus',
+                    title: 'boats',
+                    sku: 'asdfasf98',
+                    price: 100.21,
+                }],
+            },
+
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
 });
