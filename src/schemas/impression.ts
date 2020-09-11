@@ -54,6 +54,10 @@ export default {
                                         type: 'number',
                                         optional: false
                                     },
+                                    currency: {
+                                        type: 'string',
+                                        optional: true
+                                    },
                                     metadata: {
                                         type: 'array',
                                         optional: true,
@@ -253,6 +257,10 @@ export default {
                                     price: {
                                         type: 'number',
                                         optional: false
+                                    },
+                                    currency: {
+                                        type: 'string',
+                                        optional: true
                                     },
                                     metadata: {
                                         type: 'array',

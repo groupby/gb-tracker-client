@@ -58,6 +58,10 @@ export default {
                   type: 'number',
                   optional: true
                 },
+                currency: {
+                  type: 'string',
+                  optional: true
+                },
                 quantity: {
                   type: 'integer',
                   optional: false
@@ -278,6 +282,10 @@ export default {
                 },
                 price: {
                   type: 'number',
+                  optional: true
+                },
+                currency: {
+                  type: 'string',
                   optional: true
                 },
                 quantity: {

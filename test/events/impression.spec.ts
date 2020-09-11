@@ -180,6 +180,7 @@ describe('impression tests', () => {
                     //title: 'boats',
                     sku: 'asdfasf98',
                     price: 100.21,
+                    currency: 'cad',
                 }],
             },
         } as any);

@@ -55,6 +55,9 @@ export default {
                 price: {
                   optional: true
                 },
+                currency: {
+                  optional: true
+                },
                 quantity: {
                   optional: false
                 },

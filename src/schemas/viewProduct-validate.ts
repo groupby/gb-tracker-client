@@ -107,6 +107,9 @@ export default {
           price: {
             optional: true
           },
+          currency: {
+            optional: true
+          },
           metadata: {
             type: 'array',
             optional: true,
