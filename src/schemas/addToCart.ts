@@ -60,7 +60,9 @@ export default {
                 },
                 currency: {
                   type: 'string',
-                  optional: true
+                  optional: true,
+                  minLength: 3,
+                  maxLength: 3
                 },
                 quantity: {
                   type: 'integer',

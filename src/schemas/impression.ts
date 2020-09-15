@@ -56,7 +56,9 @@ export default {
                                     },
                                     currency: {
                                         type: 'string',
-                                        optional: true
+                                        optional: true,
+                                        minLength: 3,
+                                        maxLength: 3
                                     },
                                     metadata: {
                                         type: 'array',

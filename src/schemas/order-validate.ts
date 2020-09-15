@@ -56,7 +56,9 @@ export default {
                   optional: true
                 },
                 currency: {
-                  optional: true
+                  optional: true,
+                  minLength: 3,
+                  maxLength: 3
                 },
                 quantity: {
                   optional: false

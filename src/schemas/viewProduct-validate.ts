@@ -108,7 +108,9 @@ export default {
             optional: true
           },
           currency: {
-            optional: true
+            optional: true,
+            minLength: 3,
+            maxLength: 3
           },
           metadata: {
             type: 'array',
