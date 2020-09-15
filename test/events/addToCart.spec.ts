@@ -123,7 +123,7 @@ describe('addToCart tests', () => {
     gbTrackerCore.setVisitor('visitor', 'session');
 
     gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-      expect(error).to.match(/currency: must be shorter/);
+      expect(error).to.match(/currency: must be a valid 3-letter ISO 4217 Code/);
       done();
     });
 

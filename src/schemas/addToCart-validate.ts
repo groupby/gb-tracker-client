@@ -56,7 +56,8 @@ export default {
                   optional: true
                 },
                 currency: {
-                  optional: true
+                  optional: true,
+                  error: 'must be a valid 3-letter ISO 4217 Code.'
                 },
                 quantity: {
                   optional: false
