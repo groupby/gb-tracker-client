@@ -107,6 +107,12 @@ export default {
           price: {
             optional: true
           },
+          currency: {
+            optional: true,
+            minLength: 3,
+            maxLength: 3,
+            error: 'must be a valid 3-letter ISO 4217 Code.'
+          },
           metadata: {
             type: 'array',
             optional: true,
