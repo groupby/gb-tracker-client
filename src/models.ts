@@ -26,6 +26,7 @@ interface Item {
     parentId?: string;
     margin?: number;
     price?: number;
+    currency?: string;
     quantity: number;
     metadata?: Metadata;
 }
@@ -183,6 +184,7 @@ interface Product {
     parentId?: string;
     margin?: number;
     price?: number;
+    currency?: string;
     metadata?: Metadata;
 }
 

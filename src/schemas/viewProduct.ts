@@ -113,6 +113,12 @@ export default {
                         type: 'number',
                         optional: true
                     },
+                    currency: {
+                        type: 'string',
+                        optional: true,
+                        minLength: 3,
+                        maxLength: 3
+                    },
                     metadata: {
                         type: 'array',
                         optional: true,
@@ -334,6 +340,10 @@ export default {
                     },
                     price: {
                         type: 'number',
+                        optional: true
+                    },
+                    currency: {
+                        type: 'string',
                         optional: true
                     },
                     metadata: {

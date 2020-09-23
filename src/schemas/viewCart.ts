@@ -58,6 +58,13 @@ export default {
                   type: 'number',
                   optional: true
                 },
+                currency: {
+                  type: 'string',
+                  optional: true,
+                  minLength: 3,
+                  maxLength: 3,
+                  error: 'must be a valid 3-letter ISO 4217 Code.'
+                },
                 quantity: {
                   type: 'integer',
                   optional: false
@@ -278,6 +285,10 @@ export default {
                 },
                 price: {
                   type: 'number',
+                  optional: true
+                },
+                currency: {
+                  type: 'string',
                   optional: true
                 },
                 quantity: {
