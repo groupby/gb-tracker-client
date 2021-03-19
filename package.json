@@ -67,6 +67,6 @@
     "cuid": "^2.1.8",
     "deep-diff": "^1.0.2",
     "query-string": "^5.1.1",
-    "schema-inspector": "^1.7.0"
+    "schema-inspector": "^2.0.0"
   }
 }
