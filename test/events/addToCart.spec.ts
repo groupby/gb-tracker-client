@@ -12,8 +12,6 @@ const GbTracker = require('../../src');
 
 describe('addToCart tests', () => {
   it('should accept valid addToCart event', (done) => {
-    const expectedSearchAttributionToken = 'abc123';
-
     const expectedEvent = {
       cart: {
         items: [
@@ -45,7 +43,6 @@ describe('addToCart tests', () => {
           localTime: '2016-08-14T14:05:26.872Z',
         },
       },
-      searchAttributionToken: expectedSearchAttributionToken,
     };
 
     const gbTracker = new GbTracker(expectedEvent.customer.id, expectedEvent.customer.area);
@@ -68,7 +65,6 @@ describe('addToCart tests', () => {
 
     gbTracker.sendAddToCartEvent({
       cart: expectedEvent.cart,
-      searchAttributionToken: expectedSearchAttributionToken,
     });
   });
 
