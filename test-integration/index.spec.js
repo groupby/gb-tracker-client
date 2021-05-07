@@ -302,6 +302,7 @@ describe('gb-tracker-client, running in a web browser', () => {
                 title: 'testtitle',
                 collection: 'default',
             },
+            searchAttributionToken: 'abc123',
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);
@@ -328,6 +329,7 @@ describe('gb-tracker-client, running in a web browser', () => {
                     },
                 ],
             },
+            searchAttributionToken: 'abc123',
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);
@@ -406,6 +408,7 @@ describe('gb-tracker-client, running in a web browser', () => {
                     },
                 ],
             },
+            searchAttributionToken: 'abc123',
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);

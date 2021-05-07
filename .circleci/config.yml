@@ -39,7 +39,7 @@ jobs:
               scripts/deploy_browser_dev.sh
             elif [ "$CIRCLE_BRANCH" == "production" ]
             then
-              scripts/deploy_browser_prod.sh
+              echo "Skipping production deploy to CDN. Expecting that manual deploy will be performed."
             fi
   deploy-npm:
     docker:

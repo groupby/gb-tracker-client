@@ -1,6 +1,6 @@
 {
   "name": "gb-tracker-client",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "description": "GroupBy client-side event tracker",
   "main": "index.js",
   "keywords": [
@@ -67,6 +67,6 @@
     "cuid": "^2.1.8",
     "deep-diff": "^1.0.2",
     "query-string": "^5.1.1",
-    "schema-inspector": "^1.7.0"
+    "schema-inspector": "^2.0.1"
   }
 }
