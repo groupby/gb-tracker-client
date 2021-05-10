@@ -9,7 +9,7 @@ const GbTrackerCore = require('../../src');
 (navigator as any).appCodeName = 'Microsoft Internet Explorer';
 (navigator as any).userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
-describe('addToCart tests', () => {
+describe('removeFromCart tests', () => {
   it('should accept valid removeFromCart event', (done) => {
     const expectedEvent = {
       cart: {

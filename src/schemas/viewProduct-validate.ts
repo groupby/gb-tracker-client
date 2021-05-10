@@ -2,6 +2,10 @@ import {
   validation as experimentsVal,
 } from './partials/experiments';
 
+import {
+  validation as searchAttributionTokenVal,
+} from './partials/searchAttributionToken';
+
 export default {
   validation: {
     type: 'object',
@@ -154,6 +158,7 @@ export default {
         }
       },
       experiments: experimentsVal,
+      searchAttributionToken: searchAttributionTokenVal,
     }
   }
 }
