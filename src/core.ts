@@ -253,7 +253,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 let url: string;
 
                 if (internals.OVERRIDEN_PIXEL_URL && (typeof internals.OVERRIDEN_PIXEL_URL === 'string') && internals.OVERRIDEN_PIXEL_URL.length > 0) {
-                    url = internals.OVERRIDEN_PIXEL_URL;
+                    url = `${internals.OVERRIDEN_PIXEL_URL}${pathSuffix}`;
                 } else {
                     url = host + path;
                 }
