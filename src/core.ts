@@ -69,15 +69,13 @@ export type FullSendableEvent = AnySendableEvent & {
 };
 
 export interface Schemas {
-    addToCart?: { validation?: object, sanitization?: object };
-    viewCart?: { validation?: object, sanitization?: object };
-    removeFromCart?: { validation?: object, sanitization?: object };
-    order?: { validation?: object, sanitization?: object };
-    autoSearch?: { validation?: object, sanitization?: object };
-    autoMoreRefinements?: { validation?: object, sanitization?: object };
-    search?: { validation?: object, sanitization?: object };
-    viewProduct?: { validation?: object, sanitization?: object };
-    impression?: { validation?: object, sanitization?: object };
+    addToCart?: object;
+    removeFromCart?: object;
+    order?: object;
+    autoSearch?: object;
+    search?: object;
+    viewProduct?: object;
+    impression?: object;
 }
 
 export interface TrackerCoreFactory {
@@ -122,7 +120,7 @@ export interface TrackerInternals {
     overridePixelPath(path?: string): void;
     sendEvent(event: FullSendableEvent): void;
     prepareAndSendEvent(event: AnySendableEvent, eventType: keyof Schemas): void;
-    validateEvent(event: FullSendableEvent, schemas: { validation?: any, sanitization?: any }): { event?: FullSendableEvent, error?: any };
+    validateEvent(event: FullSendableEvent, schemas: Schemas): { event?: FullSendableEvent, error?: any };
     getRemovedFields(sanitizedEvent: Record<any, any>, originalEvent: Record<any, any>): string[];
 }
 
@@ -289,8 +287,8 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
             prepareAndSendEvent: (event, eventType: string) => {
                 const fullEvent = that.prepareEvent(event, eventType);
-                const schema = internals.SCHEMAS[eventType];
-                const validated = internals.validateEvent(fullEvent, schema || {});
+                const sanitizationSchema = internals.SCHEMAS[eventType];
+                const validated = internals.validateEvent(fullEvent, sanitizationSchema || {});
                 if (validated && validated.event) {
                     internals.sendEvent(validated.event);
                 } else {
@@ -301,22 +299,13 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Based on the schema provided, validate an event for sending to the tracker endpoint
+             * Based on the sanitization schema provided, sanitizes an event for sending to the tracker endpoint.
              * @param event
-             * @param eventSchemas
+             * @param sanitizationSchema
              */
-            validateEvent: (event, eventSchemas) => {
+            validateEvent: (event, sanitizationSchema) => {
                 const sanitizedEvent = deepCopy(event);
-                internals.SANITIZE_EVENT(sanitizedEvent, eventSchemas.sanitization || {});
-                const result = inspector.validate(eventSchemas.validation || {}, sanitizedEvent);
-
-                if (!result.valid) {
-                    console.error(`error while processing event: ${result.format()}`);
-                    return {
-                        event: undefined,
-                        error: result.format(),
-                    };
-                }
+                internals.SANITIZE_EVENT(sanitizedEvent, sanitizationSchema || {});
 
                 if (!sanitizedEvent.visit) {
                     sanitizedEvent.visit = {};
@@ -566,10 +555,11 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
             /**
              * Validate and send viewCart event
+             * DEPRECATED. This code does nothing now.
              * @param event
              */
             sendViewCartEvent: (event: ViewCartEvent) => {
-                internals.prepareAndSendEvent(event, 'viewCart');
+                // Event type deprecated.
             },
 
             /**
@@ -605,11 +595,12 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Validate and send moreRefinements event
+             * Validate and send moreRefinements event.
+             * DEPRECATED. This code does nothing now.
              * @param event
              */
-            sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => {
-                internals.prepareAndSendEvent(event, 'autoMoreRefinements');
+            sendMoreRefinementsEvent: (_: AutoMoreRefinementsEvent) => {
+                // Event type deprecated.
             },
 
             /**

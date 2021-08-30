@@ -102,53 +102,6 @@ describe('gb-tracker-full tests', () => {
     });
   });
 
-  it('should validate valid event', () => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    gbTrackerCore.__getInternals().sendEvent = () => { /* */ };
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    const validationSchema = {
-      type: 'object',
-      strict: true,
-      properties: {
-        thing: {
-          type: 'string',
-        },
-        anotherThing: {
-          type: 'integer',
-        },
-      },
-    };
-
-    const sanitizationSchema = {
-      strict: true,
-      properties: {
-        thing: {},
-        anotherThing: {},
-      },
-    };
-
-    const schemas = {
-      validation: validationSchema,
-      sanitization: sanitizationSchema,
-    };
-
-    const event: any = {
-      thing: 'yo',
-      anotherThing: 190,
-      extraThing: {
-        subExtra: 'fo sho',
-      },
-    };
-
-    const validated = gbTrackerCore.__getInternals().validateEvent(event, schemas);
-
-    expect((validated.event as any).thing).to.eql('yo');
-    expect((validated.event as any).anotherThing).to.eql(190);
-    expect((validated.event as any).extraThing).to.be.undefined;
-    expect((validated.event as any).visit.generated.timezoneOffset).to.not.be.undefined;
-  });
-
   it('throws during validation if strictMode is on and there are extra fields in event', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     gbTrackerCore.setStrictMode(true);
@@ -179,7 +132,6 @@ describe('gb-tracker-full tests', () => {
     };
 
     const schemas = {
-      validation: validationSchema,
       sanitization: sanitizationSchema,
     };
 
@@ -224,7 +176,6 @@ describe('gb-tracker-full tests', () => {
     };
 
     const schemas = {
-      validation: validationSchema,
       sanitization: sanitizationSchema,
     };
 
@@ -245,52 +196,5 @@ describe('gb-tracker-full tests', () => {
         value: 'extraThing',
       },
     ]);
-  });
-
-  it('should drop an invalid event', () => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    gbTrackerCore.__getInternals().sendEvent = () => { /* */ };
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    const validationSchema = {
-      type: 'object',
-      strict: true,
-      properties: {
-        thing: {
-          type: 'string',
-        },
-        anotherThing: {
-          type: 'integer',
-        },
-      },
-    };
-
-    const sanitizationSchema = {
-      strict: true,
-      properties: {
-        thing: {},
-        anotherThing: {},
-      },
-    };
-
-    const schemas = {
-      validation: validationSchema,
-      sanitization: sanitizationSchema,
-    };
-
-    const event: any = {
-      thing: {
-        shouldNotBeAnObject: 100,
-      },
-      anotherThing: 190,
-      extraThing: {
-        subExtra: 'fo sho',
-      },
-    };
-
-    const invalidated = gbTrackerCore.__getInternals().validateEvent(event, schemas);
-
-    expect(invalidated.event).to.be.undefined;
-    expect(invalidated.error).to.eql('Property @.thing: must be string, but is object');
   });
 });
