@@ -1,5 +1,3 @@
-import { MAX_STR_LENGTH } from './schemas/utils';
-
 /**
  * Metadata that can be attached to any event, and often to partials within
  * each event (for example, metadata for an event can be "gbi:true" and

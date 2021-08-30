@@ -335,32 +335,6 @@ describe('gb-tracker-client, running in a web browser', () => {
         await visitSiteAndAssert(page, expectedReceivedBeacon);
     }).timeout(TIMEOUT_MS);
 
-    // ViewCart
-    it('sends a valid ViewCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'viewCart';
-
-        build(eventType);
-
-        const page = await startServersAndBrowser();
-
-        const expectedReceivedBeacon = {
-            ...expectedReceivedBeaconBase(eventType),
-            cart: {
-                cartType: 'mario cart',
-                items: [
-                    {
-                        productId: 'testproductid',
-                        title: 'testtitle',
-                        collection: 'default',
-                        quantity: 1,
-                    },
-                ],
-            },
-        };
-
-        await visitSiteAndAssert(page, expectedReceivedBeacon);
-    }).timeout(TIMEOUT_MS);
-
     // RemoveFromCart
     it('sends a valid RemoveFromCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
         const eventType = 'removeFromCart';
