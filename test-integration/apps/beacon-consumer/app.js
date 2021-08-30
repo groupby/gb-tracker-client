@@ -15,7 +15,7 @@ module.exports = ({ beaconFilePath, logger }) => {
     });
 
     // for "search" event type
-    app.post('/', pixelParser, );
+    app.post('/', pixelParser, handler);
 
     // For all other event types
     [
