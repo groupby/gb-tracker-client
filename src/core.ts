@@ -98,8 +98,6 @@ export interface TrackerInternals {
     SESSION_TIMEOUT_SEC: number;
     VERSION: string;
     VISITOR_TIMEOUT_SEC: number;
-    MAX_PATH_LENGTH: number;
-    MAX_PATHNAME_LENGTH: number;
     WINDOW: Window;
     COOKIES_LIB: any;
     SCHEMAS: Schemas;
@@ -113,7 +111,6 @@ export interface TrackerInternals {
     STRICT_MODE: boolean;
     WARNINGS_DISABLED: boolean;
     VISITOR_SETTINGS_SOURCE?: string;
-    MAX_QUERY_STRING_LENGTH: number;
     IGNORED_FIELD_PREFIXES: string[];
     getProtocol(document?: { location?: { protocol?: string } }): string;
     overrideCookiesLib(cookies: any): void;
@@ -148,9 +145,6 @@ export interface Tracker {
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
-    const __MAX_PATH_LENGTH = 4000; // Thanks NGINX
-    const __MAX_PATHNAME_LENGTH = 100; // '/v2/pixel/?random=0.5405421565044588&m=' plus extra for luck
-
     function TrackerCtr(customerId: string, area: string = 'Production', overridePixelUrl?: string): Tracker {
         // Setting up customer
         if (typeof customerId !== 'string' || customerId.length === 0) {
@@ -171,10 +165,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             SCHEMAS: schemas,
             SANITIZE_EVENT: sanitizeEvent,
 
-            // Info on path length limitations: http://stackoverflow.com/a/812962
-            MAX_PATH_LENGTH: __MAX_PATH_LENGTH, // Thanks NGINX
-            MAX_PATHNAME_LENGTH: __MAX_PATHNAME_LENGTH, // '/v2/pixel/?random=0.5405421565044588&m=' plus extra for luck
-
             WINDOW: window,
             COOKIES_LIB: cookiesjs,
 
@@ -193,8 +183,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             OVERRIDEN_PIXEL_URL: overridePixelUrl,
 
             VISITOR_SETTINGS_SOURCE: undefined,
-
-            MAX_QUERY_STRING_LENGTH: __MAX_PATH_LENGTH - __MAX_PATHNAME_LENGTH,
 
             IGNORED_FIELD_PREFIXES: [
                 'search.records.[].allMeta',
