@@ -9,7 +9,7 @@
     <script src="{{gbTrackerClientSrc}}"></script>
     <script>
         // call autoSetVisitor before using the tracker instance
-        var gbTracker = new GbTracker('testcustomer', 'testarea', 'http://localhost:{{beaconConsumerPort}}');
+        var gbTracker = new GbTracker('testcustomer', 'testarea', 'http://localhost:{{beaconConsumerPort}}/gbi-event-search');
         gbTracker.autoSetVisitor();
 
         gbTracker.sendSearchEvent({
