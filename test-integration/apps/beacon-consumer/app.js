@@ -9,8 +9,23 @@ module.exports = ({ beaconFilePath, logger }) => {
 
     app.use(morgan('dev'));
 
-    return app.post('/', pixelParser, analyticsHandler({
+    const handler = analyticsHandler({
         beaconFilePath,
         logger,
-    }));
+    });
+
+    // for "search" event type
+    app.post('/', pixelParser, );
+
+    // For all other event types
+    [
+        'autoSearch',
+        'viewProduct',
+        'addToCart',
+        'removeFromCart',
+        'order',
+        'impression'
+    ].forEach(eventType => app.post(`/gbi-event-${eventType}`, pixelParser, handler));
+
+    return app;
 }
