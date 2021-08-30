@@ -77,7 +77,7 @@ export interface Schemas {
     autoMoreRefinements?: { validation?: object, sanitization?: object };
     search?: { validation?: object, sanitization?: object };
     viewProduct?: { validation?: object, sanitization?: object };
-    impression?: {validation?: object, sanitization?: object};
+    impression?: { validation?: object, sanitization?: object };
 }
 
 export interface TrackerCoreFactory {
@@ -216,9 +216,45 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event The event to send.
              */
             sendEvent: (event: any) => {
-                if (event && event.eventType === 'sessionChange') {
-                    // This event is deprecated
+                let eventType: string;
+                if (!event || !event.eventType) {
+                    // This should never happen, but there's nothing we can do if it does happen, because the URL
+                    // depends on the event type.
+                    // No log message because we don't want to pollute logs of browser.
                     return;
+                }
+
+                eventType = event.eventType as string;
+
+                // All event types except these are deprecated.
+                if (eventType !== 'autoSearch' && eventType !== 'search' && eventType !== 'viewProduct' && eventType !== 'addToCart' && eventType !== 'removeFromCart' && eventType !== 'order' && eventType !== 'impression') {
+                    // No log message because we don't want to pollute logs of browser.
+                    return;
+                }
+
+                let pathSuffix: string;
+                switch (eventType) {
+                    case 'autoSearch':
+                        pathSuffix = '/gbi-event-autoSearch';
+                        break;
+                    case 'viewProduct':
+                        pathSuffix = '/gbi-event-viewProduct';
+                        break;
+                    case 'addToCart':
+                        pathSuffix = '/gbi-event-addToCart';
+                        break;
+                    case 'removeFromCart':
+                        pathSuffix = '/gbi-event-removeFromCart';
+                        break;
+                    case 'order':
+                        pathSuffix = '/gbi-event-order';
+                        break;
+                    case 'impression':
+                        pathSuffix = '/gbi-event-impression';
+                        break;
+                    default:
+                        pathSuffix = '';
+                        break;
                 }
 
                 if ((internals.WINDOW as any).GROUPBY_BEACON_DEBUG || internals.COOKIES_LIB.get(internals.DEBUG_COOKIE_KEY)) {
@@ -227,7 +263,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 const protocol = internals.getProtocol(document);
                 const host = `${protocol}//${customerId}.groupbycloud.com`;
-                const path = `/wisdom/v2/pixel`;
+                const path = `/wisdom/v2/pixel${pathSuffix}`;
                 let url: string;
 
                 if (internals.OVERRIDEN_PIXEL_URL && (typeof internals.OVERRIDEN_PIXEL_URL === 'string') && internals.OVERRIDEN_PIXEL_URL.length > 0) {
