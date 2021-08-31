@@ -7,8 +7,8 @@ module.exports = ({ beaconFilePath, logger }) => {
         const beacon = req.body;
 
         // UNCOMMENT FOR MORE LOGGING FOR TROUBLESHOOTING TESTS
-        // logger(`Received beacon:`);
-        // logger(JSON.stringify(beacon, null, 2));
+        logger(`Received beacon:`);
+        logger(JSON.stringify(beacon, null, 2));
     
         fs.writeFileSync(beaconFilePath, JSON.stringify(beacon));
         logger(`Wrote beacon to disk at: ${beaconFilePath}`);

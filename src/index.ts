@@ -4,11 +4,9 @@
 
 import inspector from 'schema-inspector';
 import addToCart from './schemas/addToCart';
-import viewCart from './schemas/viewCart';
 import removeFromCart from './schemas/removeFromCart';
 import order from './schemas/order';
 import autoSearch from './schemas/autoSearch';
-import autoMoreRefinements from './schemas/autoMoreRefinements';
 import search from './schemas/search';
 import viewProduct from './schemas/viewProduct';
 import impression from './schemas/impression';
@@ -32,44 +30,17 @@ export interface SendableOrigin {
 export type SanitizeEventFn = (event: AnySendableEvent, schema?: any) => any;
 
 
-
+/**
+ * Sanitization schemas used to transform the data the customer calls the event sending functions with.
+ */
 const SCHEMAS: Schemas = {
-    addToCart: {
-        sanitization: addToCart.sanitization,
-        validation: addToCart.validation,
-    },
-    viewCart: {
-        sanitization: viewCart.sanitization,
-        validation: viewCart.validation,
-    },
-    removeFromCart: {
-        sanitization: removeFromCart.sanitization,
-        validation: removeFromCart.validation,
-    },
-    order: {
-        sanitization: order.sanitization,
-        validation: order.validation,
-    },
-    autoSearch: {
-        sanitization: autoSearch.sanitization,
-        validation: autoSearch.validation,
-    },
-    autoMoreRefinements: {
-        sanitization: autoMoreRefinements.sanitization,
-        validation: autoMoreRefinements.validation,
-    },
-    search: {
-        sanitization: search.sanitization,
-        validation: search.validation,
-    },
-    viewProduct: {
-        sanitization: viewProduct.sanitization,
-        validation: viewProduct.validation,
-    },
-    impression: {
-        sanitization: impression.sanitization,
-        validation: impression.validation,
-    },
+    addToCart: addToCart.sanitization,
+    autoSearch: autoSearch.sanitization,
+    impression: impression.sanitization,
+    order: order.sanitization,
+    removeFromCart: removeFromCart.sanitization,
+    search: search.sanitization,
+    viewProduct: viewProduct.sanitization,
 };
 
 /**
