@@ -76,100 +76,6 @@ describe('order tests', () => {
     });
   });
 
-  it('should reject invalid order event that is not nested in cart', (done) => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-
-      done('fail');
-    };
-
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-      expect(error).to.match(/cart: is missing/);
-      done();
-    });
-
-    gbTrackerCore.sendOrderEvent({
-      items: [
-        {
-          productId: 'asdfasd',
-          category: 'boats',
-          collection: 'boatssrus',
-          title: 'boats',
-          sku: 'asdfasf98',
-          quantity: 10,
-          price: 100.21,
-        },
-      ],
-    } as any);
-  });
-
-  it('should reject invalid order event missing product ID', (done) => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-
-      done('fail');
-    };
-
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-      expect(error).to.match(/productId: is missing/);
-      done();
-    });
-
-    gbTrackerCore.sendOrderEvent({
-      cart: {
-        items: [
-          {
-            // productId:  'asdfasd',
-            category: 'boats',
-            collection: 'boatssrus',
-            title: 'boats',
-            sku: 'asdfasf98',
-            quantity: 10,
-            price: 100.21,
-          },
-        ],
-      },
-    } as any);
-  });
-
-  it('should reject invalid order event missing quantity', (done) => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-
-      done('fail');
-    };
-
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-      expect(error).to.match(/quantity: is missing/);
-      done();
-    });
-
-    gbTrackerCore.sendOrderEvent({
-      cart: {
-        items: [
-          {
-            productId: 'asdfasd',
-            category: 'boats',
-            collection: 'boatssrus',
-            title: 'boats',
-            sku: 'asdfasf98',
-            // quantity:   10,
-            price: 100.21,
-          },
-        ],
-      },
-    } as any);
-  });
-
   it('should not reject order event missing price', (done) => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
 
@@ -200,38 +106,6 @@ describe('order tests', () => {
         ],
       },
     });
-  });
-
-  it('should reject invalid order event missing title', (done) => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-
-      done('fail');
-    };
-
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    gbTrackerCore.setInvalidEventCallback((event: any, error: any) => {
-      expect(error).to.match(/title: is missing/);
-      done();
-    });
-
-    gbTrackerCore.sendOrderEvent({
-      cart: {
-        items: [
-          {
-            productId: 'asdfasd',
-            category: 'boats',
-            collection: 'boatssrus',
-            // title:      'boats',
-            sku: 'asdfasf98',
-            quantity: 10,
-            price: 100.21,
-          },
-        ],
-      },
-    } as any);
   });
 
   it('should NOT reject order event missing category', (done) => {

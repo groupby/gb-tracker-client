@@ -69,15 +69,13 @@ export type FullSendableEvent = AnySendableEvent & {
 };
 
 export interface Schemas {
-    addToCart?: { validation?: object, sanitization?: object };
-    viewCart?: { validation?: object, sanitization?: object };
-    removeFromCart?: { validation?: object, sanitization?: object };
-    order?: { validation?: object, sanitization?: object };
-    autoSearch?: { validation?: object, sanitization?: object };
-    autoMoreRefinements?: { validation?: object, sanitization?: object };
-    search?: { validation?: object, sanitization?: object };
-    viewProduct?: { validation?: object, sanitization?: object };
-    impression?: {validation?: object, sanitization?: object};
+    addToCart?: object;
+    removeFromCart?: object;
+    order?: object;
+    autoSearch?: object;
+    search?: object;
+    viewProduct?: object;
+    impression?: object;
 }
 
 export interface TrackerCoreFactory {
@@ -100,8 +98,6 @@ export interface TrackerInternals {
     SESSION_TIMEOUT_SEC: number;
     VERSION: string;
     VISITOR_TIMEOUT_SEC: number;
-    MAX_PATH_LENGTH: number;
-    MAX_PATHNAME_LENGTH: number;
     WINDOW: Window;
     COOKIES_LIB: any;
     SCHEMAS: Schemas;
@@ -115,14 +111,13 @@ export interface TrackerInternals {
     STRICT_MODE: boolean;
     WARNINGS_DISABLED: boolean;
     VISITOR_SETTINGS_SOURCE?: string;
-    MAX_QUERY_STRING_LENGTH: number;
     IGNORED_FIELD_PREFIXES: string[];
     getProtocol(document?: { location?: { protocol?: string } }): string;
     overrideCookiesLib(cookies: any): void;
     overridePixelPath(path?: string): void;
     sendEvent(event: FullSendableEvent): void;
     prepareAndSendEvent(event: AnySendableEvent, eventType: keyof Schemas): void;
-    validateEvent(event: FullSendableEvent, schemas: { validation?: any, sanitization?: any }): { event?: FullSendableEvent, error?: any };
+    validateEvent(event: FullSendableEvent, schemas: Schemas): { event?: FullSendableEvent, error?: any };
     getRemovedFields(sanitizedEvent: Record<any, any>, originalEvent: Record<any, any>): string[];
 }
 
@@ -150,9 +145,6 @@ export interface Tracker {
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
-    const __MAX_PATH_LENGTH = 4000; // Thanks NGINX
-    const __MAX_PATHNAME_LENGTH = 100; // '/v2/pixel/?random=0.5405421565044588&m=' plus extra for luck
-
     function TrackerCtr(customerId: string, area: string = 'Production', overridePixelUrl?: string): Tracker {
         // Setting up customer
         if (typeof customerId !== 'string' || customerId.length === 0) {
@@ -173,10 +165,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             SCHEMAS: schemas,
             SANITIZE_EVENT: sanitizeEvent,
 
-            // Info on path length limitations: http://stackoverflow.com/a/812962
-            MAX_PATH_LENGTH: __MAX_PATH_LENGTH, // Thanks NGINX
-            MAX_PATHNAME_LENGTH: __MAX_PATHNAME_LENGTH, // '/v2/pixel/?random=0.5405421565044588&m=' plus extra for luck
-
             WINDOW: window,
             COOKIES_LIB: cookiesjs,
 
@@ -196,8 +184,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
             VISITOR_SETTINGS_SOURCE: undefined,
 
-            MAX_QUERY_STRING_LENGTH: __MAX_PATH_LENGTH - __MAX_PATHNAME_LENGTH,
-
             IGNORED_FIELD_PREFIXES: [
                 'search.records.[].allMeta',
                 'search.template.zones',
@@ -216,8 +202,19 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event The event to send.
              */
             sendEvent: (event: any) => {
-                if (event && event.eventType === 'sessionChange') {
-                    // This event is deprecated
+                let eventType: string;
+                if (!event || !event.eventType) {
+                    // This should never happen, but there's nothing we can do if it does happen, because the URL
+                    // depends on the event type.
+                    // No log message because we don't want to pollute logs of browser.
+                    return;
+                }
+
+                eventType = event.eventType as string;
+
+                // All event types except these are deprecated.
+                if (eventType !== 'autoSearch' && eventType !== 'search' && eventType !== 'viewProduct' && eventType !== 'addToCart' && eventType !== 'removeFromCart' && eventType !== 'order' && eventType !== 'impression') {
+                    // No log message because we don't want to pollute logs of browser.
                     return;
                 }
 
@@ -253,8 +250,8 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
             prepareAndSendEvent: (event, eventType: string) => {
                 const fullEvent = that.prepareEvent(event, eventType);
-                const schema = internals.SCHEMAS[eventType];
-                const validated = internals.validateEvent(fullEvent, schema || {});
+                const sanitizationSchema = internals.SCHEMAS[eventType];
+                const validated = internals.validateEvent(fullEvent, sanitizationSchema || {});
                 if (validated && validated.event) {
                     internals.sendEvent(validated.event);
                 } else {
@@ -265,22 +262,13 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Based on the schema provided, validate an event for sending to the tracker endpoint
+             * Based on the sanitization schema provided, sanitizes an event for sending to the tracker endpoint.
              * @param event
-             * @param eventSchemas
+             * @param sanitizationSchema
              */
-            validateEvent: (event, eventSchemas) => {
+            validateEvent: (event, sanitizationSchema) => {
                 const sanitizedEvent = deepCopy(event);
-                internals.SANITIZE_EVENT(sanitizedEvent, eventSchemas.sanitization || {});
-                const result = inspector.validate(eventSchemas.validation || {}, sanitizedEvent);
-
-                if (!result.valid) {
-                    console.error(`error while processing event: ${result.format()}`);
-                    return {
-                        event: undefined,
-                        error: result.format(),
-                    };
-                }
+                internals.SANITIZE_EVENT(sanitizedEvent, sanitizationSchema || {});
 
                 if (!sanitizedEvent.visit) {
                     sanitizedEvent.visit = {};
@@ -530,10 +518,11 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
             /**
              * Validate and send viewCart event
+             * DEPRECATED. This code does nothing now.
              * @param event
              */
             sendViewCartEvent: (event: ViewCartEvent) => {
-                internals.prepareAndSendEvent(event, 'viewCart');
+                // Event type deprecated.
             },
 
             /**
@@ -569,11 +558,12 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Validate and send moreRefinements event
+             * Validate and send moreRefinements event.
+             * DEPRECATED. This code does nothing now.
              * @param event
              */
-            sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => {
-                internals.prepareAndSendEvent(event, 'autoMoreRefinements');
+            sendMoreRefinementsEvent: (_: AutoMoreRefinementsEvent) => {
+                // Event type deprecated.
             },
 
             /**

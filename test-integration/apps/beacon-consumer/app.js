@@ -9,8 +9,12 @@ module.exports = ({ beaconFilePath, logger }) => {
 
     app.use(morgan('dev'));
 
-    return app.post('/', pixelParser, analyticsHandler({
+    const handler = analyticsHandler({
         beaconFilePath,
         logger,
-    }));
+    });
+
+    app.post('/', pixelParser, handler);
+
+    return app;
 }
