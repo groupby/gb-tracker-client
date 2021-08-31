@@ -218,42 +218,17 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     return;
                 }
 
-                let pathSuffix: string;
-                switch (eventType) {
-                    case 'autoSearch':
-                        pathSuffix = '/gbi-event-autoSearch';
-                        break;
-                    case 'viewProduct':
-                        pathSuffix = '/gbi-event-viewProduct';
-                        break;
-                    case 'addToCart':
-                        pathSuffix = '/gbi-event-addToCart';
-                        break;
-                    case 'removeFromCart':
-                        pathSuffix = '/gbi-event-removeFromCart';
-                        break;
-                    case 'order':
-                        pathSuffix = '/gbi-event-order';
-                        break;
-                    case 'impression':
-                        pathSuffix = '/gbi-event-impression';
-                        break;
-                    default:
-                        pathSuffix = '';
-                        break;
-                }
-
                 if ((internals.WINDOW as any).GROUPBY_BEACON_DEBUG || internals.COOKIES_LIB.get(internals.DEBUG_COOKIE_KEY)) {
                     console.log(`Beaconing event: ${JSON.stringify(event, null, 2)}`);
                 }
 
                 const protocol = internals.getProtocol(document);
                 const host = `${protocol}//${customerId}.groupbycloud.com`;
-                const path = `/wisdom/v2/pixel${pathSuffix}`;
+                const path = `/wisdom/v2/pixel`;
                 let url: string;
 
                 if (internals.OVERRIDEN_PIXEL_URL && (typeof internals.OVERRIDEN_PIXEL_URL === 'string') && internals.OVERRIDEN_PIXEL_URL.length > 0) {
-                    url = `${internals.OVERRIDEN_PIXEL_URL}${pathSuffix}`;
+                    url = internals.OVERRIDEN_PIXEL_URL;
                 } else {
                     url = host + path;
                 }

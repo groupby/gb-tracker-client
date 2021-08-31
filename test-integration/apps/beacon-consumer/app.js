@@ -14,18 +14,7 @@ module.exports = ({ beaconFilePath, logger }) => {
         logger,
     });
 
-    // for "search" event type
     app.post('/', pixelParser, handler);
-
-    // For all other event types
-    [
-        'autoSearch',
-        'viewProduct',
-        'addToCart',
-        'removeFromCart',
-        'order',
-        'impression'
-    ].forEach(eventType => app.post(`/gbi-event-${eventType}`, pixelParser, handler));
 
     return app;
 }
