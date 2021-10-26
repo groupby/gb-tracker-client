@@ -274,7 +274,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 // Only search events have validation too
                 if (event.eventType && event.eventType === 'search') {
-                    sanitizationSchema = (schema as any).sanitize;
+                    sanitizationSchema = (schema as any).sanitization;
                     validationSchema = (schema as any).validation;
                 }
 
