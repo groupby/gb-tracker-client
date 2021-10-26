@@ -262,13 +262,26 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Based on the sanitization schema provided, sanitizes an event for sending to the tracker endpoint.
+             * Based on the sanitization (and optionally, validation) schema
+             * provided, sanitizes (and optionally, validates) an event for
+             * sending to the tracker endpoint.
              * @param event
-             * @param sanitizationSchema
+             * @param schema
              */
-            validateEvent: (event, sanitizationSchema) => {
+            validateEvent: (event, schema) => {
                 const sanitizedEvent = deepCopy(event);
-                internals.SANITIZE_EVENT(sanitizedEvent, sanitizationSchema || {});
+                internals.SANITIZE_EVENT(sanitizedEvent, schema || {});
+
+                // Not all event types have validation. Only search does.
+                const result = inspector.validate((schema as any).validation || {}, sanitizedEvent);
+
+                if (!result.valid) {
+                    console.error(`error while processing event: ${result.format()}`);
+                    return {
+                        event: undefined,
+                        error: result.format(),
+                    };
+                }
 
                 if (!sanitizedEvent.visit) {
                     sanitizedEvent.visit = {};

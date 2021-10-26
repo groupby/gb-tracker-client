@@ -39,7 +39,10 @@ const SCHEMAS: Schemas = {
     impression: impression.sanitization,
     order: order.sanitization,
     removeFromCart: removeFromCart.sanitization,
-    search: search.sanitization,
+    search: {
+        sanitization: search.sanitization,
+        validation: search.validation,
+    },
     viewProduct: viewProduct.sanitization,
 };
 
