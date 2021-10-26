@@ -58,8 +58,6 @@ workflows:
     jobs:
       - deploy-cdn:
           context: org-global
-          requires:
-            - run-tests
           filters:
             branches:
               only:
@@ -67,8 +65,6 @@ workflows:
                 - develop
       - deploy-npm:
           context: org-global
-          requires:
-            - run-tests
           filters:
             branches:
               only:
