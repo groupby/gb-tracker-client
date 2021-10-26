@@ -269,19 +269,29 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param schema
              */
             validateEvent: (event, schema) => {
-                const sanitizedEvent = deepCopy(event);
-                internals.SANITIZE_EVENT(sanitizedEvent, schema || {});
+                let sanitizationSchema = schema;
+                let validationSchema: object;
 
-                // Not all event types have validation. Only search does.
-                const result = inspector.validate((schema as any).validation || {}, sanitizedEvent);
-
-                if (!result.valid) {
-                    console.error(`error while processing event: ${result.format()}`);
-                    return {
-                        event: undefined,
-                        error: result.format(),
-                    };
+                // Only search events have validation too
+                if (event.eventType && event.eventType === 'search') {
+                    sanitizationSchema = (schema as any).sanitize;
+                    validationSchema = (schema as any).validation;
                 }
+
+                const sanitizedEvent = deepCopy(event);
+                internals.SANITIZE_EVENT(sanitizedEvent, sanitizationSchema || {});
+
+                if (validationSchema) {
+                    const result = inspector.validate((schema as any).validation || {}, sanitizedEvent);
+
+                    if (!result.valid) {
+                        console.error(`error while processing event: ${result.format()}`);
+                        return {
+                            event: undefined,
+                            error: result.format(),
+                        };
+                    }
+                }                
 
                 if (!sanitizedEvent.visit) {
                     sanitizedEvent.visit = {};
