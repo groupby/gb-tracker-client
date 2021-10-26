@@ -5,23 +5,14 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, production ]
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, production ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    services:
-      redis:
-        image: redis:4.0
-
-    strategy:
-      matrix:
-        node-version: ["12", "14", "16"]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v2
