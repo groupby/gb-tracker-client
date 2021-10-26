@@ -26,6 +26,12 @@ import {
 } from './models';
 import { visitorIdFromAmpLinker } from './amputils';
 
+// Creates a message that can be shown to a GroupBy customer implementing beacons to tell them that the beacon type they
+// are trying to send has been removed.
+function eventTypeRemovedMsg(eventType: string) {
+    return `The ${eventType} event type has been removed. Calling this function results in no beacon being sent. The function is a no op with no performance implications. The code calling this function can be removed at a time it is convenient to do so.`;
+}
+
 interface EventCustomer {
     id: string;
     area: string;
@@ -214,7 +220,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 // All event types except these are deprecated.
                 if (eventType !== 'autoSearch' && eventType !== 'search' && eventType !== 'viewProduct' && eventType !== 'addToCart' && eventType !== 'removeFromCart' && eventType !== 'order' && eventType !== 'impression') {
-                    // No log message because we don't want to pollute logs of browser.
+                    console.info(eventTypeRemovedMsg(eventType));
                     return;
                 }
 
@@ -545,7 +551,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendViewCartEvent: (event: ViewCartEvent) => {
-                // Event type deprecated.
+                console.info(eventTypeRemovedMsg('viewCart'));
             },
 
             /**
@@ -586,7 +592,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendMoreRefinementsEvent: (_: AutoMoreRefinementsEvent) => {
-                // Event type deprecated.
+                console.info(eventTypeRemovedMsg('moreRefinements'));
             },
 
             /**
