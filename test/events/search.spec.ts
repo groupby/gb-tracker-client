@@ -12,6 +12,10 @@ import { SearchEvent } from '../../src/models';
 (navigator as any).appCodeName = 'Microsoft Internet Explorer';
 (navigator as any).userAgent = 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)';
 
+import {
+  EVENT_TYPE_SEARCH,
+} from '../../src/eventTypes';
+
 describe('search tests', () => {
   it('should accept valid search event without search id', (done) => {
     const expectedEvent = {
@@ -46,7 +50,7 @@ describe('search tests', () => {
         },
         query: 'searchy searchface < > no angles or trailing spaces    ',
       },
-      eventType: 'search',
+      eventType: EVENT_TYPE_SEARCH,
       customer: {
         id: 'testcustomer',
         area: 'area',
@@ -124,7 +128,7 @@ describe('search tests', () => {
         },
         query: 'searchy searchface < > no angles or trailing spaces    ',
       },
-      eventType: 'search',
+      eventType: EVENT_TYPE_SEARCH,
       customer: {
         id: 'testcustomer',
         area: 'area',
@@ -202,7 +206,7 @@ describe('search tests', () => {
         },
         query: '',
       },
-      eventType: 'search',
+      eventType: EVENT_TYPE_SEARCH,
       customer: {
         id: 'testcustomer',
         area: 'area',
@@ -264,7 +268,7 @@ describe('search tests', () => {
   it('should accept valid search event with records', (done) => {
     const expectedEvent = {
       search: _.cloneDeep(searchEvent.search),
-      eventType: 'search',
+      eventType: EVENT_TYPE_SEARCH,
       customer: {
         id: 'testcustomer',
         area: 'area',

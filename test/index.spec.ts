@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import _ from 'lodash';
 import jsdom from 'jsdom';
 import moment from 'moment';
+import { EVENT_TYPE_SEARCH } from '../src/eventTypes';
 
 // tslint:disable-next-line:no-var-requires
 const GbTracker: any = require('../src');
@@ -78,7 +79,7 @@ describe('gb-tracker-core index tests', () => {
         },
         query: 'searchy searchface < > no angles or trailing spaces    ',
       },
-      eventType: 'search',
+      eventType: EVENT_TYPE_SEARCH,
       customer: {
         id: 'testcustomer',
         area: 'area',

@@ -1,6 +1,7 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
 import exp = require("constants");
+import { EVENT_TYPE_ADD_TO_CART } from '../../src/eventTypes';
 
 const GbTracker = require('../../src');
 
@@ -27,7 +28,7 @@ describe('addToCart tests', () => {
           },
         ],
       },
-      eventType: 'addToCart',
+      eventType: EVENT_TYPE_ADD_TO_CART,
       customer: {
         id: 'testcustomer',
         area: 'area',

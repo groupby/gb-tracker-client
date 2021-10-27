@@ -1,5 +1,6 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
+import { EVENT_TYPE_ORDER } from '../../src/eventTypes';
 
 const GbTracker = require('../../src');
 
@@ -34,7 +35,7 @@ describe('order tests', () => {
           },
         ],
       },
-      eventType: 'order',
+      eventType: EVENT_TYPE_ORDER,
       customer: {
         id: 'testcustomer',
         area: 'area',

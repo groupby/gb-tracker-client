@@ -22,6 +22,7 @@ const PATH_BUILT_SITE = 'test-integration/apps/site/index.html';
 const UTF8 = 'utf8';
 const TIMEOUT_MS = 10000;
 const trackerVersion = require('./version');
+const { EVENT_TYPE_ORDER, EVENT_TYPE_SEARCH, EVENT_TYPE_AUTO_SEARCH, EVENT_TYPE_VIEW_PRODUCT, EVENT_TYPE_ADD_TO_CART, EVENT_TYPE_REMOVE_FROM_CART } = require('../src/eventTypes');
 
 log(`Detected tracker version: ${trackerVersion}`);
 
@@ -206,7 +207,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // AutoSearch
     it('sends a valid AutoSearch beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'autoSearch';
+        const eventType = EVENT_TYPE_AUTO_SEARCH;
 
         build(eventType);
 
@@ -233,7 +234,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // Search
     it('sends a valid Search beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'search';
+        const eventType = EVENT_TYPE_SEARCH;
 
         build(eventType);
 
@@ -291,12 +292,12 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // ViewProduct
     it('sends a valid ViewProduct beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        build('viewProduct');
+        build(EVENT_TYPE_VIEW_PRODUCT);
 
         const page = await startServersAndBrowser();
 
         const expectedReceivedBeacon = {
-            ...expectedReceivedBeaconBase('viewProduct'),
+            ...expectedReceivedBeaconBase(EVENT_TYPE_VIEW_PRODUCT),
             product: {
                 productId: 'testproductid',
                 title: 'testtitle',
@@ -310,7 +311,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // AddToCart
     it('sends a valid AddToCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'addToCart';
+        const eventType = EVENT_TYPE_ADD_TO_CART;
 
         build(eventType);
 
@@ -337,7 +338,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // RemoveFromCart
     it('sends a valid RemoveFromCart beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'removeFromCart';
+        const eventType = EVENT_TYPE_REMOVE_FROM_CART;
 
         build(eventType);
 
@@ -363,7 +364,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // Order
     it('sends a valid Order beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'order';
+        const eventType = EVENT_TYPE_ORDER;
 
         build(eventType);
 
