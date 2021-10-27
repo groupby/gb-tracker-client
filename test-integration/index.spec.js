@@ -22,6 +22,7 @@ const PATH_BUILT_SITE = 'test-integration/apps/site/index.html';
 const UTF8 = 'utf8';
 const TIMEOUT_MS = 10000;
 const trackerVersion = require('./version');
+const { EVENT_TYPE_ORDER } = require('../src/eventTypes');
 
 log(`Detected tracker version: ${trackerVersion}`);
 
@@ -363,7 +364,7 @@ describe('gb-tracker-client, running in a web browser', () => {
 
     // Order
     it('sends a valid Order beacon to a web API consumer app, which successfully receives the beacon', async () => {
-        const eventType = 'order';
+        const eventType = EVENT_TYPE_ORDER;
 
         build(eventType);
 

@@ -25,6 +25,22 @@ import {
     ImpressionEvent,
 } from './models';
 import { visitorIdFromAmpLinker } from './amputils';
+import {
+    EVENT_TYPE_SEARCH,
+    EVENT_TYPE_AUTO_SEARCH,
+    EVENT_TYPE_VIEW_PRODUCT,
+    EVENT_TYPE_ADD_TO_CART,
+    EVENT_TYPE_REMOVE_FROM_CART,
+    EVENT_TYPE_ORDER,
+    EVENT_TYPE_IMPRESSION,
+    EVENT_TYPE_VIEW_CART,
+    EVENT_TYPE_MORE_REFINEMENTS
+} from './eventTypes';
+
+const DEPRECATED_EVENT_TYPES = [
+    EVENT_TYPE_VIEW_CART,
+    EVENT_TYPE_MORE_REFINEMENTS,
+];
 
 // Creates a message that can be shown to a GroupBy customer implementing beacons to tell them that the beacon type they
 // are trying to send has been removed.
@@ -218,8 +234,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 eventType = event.eventType as string;
 
-                // All event types except these are deprecated.
-                if (eventType !== 'autoSearch' && eventType !== 'search' && eventType !== 'viewProduct' && eventType !== 'addToCart' && eventType !== 'removeFromCart' && eventType !== 'order' && eventType !== 'impression') {
+                if (DEPRECATED_EVENT_TYPES.indexOf(eventType) > -1) {
                     console.info(eventTypeRemovedMsg(eventType));
                     return;
                 }
@@ -279,7 +294,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 let validationSchema: object;
 
                 // Only search events have validation too
-                if (event.eventType && event.eventType === 'search') {
+                if (event.eventType && event.eventType === EVENT_TYPE_SEARCH) {
                     sanitizationSchema = (schema as any).sanitization;
                     validationSchema = (schema as any).validation;
                 }
@@ -542,7 +557,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendAddToCartEvent: (event: AddToCartEvent) => {
-                internals.prepareAndSendEvent(event, 'addToCart');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_ADD_TO_CART);
             },
 
             /**
@@ -551,7 +566,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendViewCartEvent: (event: ViewCartEvent) => {
-                console.info(eventTypeRemovedMsg('viewCart'));
+                console.info(eventTypeRemovedMsg(EVENT_TYPE_VIEW_CART));
             },
 
             /**
@@ -559,7 +574,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendRemoveFromCartEvent: (event: RemoveFromCartEvent) => {
-                internals.prepareAndSendEvent(event, 'removeFromCart');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_REMOVE_FROM_CART);
             },
 
             /**
@@ -567,7 +582,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendOrderEvent: (event: OrderEvent) => {
-                internals.prepareAndSendEvent(event, 'order');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_ORDER);
             },
 
             /**
@@ -575,7 +590,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendSearchEvent: (event: SearchEvent) => {
-                internals.prepareAndSendEvent(event, 'search');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_SEARCH);
             },
 
             /**
@@ -583,7 +598,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendAutoSearchEvent: (event: AutoSearchEvent) => {
-                internals.prepareAndSendEvent(event, 'autoSearch');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_AUTO_SEARCH);
             },
 
             /**
@@ -592,7 +607,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendMoreRefinementsEvent: (_: AutoMoreRefinementsEvent) => {
-                console.info(eventTypeRemovedMsg('moreRefinements'));
+                console.info(eventTypeRemovedMsg(EVENT_TYPE_MORE_REFINEMENTS));
             },
 
             /**
@@ -600,7 +615,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendViewProductEvent: (event: ViewProductEvent) => {
-                internals.prepareAndSendEvent(event, 'viewProduct');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_VIEW_PRODUCT);
             },
 
             /**
@@ -609,7 +624,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
 
             sendImpressionEvent: (event: ImpressionEvent) => {
-                internals.prepareAndSendEvent(event, 'impression');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_IMPRESSION);
             },
         };
 
