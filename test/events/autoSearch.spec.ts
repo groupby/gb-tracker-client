@@ -1,5 +1,6 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
+import { EVENT_TYPE_AUTO_SEARCH } from '../../src/eventTypes';
 
 const GbTrackerCore = require('../../src');
 
@@ -18,7 +19,7 @@ describe('autoSearch tests', () => {
           sayt: true,
         },
       },
-      eventType: 'autoSearch',
+      eventType: EVENT_TYPE_AUTO_SEARCH,
       customer: {
         id: 'testcustomer',
         area: 'area',

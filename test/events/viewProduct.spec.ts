@@ -1,5 +1,6 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
+import { EVENT_TYPE_VIEW_PRODUCT } from '../../src/eventTypes';
 
 const GbTracker = require('../../src');
 
@@ -20,7 +21,7 @@ describe('viewProduct tests', () => {
         sku: 'asdfasf98',
         price: 100.21,
       },
-      eventType: 'viewProduct',
+      eventType: EVENT_TYPE_VIEW_PRODUCT,
       customer: {
         id: 'testcustomer',
         area: 'area',
