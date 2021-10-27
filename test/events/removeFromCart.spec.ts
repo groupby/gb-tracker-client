@@ -1,5 +1,6 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
+import { EVENT_TYPE_REMOVE_FROM_CART } from '../../src/eventTypes';
 
 const GbTrackerCore = require('../../src');
 
@@ -25,7 +26,7 @@ describe('removeFromCart tests', () => {
           },
         ],
       },
-      eventType: 'removeFromCart',
+      eventType: EVENT_TYPE_REMOVE_FROM_CART,
       customer: {
         id: 'testcustomer',
         area: 'area',

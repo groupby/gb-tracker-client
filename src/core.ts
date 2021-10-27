@@ -25,6 +25,28 @@ import {
     ImpressionEvent,
 } from './models';
 import { visitorIdFromAmpLinker } from './amputils';
+import {
+    EVENT_TYPE_SEARCH,
+    EVENT_TYPE_AUTO_SEARCH,
+    EVENT_TYPE_VIEW_PRODUCT,
+    EVENT_TYPE_ADD_TO_CART,
+    EVENT_TYPE_REMOVE_FROM_CART,
+    EVENT_TYPE_ORDER,
+    EVENT_TYPE_IMPRESSION,
+    EVENT_TYPE_VIEW_CART,
+    EVENT_TYPE_MORE_REFINEMENTS
+} from './eventTypes';
+
+const DEPRECATED_EVENT_TYPES = [
+    EVENT_TYPE_VIEW_CART,
+    EVENT_TYPE_MORE_REFINEMENTS,
+];
+
+// Creates a message that can be shown to a GroupBy customer implementing beacons to tell them that the beacon type they
+// are trying to send has been removed.
+function eventTypeRemovedMsg(eventType: string) {
+    return `The ${eventType} event type has been removed. Calling this function results in no beacon being sent. The function is a no op with no performance implications. The code calling this function can be removed at a time it is convenient to do so.`;
+}
 
 interface EventCustomer {
     id: string;
@@ -212,9 +234,8 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 eventType = event.eventType as string;
 
-                // All event types except these are deprecated.
-                if (eventType !== 'autoSearch' && eventType !== 'search' && eventType !== 'viewProduct' && eventType !== 'addToCart' && eventType !== 'removeFromCart' && eventType !== 'order' && eventType !== 'impression') {
-                    // No log message because we don't want to pollute logs of browser.
+                if (DEPRECATED_EVENT_TYPES.indexOf(eventType) > -1) {
+                    console.info(eventTypeRemovedMsg(eventType));
                     return;
                 }
 
@@ -262,13 +283,36 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             },
 
             /**
-             * Based on the sanitization schema provided, sanitizes an event for sending to the tracker endpoint.
+             * Based on the sanitization (and optionally, validation) schema
+             * provided, sanitizes (and optionally, validates) an event for
+             * sending to the tracker endpoint.
              * @param event
-             * @param sanitizationSchema
+             * @param schema
              */
-            validateEvent: (event, sanitizationSchema) => {
+            validateEvent: (event, schema) => {
+                let sanitizationSchema = schema;
+                let validationSchema: object;
+
+                // Only search events have validation too
+                if (event.eventType && event.eventType === EVENT_TYPE_SEARCH) {
+                    sanitizationSchema = (schema as any).sanitization;
+                    validationSchema = (schema as any).validation;
+                }
+
                 const sanitizedEvent = deepCopy(event);
                 internals.SANITIZE_EVENT(sanitizedEvent, sanitizationSchema || {});
+
+                if (validationSchema) {
+                    const result = inspector.validate((schema as any).validation || {}, sanitizedEvent);
+
+                    if (!result.valid) {
+                        console.error(`error while processing event: ${result.format()}`);
+                        return {
+                            event: undefined,
+                            error: result.format(),
+                        };
+                    }
+                }                
 
                 if (!sanitizedEvent.visit) {
                     sanitizedEvent.visit = {};
@@ -513,7 +557,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendAddToCartEvent: (event: AddToCartEvent) => {
-                internals.prepareAndSendEvent(event, 'addToCart');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_ADD_TO_CART);
             },
 
             /**
@@ -522,7 +566,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendViewCartEvent: (event: ViewCartEvent) => {
-                // Event type deprecated.
+                console.info(eventTypeRemovedMsg(EVENT_TYPE_VIEW_CART));
             },
 
             /**
@@ -530,7 +574,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendRemoveFromCartEvent: (event: RemoveFromCartEvent) => {
-                internals.prepareAndSendEvent(event, 'removeFromCart');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_REMOVE_FROM_CART);
             },
 
             /**
@@ -538,7 +582,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendOrderEvent: (event: OrderEvent) => {
-                internals.prepareAndSendEvent(event, 'order');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_ORDER);
             },
 
             /**
@@ -546,7 +590,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendSearchEvent: (event: SearchEvent) => {
-                internals.prepareAndSendEvent(event, 'search');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_SEARCH);
             },
 
             /**
@@ -554,7 +598,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendAutoSearchEvent: (event: AutoSearchEvent) => {
-                internals.prepareAndSendEvent(event, 'autoSearch');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_AUTO_SEARCH);
             },
 
             /**
@@ -563,7 +607,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendMoreRefinementsEvent: (_: AutoMoreRefinementsEvent) => {
-                // Event type deprecated.
+                console.info(eventTypeRemovedMsg(EVENT_TYPE_MORE_REFINEMENTS));
             },
 
             /**
@@ -571,7 +615,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param event
              */
             sendViewProductEvent: (event: ViewProductEvent) => {
-                internals.prepareAndSendEvent(event, 'viewProduct');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_VIEW_PRODUCT);
             },
 
             /**
@@ -580,7 +624,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
 
             sendImpressionEvent: (event: ImpressionEvent) => {
-                internals.prepareAndSendEvent(event, 'impression');
+                internals.prepareAndSendEvent(event, EVENT_TYPE_IMPRESSION);
             },
         };
 
