@@ -58,4 +58,51 @@ describe('utils tests', () => {
       expect(utils.getUnique(someArray)).to.eql(['this', 'that', 'another', 'something']);
     });
   });
+
+  describe('getApexDomain', () => {
+    it('returns the appropriate value given a certain input (test table style)', () => {
+      interface Input {
+        location: {
+          hostname: string
+        }
+      }
+
+      interface TestCase {
+        input: Input;
+        expected: string;
+      }
+
+      const testCases: TestCase[] = [
+        {
+          input: { location: { hostname: 'example.com' } },
+          expected: 'example.com',
+        },
+        {
+          input: { location: { hostname: 'www.example.com' } },
+          expected: 'example.com',
+        },
+        {
+          input: { location: { hostname: 'sub.example.com' } },
+          expected: 'example.com',
+        },
+        {
+          input: { location: { hostname: 'sub1.sub2.example.com' } },
+          expected: 'example.com',
+        },
+        {
+          input: { location: { hostname: 'example.net' } },
+          expected: 'example.net',
+        },
+        {
+          input: { location: { hostname: 'localhost' } },
+          expected: 'localhost',
+        },
+      ];
+      const sut = utils.getApexDomain;
+
+      testCases.forEach(testCase => {
+        expect(sut(testCase.input as Window)).to.eql(testCase.expected);
+      });
+    });
+  });
 });

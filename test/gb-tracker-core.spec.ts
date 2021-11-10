@@ -101,7 +101,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -131,7 +131,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -169,7 +169,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -207,7 +207,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.be.undefined;
@@ -238,7 +238,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     gbTrackerCore.setVisitor(1 as any, 1 as any);
@@ -252,7 +252,7 @@ describe('gb-tracker-core tests', () => {
     const cookieJar = new jsdom.CookieJar();
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
 
     const visitorCookieKey = gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY;
 
@@ -276,7 +276,7 @@ describe('gb-tracker-core tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     const internals = gbTrackerCore.__getInternals();
     internals.WINDOW = window as unknown as Window;
-    const CookiesLib = internals.COOKIES_LIB;
+    const CookiesLib = internals.COOKIES_LIB as any;
 
     const visitorCookieKey = internals.VISITOR_COOKIE_KEY;
 
@@ -300,7 +300,7 @@ describe('gb-tracker-core tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     const internals = gbTrackerCore.__getInternals();
     internals.WINDOW = window as unknown as Window;
-    const CookiesLib = internals.COOKIES_LIB;
+    const CookiesLib = internals.COOKIES_LIB as any;
 
     CookiesLib._document = window.document;
 
@@ -324,7 +324,7 @@ describe('gb-tracker-core tests', () => {
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
     const internals = gbTrackerCore.__getInternals();
     internals.WINDOW = window as unknown as Window;
-    const CookiesLib = internals.COOKIES_LIB;
+    const CookiesLib = internals.COOKIES_LIB as any;
 
     CookiesLib._document = window.document;
     CookiesLib.set(internals.VISITOR_COOKIE_KEY, 'abc123');
@@ -344,7 +344,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     gbTrackerCore.autoSetVisitor();
@@ -360,7 +360,7 @@ describe('gb-tracker-core tests', () => {
     const window = new jsdom.JSDOM(undefined, { cookieJar }).window;
 
     const gbTrackerCore = new GbTracker('testcustomer', 'area');
-    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB;
+    const CookiesLib = gbTrackerCore.__getInternals().COOKIES_LIB as any;
     CookiesLib._document = window.document;
 
     expect(CookiesLib.get(gbTrackerCore.__getInternals().VISITOR_COOKIE_KEY)).to.be.undefined;

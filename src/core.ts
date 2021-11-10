@@ -7,6 +7,7 @@ import {
     startsWithOneOf,
     getUnique,
     deepCopy,
+    getApexDomain,
 } from './utils';
 
 import {
@@ -121,7 +122,7 @@ export interface TrackerInternals {
     VERSION: string;
     VISITOR_TIMEOUT_SEC: number;
     WINDOW: Window;
-    COOKIES_LIB: any;
+    COOKIES_LIB: CookiesStatic;
     SCHEMAS: Schemas;
     SANITIZE_EVENT: SanitizeEventFn;
     OVERRIDEN_PIXEL_URL: string | undefined;
@@ -312,7 +313,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                             error: result.format(),
                         };
                     }
-                }                
+                }
 
                 if (!sanitizedEvent.visit) {
                     sanitizedEvent.visit = {};
@@ -407,6 +408,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 return protocol;
             },
+
         };
 
         const that: Tracker = {
@@ -426,6 +428,8 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @param sessionId
              */
             setVisitor: (visitorId, sessionId) => {
+                console.warn('"setVisitor" is now deprecated and will be removed in a future major version of gb-tracker-client. Use "autoSetVisitor" instead.');
+
                 if (internals.VISITOR_SETTINGS_SOURCE && internals.VISITOR_SETTINGS_SOURCE !== internals.NOT_SET_FROM_COOKIES) {
                     console.log('visitorId and sessionId already set using autoSetVisitor(). Ignoring setVisitor()');
                     return;
@@ -499,7 +503,21 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
                 // Set cookie for visitor ID. This resets the expiry time if it
                 // was a cookie already set before.
-                internals.COOKIES_LIB.set(internals.VISITOR_COOKIE_KEY, internals.VISIT.customerData.visitorId, { expires: internals.VISITOR_TIMEOUT_SEC });
+                const opts: CookieOptions = {
+                    expires: internals.VISITOR_TIMEOUT_SEC,
+                };
+                const isDomain = (str: string) => str.indexOf('.') >= 0;
+                if (internals.WINDOW.location
+                    && internals.WINDOW.location.hostname
+                    && internals.WINDOW.location.hostname.length > 0
+                    && isDomain(internals.WINDOW.location.hostname)) {
+                        opts.domain = getApexDomain(internals.WINDOW);
+                }
+                internals.COOKIES_LIB.set(
+                    internals.VISITOR_COOKIE_KEY,
+                    internals.VISIT.customerData.visitorId,
+                    opts,
+                );
             },
 
             getVisitorId: () => {
@@ -525,6 +543,8 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              */
             prepareEvent: (event, type) => {
                 // Continuously initialize visitor info in order to keep sessionId from expiring
+                // Note that because we don't use sessionId anymore (and do sessioning by grouping events by event time
+                // server side now), sessionId and things related to it will be removed in a future version.
                 if (internals.VISITOR_SETTINGS_SOURCE === internals.SET_FROM_COOKIES) {
                     that.autoSetVisitor(internals.VISIT.customerData.loginId);
                 }

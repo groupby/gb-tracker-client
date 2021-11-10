@@ -6,10 +6,12 @@
  * non-GroupBy Search, or custom solutions created with help from a GroupBy
  * Customer's TC on the Customer Success team.
  */
-type Metadata = {
-    key: string,
-    value: string
-}[];
+interface MetadataItem {
+    key: string;
+    value: string;
+}
+
+type Metadata = MetadataItem[];
 
 interface AutoMoreRefinementsPartial {
     id: string;
@@ -173,7 +175,7 @@ interface DirectSearchPartial {
     originalRequest?: SearchQuery;
 }
 
-interface Product {
+export interface Product {
     category?: string;
     collection: string;
     title: string;
@@ -199,7 +201,7 @@ export interface SendableOrigin {
 /**
  * Used for A/B testing experiments.
  */
-interface Experiment {
+export interface Experiment {
     experimentId: string;
     experimentVariant: string;
 }
