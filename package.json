@@ -62,7 +62,6 @@
   },
   "types": "index.d.ts",
   "dependencies": {
-    "@groupby/beacon-models": "^2.0.4",
     "cookies-js": "^1.2.3",
     "cuid": "^2.1.8",
     "deep-diff": "^1.0.2",
