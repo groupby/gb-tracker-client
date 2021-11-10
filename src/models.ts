@@ -175,7 +175,7 @@ interface DirectSearchPartial {
     originalRequest?: SearchQuery;
 }
 
-export interface Product {
+interface Product {
     category?: string;
     collection: string;
     title: string;
@@ -201,7 +201,7 @@ export interface SendableOrigin {
 /**
  * Used for A/B testing experiments.
  */
-export interface Experiment {
+interface Experiment {
     experimentId: string;
     experimentVariant: string;
 }
