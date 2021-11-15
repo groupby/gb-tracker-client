@@ -56,6 +56,16 @@ const a: AddToCartEvent = { ... };
 tracker.sendAddToCartEvent(a);
 ```
 
+## Options
+
+The constructor for the tracker client has a third, optional parameter for providing options:
+
+```typescript
+const tracker = new GbTracker('customer_id', 'area', {
+    overrideUrl: '<some_url>' // Optional, overrides the URL the beacon is sent to. Useful for testing.
+});
+```
+
 ## More Usage Details
 
 See the docs for more detailed information about implementing beacons:
