@@ -106,10 +106,14 @@ export interface TrackerCoreFactory {
     (schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory;
 }
 
+interface Options {
+    overrideUrl?: string;
+}
+
 export interface TrackerFactory {
     VERSION: string;
-    new(customerId: string, area?: string, overridePixelUrl?: string | null): Tracker;
-    (customerId: string, area?: string, overridePixelUrl?: string | null): Tracker;
+    new(customerId: string, area?: string, options?: Options | null): Tracker;
+    (customerId: string, area?: string, options?: Options | null): Tracker;
 }
 
 export interface TrackerInternals {
@@ -168,7 +172,7 @@ export interface Tracker {
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
-    function TrackerCtr(customerId: string, area: string = 'Production', overridePixelUrl?: string): Tracker {
+    function TrackerCtr(customerId: string, area: string = 'Production', options?: Options): Tracker {
         // Setting up customer
         if (typeof customerId !== 'string' || customerId.length === 0) {
             throw new Error('customerId must be a string with length');
@@ -203,7 +207,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
             INVALID_EVENT_CALLBACK: undefined,
             STRICT_MODE: false,
             WARNINGS_DISABLED: false,
-            OVERRIDEN_PIXEL_URL: overridePixelUrl,
+            OVERRIDEN_PIXEL_URL: options?.overrideUrl,
 
             VISITOR_SETTINGS_SOURCE: undefined,
 
