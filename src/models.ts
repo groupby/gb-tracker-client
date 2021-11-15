@@ -6,10 +6,12 @@
  * non-GroupBy Search, or custom solutions created with help from a GroupBy
  * Customer's TC on the Customer Success team.
  */
-type Metadata = {
-    key: string,
-    value: string
-}[];
+interface MetadataItem {
+    key: string;
+    value: string;
+}
+
+type Metadata = MetadataItem[];
 
 interface AutoMoreRefinementsPartial {
     id: string;
