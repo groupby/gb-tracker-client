@@ -47,3 +47,23 @@ export function startsWithOneOf(target: string, array: string[]): boolean {
 
     return false;
 }
+
+/**
+ * When we set the visitor ID cookie, we want to set it on the apex domain, not the specific domain. This allows all
+ * domains the customer has associated with the apex domain to share a visitor ID value. We consider this to not
+ * violate privacy because presumably, any subdomains are owned by the same customer that owns the apex domain. They
+ * presumably already have the ability to track shoppers accross their websites. We're matching that capability, but
+ * going no further. For example, we aren't tracking shoppers accross different apex domains.
+ * @param window An object conforming the Window interface of web browsers.
+ */
+export function getApexDomain(window: Window): string {
+    const host = window.location.hostname;
+
+    if (host.indexOf('.') < 0) {
+        // No . so do no split.
+        return host;
+    }
+
+    const split = host.split('.');
+    return `${split[split.length - 2]}.${split[split.length - 1]}`;
+};
