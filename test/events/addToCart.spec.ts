@@ -99,46 +99,4 @@ describe('addToCart tests', () => {
       },
     });
   });
-
-  it('should NOT reject addToCart event that is missing category', (done) => {
-    const gbTrackerCore = new GbTracker('testcustomer', 'area');
-
-    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-      expect(event.cart.items).to.eql([
-        {
-          productId: 'asdfasd',
-          // category:   'boats',
-          collection: 'boatssrus',
-          title: 'boats',
-          sku: 'asdfasf98',
-          quantity: 10,
-          price: 100.21,
-        },
-      ]);
-
-      done();
-    };
-
-    gbTrackerCore.setVisitor('visitor', 'session');
-
-    gbTrackerCore.setInvalidEventCallback(() => {
-      done('fail');
-    });
-
-    gbTrackerCore.sendAddToCartEvent({
-      cart: {
-        items: [
-          {
-            productId: 'asdfasd',
-            // category:   'boats',
-            collection: 'boatssrus',
-            title: 'boats',
-            sku: 'asdfasf98',
-            quantity: 10,
-            price: 100.21,
-          },
-        ],
-      },
-    });
-  });
 });

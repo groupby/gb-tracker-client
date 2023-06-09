@@ -14,6 +14,8 @@
         });
         gbTracker.autoSetVisitor();
 
+        gbTracker.setSite('site');
+
         gbTracker.sendAddToCartEvent({
             cart: {
                 cartType: 'mario cart',
@@ -32,6 +34,12 @@
                 },
             ],
             searchAttributionToken: 'abc123',
+            metadata: [
+                {
+                    key: 'siteFilter',
+                    value: 'this item will be replaced'
+                }
+            ]
         });
     </script>
 </head>
