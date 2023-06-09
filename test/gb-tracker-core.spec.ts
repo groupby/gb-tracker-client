@@ -454,7 +454,6 @@ describe('gb-tracker-core tests', () => {
       gbTrackerCore.setSite(siteFilter);
   
       gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-        console.log('<<<', JSON.stringify(event.metadata));
         expect(event.metadata[0].key).to.be.equal(SITE_FILTER_METADATA_KEY);
         expect(event.metadata[0].value).to.be.equal(siteFilter);
         done();
@@ -464,9 +463,7 @@ describe('gb-tracker-core tests', () => {
     });
 
     it('should NOT add siteFilter to metadata if it is empty', (done) => {
-      console.log('***', JSON.stringify(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_ADD_TO_CART)));
       gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-        console.log('!!!', JSON.stringify(event.metadata));
         expect(event.metadata).to.be.undefined;
         done();
       };
