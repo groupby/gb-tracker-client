@@ -24,6 +24,8 @@ import {
     AutoMoreRefinementsEvent,
     ViewProductEvent,
     ImpressionEvent,
+    Metadata,
+    MetadataItem,
 } from './models';
 import { visitorIdFromAmpLinker } from './amputils';
 import {
@@ -37,7 +39,7 @@ import {
     EVENT_TYPE_VIEW_CART,
     EVENT_TYPE_MORE_REFINEMENTS
 } from './eventTypes';
-import { SITE_FILTER_METADATA_KEY } from './constants';
+import { METADATA_SERVICE_KEYS, SITE_FILTER_METADATA_KEY } from './constants';
 
 const DEPRECATED_EVENT_TYPES = [
     EVENT_TYPE_VIEW_CART,
@@ -148,6 +150,7 @@ export interface TrackerInternals {
     prepareAndSendEvent(event: AnySendableEvent, eventType: keyof Schemas): void;
     validateEvent(event: FullSendableEvent, schemas: Schemas): { event?: FullSendableEvent, error?: any };
     getRemovedFields(sanitizedEvent: Record<any, any>, originalEvent: Record<any, any>): string[];
+    getPreparedMetadata(metadata: AnySendableEvent['metadata']): AnySendableEvent['metadata'];
 }
 
 export interface Tracker {
@@ -416,6 +419,26 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                 return protocol;
             },
 
+            /**
+             * Clear metadata from items with service keys and add siteFilter item
+             * @param metadata
+             * @returns { Metadata | undefined }
+             */
+            getPreparedMetadata: (metadata): Metadata | undefined => {
+                if (!internals.SITE_FILTER) {
+                    return metadata;
+                }
+
+                const siteFilterMetadataItem: MetadataItem = {
+                    key: SITE_FILTER_METADATA_KEY,
+                    value: internals.SITE_FILTER,
+                }
+                const filteredMetadata = (metadata ?? []).filter(({ key }) => !METADATA_SERVICE_KEYS.includes(key.toLowerCase()));
+                filteredMetadata.push(siteFilterMetadataItem);
+
+                return filteredMetadata;
+            }
+
         };
 
         const that: Tracker = {
@@ -560,24 +583,15 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     throw new Error('call autoSetVisitor() at least once before an event is sent');
                 }
 
+                const metadata = internals.getPreparedMetadata(event.metadata);
                 const fullSendableEvent: FullSendableEvent = {
                     ...event,
                     clientVersion: { raw: internals.VERSION },
                     eventType: type,
                     customer: internals.CUSTOMER,
                     visit: internals.VISIT as SendableVisit,
+                    ...metadata && { metadata }
                 };
-
-                const { metadata = [] } = fullSendableEvent;
-                if (internals.SITE_FILTER) {
-                    fullSendableEvent.metadata = [
-                        ...metadata,
-                        {
-                            key: SITE_FILTER_METADATA_KEY,
-                            value: internals.SITE_FILTER,
-                        }
-                    ]
-                }
 
                 return fullSendableEvent;
             },
