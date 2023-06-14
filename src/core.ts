@@ -590,7 +590,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     eventType: type,
                     customer: internals.CUSTOMER,
                     visit: internals.VISIT as SendableVisit,
-                    ...metadata && { metadata }
+                    ...(metadata && { metadata })
                 };
 
                 return fullSendableEvent;
@@ -687,7 +687,6 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * Initialize siteFilter parameter.
              * @param string
              */
-
             setSite: (siteFilter: string) => {
                 internals.SITE_FILTER = siteFilter;
             }
