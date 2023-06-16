@@ -23,6 +23,7 @@ const UTF8 = 'utf8';
 const TIMEOUT_MS = 10000;
 const trackerVersion = require('./version');
 const { EVENT_TYPE_ORDER, EVENT_TYPE_SEARCH, EVENT_TYPE_AUTO_SEARCH, EVENT_TYPE_VIEW_PRODUCT, EVENT_TYPE_ADD_TO_CART, EVENT_TYPE_REMOVE_FROM_CART } = require('../src/eventTypes');
+const { SITE_FILTER_METADATA_KEY } = require('../src/constants');
 
 log(`Detected tracker version: ${trackerVersion}`);
 
@@ -176,6 +177,10 @@ function expectedReceivedBeaconBase(eventType) {
                 experimentVariant: 'testexperimentvariant',
             },
         ],
+        metadata: [{
+            key: SITE_FILTER_METADATA_KEY,
+            value: 'site',
+        }]
     };
 }
 
