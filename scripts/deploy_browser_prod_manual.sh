@@ -33,4 +33,4 @@ cd cdn
 git checkout -b ${NAME}-${CURRENT_VERSION}
 git add "static/javascript/${NAME}-*.js"
 git commit -m "Release ${NAME} v${CURRENT_VERSION}"
-git push
+git push -u origin HEAD
