@@ -30,7 +30,7 @@ cp "build/${NAME}-${CURRENT_VERSION}.js" "cdn/static/javascript/${NAME}-${CURREN
 cp "build/${NAME}-${CURRENT_VERSION}.min.js" "cdn/static/javascript/${NAME}-${CURRENT_VERSION_MAJOR}.min.js"
 
 cd cdn
-git checkout -b ${NAME}-${CURRENT_VERSION}
+git checkout -b "${NAME}-${CURRENT_VERSION}"
 git add "static/javascript/${NAME}-*.js"
 git commit -m "Release ${NAME} v${CURRENT_VERSION}"
 git push -u origin HEAD
