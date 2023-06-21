@@ -174,7 +174,7 @@ export interface Tracker {
     sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => void;
     sendViewProductEvent: (event: ViewProductEvent) => void;
     sendImpressionEvent: (event: ImpressionEvent) => void;
-    setSite: (site: string) => void;
+    setSite: (site: string | undefined) => void;
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
@@ -425,7 +425,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @returns { Metadata | undefined }
              */
             getPreparedMetadata: (metadata): Metadata | undefined => {
-                if (!internals.SITE_FILTER) {
+                if (internals.SITE_FILTER === undefined) {
                     return metadata;
                 }
 
@@ -685,9 +685,12 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
             /**
              * Initialize siteFilter parameter.
-             * @param string
+             * @param siteFilter
              */
-            setSite: (siteFilter: string) => {
+            setSite: (siteFilter: string | undefined) => {
+                if (siteFilter !== undefined && typeof siteFilter !== 'string') {
+                    throw new Error('if siteFilter is provided, it must be a string or undefined');
+                }
                 internals.SITE_FILTER = siteFilter;
             }
         };

@@ -7,6 +7,7 @@ import cuid from 'cuid';
 import { AnySendableEvent, Tracker, TrackerCore } from '../src/core';
 import { SITE_FILTER_METADATA_KEY } from '../src/constants';
 import { EVENT_TYPE_ADD_TO_CART, EVENT_TYPE_AUTO_SEARCH, EVENT_TYPE_IMPRESSION, EVENT_TYPE_MORE_REFINEMENTS, EVENT_TYPE_ORDER, EVENT_TYPE_REMOVE_FROM_CART, EVENT_TYPE_SEARCH, EVENT_TYPE_VIEW_CART, EVENT_TYPE_VIEW_PRODUCT } from '../src/eventTypes';
+import { MetadataItem } from '../src/models';
 
 const GbTracker = TrackerCore({} as any, () => null);
 
@@ -450,25 +451,41 @@ describe('gb-tracker-core tests', () => {
       expect(gbTrackerCore.__getInternals().SITE_FILTER).to.equal(siteFilter);
     });
 
-    it('should add siteFilter to metadata if it exists', (done) => {
+    it('should add siteFilter to metadata if it exists', () => {
+      const siteFilterMetadataItem: MetadataItem = {
+        key: SITE_FILTER_METADATA_KEY,
+        value: '',
+      }
+
+      gbTrackerCore.setSite('');
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata([])).to.deep.equal([siteFilterMetadataItem]);
+
       gbTrackerCore.setSite(siteFilter);
-  
-      gbTrackerCore.__getInternals().sendEvent = (event: any) => {
-        expect(event.metadata[0].key).to.be.equal(SITE_FILTER_METADATA_KEY);
-        expect(event.metadata[0].value).to.be.equal(siteFilter);
-        done();
-      };
-  
-      gbTrackerCore.sendAddToCartEvent(anySendableEvent);
+      siteFilterMetadataItem.value = siteFilter;
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata([])).to.deep.equal([siteFilterMetadataItem]);
     });
 
     it('should NOT add siteFilter to metadata if it is empty', (done) => {
+      gbTrackerCore.setSite(undefined);
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata(undefined)).to.be.undefined;
+
       gbTrackerCore.__getInternals().sendEvent = (event: any) => {
         expect(event.metadata).to.be.undefined;
         done();
       };
   
       gbTrackerCore.sendAddToCartEvent(anySendableEvent);
+    });
+
+    it('should throw an error if siteFilter is not a string or undefined', () => {
+      expect(() => gbTrackerCore.setSite(0 as any)).to.throws();
+      expect(() => gbTrackerCore.setSite([] as any)).to.throw();
+      expect(() => gbTrackerCore.setSite({} as any)).to.throw();
+      expect(() => gbTrackerCore.setSite(false as any)).to.throw();
+      expect(() => gbTrackerCore.setSite(null as any)).to.throw();
+      expect(() => gbTrackerCore.setSite('')).to.not.throw();
+      expect(() => gbTrackerCore.setSite('test')).to.not.throw();
+      expect(() => gbTrackerCore.setSite(undefined)).to.not.throw();
     });
 
     it('should remove all metadata items with siteFilter key and add an initialized siteFilter if it exists', (done) => {
