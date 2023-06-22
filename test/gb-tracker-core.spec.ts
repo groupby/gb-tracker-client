@@ -466,7 +466,9 @@ describe('gb-tracker-core tests', () => {
     });
 
     it('should NOT add siteFilter to metadata if it is empty', (done) => {
-      gbTrackerCore.setSite(undefined);
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata(undefined)).to.be.undefined;
+      
+      gbTrackerCore.setSite(null);
       expect(gbTrackerCore.__getInternals().getPreparedMetadata(undefined)).to.be.undefined;
 
       gbTrackerCore.__getInternals().sendEvent = (event: any) => {
@@ -482,10 +484,10 @@ describe('gb-tracker-core tests', () => {
       expect(() => gbTrackerCore.setSite([] as any)).to.throw();
       expect(() => gbTrackerCore.setSite({} as any)).to.throw();
       expect(() => gbTrackerCore.setSite(false as any)).to.throw();
-      expect(() => gbTrackerCore.setSite(null as any)).to.throw();
+      expect(() => gbTrackerCore.setSite(undefined as any)).to.throw();
       expect(() => gbTrackerCore.setSite('')).to.not.throw();
       expect(() => gbTrackerCore.setSite('test')).to.not.throw();
-      expect(() => gbTrackerCore.setSite(undefined)).to.not.throw();
+      expect(() => gbTrackerCore.setSite(null)).to.not.throw();
     });
 
     it('should remove all metadata items with siteFilter key and add an initialized siteFilter if it exists', (done) => {

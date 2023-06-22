@@ -142,7 +142,7 @@ export interface TrackerInternals {
     WARNINGS_DISABLED: boolean;
     VISITOR_SETTINGS_SOURCE?: string;
     IGNORED_FIELD_PREFIXES: string[];
-    SITE_FILTER?: string;
+    SITE_FILTER?: string | null;
     getProtocol(document?: { location?: { protocol?: string } }): string;
     overrideCookiesLib(cookies: any): void;
     overridePixelPath(path?: string): void;
@@ -174,7 +174,7 @@ export interface Tracker {
     sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => void;
     sendViewProductEvent: (event: ViewProductEvent) => void;
     sendImpressionEvent: (event: ImpressionEvent) => void;
-    setSite: (site: string | undefined) => void;
+    setSite: (site: string | null) => void;
 }
 
 function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerFactory {
@@ -425,7 +425,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * @returns { Metadata | undefined }
              */
             getPreparedMetadata: (metadata): Metadata | undefined => {
-                if (internals.SITE_FILTER === undefined) {
+                if (internals.SITE_FILTER == null) {
                     return metadata;
                 }
 
@@ -687,9 +687,9 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
              * Initialize siteFilter parameter.
              * @param siteFilter
              */
-            setSite: (siteFilter: string | undefined) => {
-                if (siteFilter !== undefined && typeof siteFilter !== 'string') {
-                    throw new Error('if siteFilter is provided, it must be a string or undefined');
+            setSite: (siteFilter: string | null) => {
+                if (siteFilter !== null && typeof siteFilter !== 'string') {
+                    throw new Error('if siteFilter is provided, it must be a string or null');
                 }
                 internals.SITE_FILTER = siteFilter;
             }
