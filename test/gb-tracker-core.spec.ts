@@ -4,7 +4,10 @@ import _ from 'lodash';
 import jsdom from 'jsdom';
 import moment from 'moment';
 import cuid from 'cuid';
-import { TrackerCore } from '../src/core';
+import { AnySendableEvent, Tracker, TrackerCore } from '../src/core';
+import { SITE_FILTER_METADATA_KEY } from '../src/constants';
+import { EVENT_TYPE_ADD_TO_CART, EVENT_TYPE_AUTO_SEARCH, EVENT_TYPE_IMPRESSION, EVENT_TYPE_MORE_REFINEMENTS, EVENT_TYPE_ORDER, EVENT_TYPE_REMOVE_FROM_CART, EVENT_TYPE_SEARCH, EVENT_TYPE_VIEW_CART, EVENT_TYPE_VIEW_PRODUCT } from '../src/eventTypes';
+import { MetadataItem } from '../src/models';
 
 const GbTracker = TrackerCore({} as any, () => null);
 
@@ -416,4 +419,145 @@ describe('gb-tracker-core tests', () => {
     });
   });
 
+  describe('Site Filter', () => {
+    const siteFilter = 'site';
+
+    const anySendableEvent: AnySendableEvent = {
+      cart: {
+        items: [
+          {
+            productId: 'asdfasd',
+            collection: 'boatssrus',
+            title: 'boats',
+            sku: 'asdfasf98',
+            quantity: 10,
+            price: 100.21,
+          },
+        ],
+      }
+    };
+
+    let gbTrackerCore: Tracker;
+
+    beforeEach(() => {
+      gbTrackerCore = new GbTracker('testcustomer', 'area');
+      gbTrackerCore.autoSetVisitor();
+    })
+
+    it('should initialize siteFilter parameter', () => {
+      expect(gbTrackerCore.__getInternals().SITE_FILTER).to.be.undefined;
+
+      gbTrackerCore.setSite(siteFilter);
+      expect(gbTrackerCore.__getInternals().SITE_FILTER).to.equal(siteFilter);
+    });
+
+    it('should add siteFilter to metadata if it exists', () => {
+      const siteFilterMetadataItem: MetadataItem = {
+        key: SITE_FILTER_METADATA_KEY,
+        value: '',
+      }
+
+      gbTrackerCore.setSite('');
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata([])).to.deep.equal([siteFilterMetadataItem]);
+
+      gbTrackerCore.setSite(siteFilter);
+      siteFilterMetadataItem.value = siteFilter;
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata([])).to.deep.equal([siteFilterMetadataItem]);
+    });
+
+    it('should NOT add siteFilter to metadata if it is empty', (done) => {
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata(undefined)).to.be.undefined;
+      
+      gbTrackerCore.setSite(null);
+      expect(gbTrackerCore.__getInternals().getPreparedMetadata(undefined)).to.be.undefined;
+
+      gbTrackerCore.__getInternals().sendEvent = (event: any) => {
+        expect(event.metadata).to.be.undefined;
+        done();
+      };
+  
+      gbTrackerCore.sendAddToCartEvent(anySendableEvent);
+    });
+
+    it('should throw an error if siteFilter is not a string or undefined', () => {
+      expect(() => gbTrackerCore.setSite(0 as any)).to.throws();
+      expect(() => gbTrackerCore.setSite([] as any)).to.throw();
+      expect(() => gbTrackerCore.setSite({} as any)).to.throw();
+      expect(() => gbTrackerCore.setSite(false as any)).to.throw();
+      expect(() => gbTrackerCore.setSite(undefined as any)).to.throw();
+      expect(() => gbTrackerCore.setSite('')).to.not.throw();
+      expect(() => gbTrackerCore.setSite('test')).to.not.throw();
+      expect(() => gbTrackerCore.setSite(null)).to.not.throw();
+    });
+
+    it('should remove all metadata items with siteFilter key and add an initialized siteFilter if it exists', (done) => {
+      gbTrackerCore.setSite(siteFilter);
+  
+      gbTrackerCore.__getInternals().sendEvent = (event: any) => {
+        expect(event.metadata[0].key).to.be.equal(SITE_FILTER_METADATA_KEY);
+        expect(event.metadata[0].value).to.be.equal(siteFilter);
+        done();
+      };
+  
+      gbTrackerCore.sendAddToCartEvent({
+        ...anySendableEvent,
+        metadata: [
+          {
+            key: 'siteFilter',
+            value: 'test',
+          },
+          {
+            key: 'sIteFiltEr',
+            value: 'test',
+          },
+          {
+            key: 'sitefilter',
+            value: 'test',
+          }
+        ]
+      });
+    });
+
+    it('should pass all metadata items with siteFilter key if siteFilter was not initialized', (done) => {
+      gbTrackerCore.__getInternals().sendEvent = (event: any) => {
+        expect(event.metadata[0].key).to.be.equal('siteFilter');
+        expect(event.metadata[1].key).to.be.equal('sIteFiltEr');
+        expect(event.metadata[2].key).to.be.equal('sitefilter');
+        done();
+      };
+  
+      gbTrackerCore.sendAddToCartEvent({
+        ...anySendableEvent,
+        metadata: [
+          {
+            key: 'siteFilter',
+            value: 'test',
+          },
+          {
+            key: 'sIteFiltEr',
+            value: 'test',
+          },
+          {
+            key: 'sitefilter',
+            value: 'test',
+          }
+        ]
+      });
+    });
+
+    it('should add siteFilter metadata item to all events', () => {
+      gbTrackerCore.setSite('site');
+
+      const siteFilterMetadataItem = { key: SITE_FILTER_METADATA_KEY, value: 'site' };
+
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_ADD_TO_CART).metadata).to.deep.equal([siteFilterMetadataItem]);
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_AUTO_SEARCH).metadata).to.deep.equal([siteFilterMetadataItem]);
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_IMPRESSION).metadata).to.deep.equal([siteFilterMetadataItem]);
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_ORDER).metadata).to.deep.equal([siteFilterMetadataItem]);
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_REMOVE_FROM_CART).metadata).to.deep.equal([siteFilterMetadataItem]);
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_SEARCH).metadata).to.deep.equal([siteFilterMetadataItem]);
+      expect(gbTrackerCore.prepareEvent(anySendableEvent, EVENT_TYPE_VIEW_PRODUCT).metadata).to.deep.equal([siteFilterMetadataItem]);
+    });
+
+  });
 });

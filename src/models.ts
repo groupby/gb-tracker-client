@@ -6,12 +6,12 @@
  * non-GroupBy Search, or custom solutions created with help from a GroupBy
  * Customer's TC on the Customer Success team.
  */
-interface MetadataItem {
+export interface MetadataItem {
     key: string;
     value: string;
 }
 
-type Metadata = MetadataItem[];
+export type Metadata = MetadataItem[];
 
 interface AutoMoreRefinementsPartial {
     id: string;
