@@ -1,8 +1,6 @@
 import { sanitization as experimentsSan } from './partials/experiments';
 import { productsSanitization } from './partials/products';
 
-import { sanitization as searchAttributionTokenSan } from './partials/searchAttributionToken';
-
 export default {
   sanitization: {
     type: 'object',
@@ -159,7 +157,6 @@ export default {
         }
       },
       experiments: experimentsSan,
-      searchAttributionToken: searchAttributionTokenSan,
     }
   }
 }
