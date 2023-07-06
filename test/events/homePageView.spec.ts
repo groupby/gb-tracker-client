@@ -60,8 +60,8 @@ describe('homePageView tests', () => {
           expect(event.products).to.deep.equal(expectedEvent.products);
           expect(event.metadata).to.deep.equal(expectedEvent.metadata);
           expect(event.eventType).to.equal(expectedEvent.eventType);
-          expect(event.customer).to.equal(expectedEvent.customer);
-          expect(event.visit.customerData).to.equal(expectedEvent.visit.customerData);
+          expect(event.customer).to.deep.equal(expectedEvent.customer);
+          expect(event.visit.customerData).to.deep.equal(expectedEvent.visit.customerData);
           expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
           expect(event.visit.generated.localTime).to.not.be.undefined;
           done();
