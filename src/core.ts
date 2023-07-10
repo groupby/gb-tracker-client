@@ -26,6 +26,7 @@ import {
     ImpressionEvent,
     Metadata,
     MetadataItem,
+    HomePageViewEvent,
 } from './models';
 import { visitorIdFromAmpLinker } from './amputils';
 import {
@@ -37,7 +38,8 @@ import {
     EVENT_TYPE_ORDER,
     EVENT_TYPE_IMPRESSION,
     EVENT_TYPE_VIEW_CART,
-    EVENT_TYPE_MORE_REFINEMENTS
+    EVENT_TYPE_MORE_REFINEMENTS,
+    EVENT_TYPE_HOME_PAGE_VIEW
 } from './eventTypes';
 import { METADATA_SERVICE_KEYS, SITE_FILTER_METADATA_KEY } from './constants';
 
@@ -81,9 +83,17 @@ type SendableVisit = {
     }
 }
 
-export type AnySendableEvent = AddToCartEvent | ViewCartEvent
-    | RemoveFromCartEvent | OrderEvent | SearchEvent | AutoSearchEvent
-    | AutoMoreRefinementsEvent | ViewProductEvent | ImpressionEvent;
+export type AnySendableEvent =
+    | AddToCartEvent
+    | ViewCartEvent
+    | RemoveFromCartEvent
+    | OrderEvent
+    | SearchEvent
+    | AutoSearchEvent
+    | AutoMoreRefinementsEvent
+    | ViewProductEvent
+    | ImpressionEvent
+    | HomePageViewEvent;
 
 export type FullSendableEvent = AnySendableEvent & {
     eventType: string,
@@ -102,6 +112,7 @@ export interface Schemas {
     search?: object;
     viewProduct?: object;
     impression?: object;
+    homePageView?: object;
 }
 
 export interface TrackerCoreFactory {
@@ -174,6 +185,7 @@ export interface Tracker {
     sendMoreRefinementsEvent: (event: AutoMoreRefinementsEvent) => void;
     sendViewProductEvent: (event: ViewProductEvent) => void;
     sendImpressionEvent: (event: ImpressionEvent) => void;
+    sendHomePageViewEvent: (event: HomePageViewEvent) => void;
     setSite: (site: string | null) => void;
 }
 
@@ -681,6 +693,14 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
 
             sendImpressionEvent: (event: ImpressionEvent) => {
                 internals.prepareAndSendEvent(event, EVENT_TYPE_IMPRESSION);
+            },
+
+            /**
+             * Validate and send HomePageView event
+             * @param event
+             */
+            sendHomePageViewEvent: (event) => {
+                internals.prepareAndSendEvent(event, EVENT_TYPE_HOME_PAGE_VIEW);
             },
 
             /**
