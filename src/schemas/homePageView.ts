@@ -6,7 +6,13 @@ export default {
     type: 'object',
     strict: true,
     properties: {
-      products: productsSanitization,
+      products: {
+        type: 'object',
+        optional: true,
+        properties: {
+          items: productsSanitization,
+        }
+      },
       clientVersion: {
         type: 'object',
         strict: true,

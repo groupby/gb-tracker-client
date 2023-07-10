@@ -427,14 +427,16 @@ describe('gb-tracker-client, running in a web browser', () => {
 
         const expectedReceivedBeacon = {
             ...expectedReceivedBeaconBase('homePageView'),
-            products: [{
-                productId: 'asdfasd',
-                category: 'boats',
-                collection: 'boatssrus',
-                title: 'boats',
-                sku: 'asdfasf98',
-                price: 100.21,
-            }],
+            products: {
+                items: [{
+                    productId: 'asdfasd',
+                    category: 'boats',
+                    collection: 'boatssrus',
+                    title: 'boats',
+                    sku: 'asdfasf98',
+                    price: 100.21,
+                }],
+            }
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);
