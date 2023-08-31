@@ -71,6 +71,15 @@ const tracker = new GbTracker('customer_id', 'area', {
 
 The first party cookie `gbi_visitorId` is set with an empiry time of 1 year that is extended each time the shopper visits again. This is used to anonymously track the shopper.
 
+### 5.0.0 changes
+
+**IMPORTANT**
+
+As of version 5.0.0, the way shopper tracking works has changed and includes cross-domain support. Shoppers will be tracked across your domains if cross-domain rules are met (see next section). Tracking on domains whose apex domain has a two-level suffix is supported from version 5.1.2. Examples:
+
+- `.com` -  You can use version **5.0.0** or higher.
+- `.co.uk` - You can use version **5.1.2** or higher.
+
 ### Cross-domain rules
 
 For shoppers to be tracked across your domains, the domains must share the same apex domain. Examples:
@@ -79,9 +88,8 @@ For shoppers to be tracked across your domains, the domains must share the same 
 - `a.example.com` and `example.com`
 - `example.com` and `a.example.com`
 
-In order to support this functionality for Second-Level-Domains such as .co.uk, a list of domains has been added to the script logic to account for these cases.
-The list is available here ![Link to the list of domains](https://github.com/groupby/gb-tracker-client/src/slds.ts)
-If a SLD you use is not available in the list, please contact support@groupbyinc.com for assistance.
+Starting with version 5.1.2, many two-level domain suffixes such as `.co.uk` are also supported.
+If your domain has a multi-level suffix that is not in the [list of supported domain suffixes](src/slds.ts), please contact support@groupbyinc.com for assistance.
 
 ### Upgrading from versions 3 or 4 and visitor ID re-use
 

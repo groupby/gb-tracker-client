@@ -69,8 +69,8 @@ export function getApexDomain(window: Window): string {
     const hostLength = split.length;
     const apex =  `${split[hostLength - 2]}.${split[hostLength - 1]}`;
 
-    if (SLDs.indexOf(apex) < 0) {
-        return apex;
+    if (SLDs.indexOf(apex) >= 0) {
+        return `${split[hostLength - 3]}.${apex}`;
     }
-    return `${split[hostLength - 3]}.${apex}`;
+    return apex;
 };

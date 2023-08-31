@@ -1,13 +1,6 @@
-// Custom suffix list is used instead of Public Suffix List https://publicsuffix.org/, so as not to increase the size of the package
+// Custom suffix list is used instead of Public Suffix List https://publicsuffix.org/, so as not to increase the size of the package.
+// List derived from https://github.com/gavingmiller/second-level-domains (Copyright (c) 2013 Gavin Miller, licensed under the MIT License).
 export const SLDs = [
-  "'.cr",
-  "'.fr",
-  "'.in",
-  "'.iq",
-  "'.ir",
-  "'.km",
-  "'.kr",
-  "'.ma",
   "a.se",
   "ab.ca",
   "abo.pa",

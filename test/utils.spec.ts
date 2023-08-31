@@ -106,19 +106,19 @@ describe('utils tests', () => {
       });
     });
 
-    it('should return a correct value if base domain is on the third level (sub.example.com) and it\'s exist in hardcoded SLDs list', () => {
+    it('should return a correct value if base domain is on the third level (sub.example.com) and it exists in hardcoded SLDs list', () => {
       const testCases: TestCase[] = [
         {
-          input: { location: { hostname: "example.'.cr" } },
-          expected: "example.'.cr",
+          input: { location: { hostname: "example.ac.tz" } },
+          expected: "example.ac.tz",
         },
         {
-          input: { location: { hostname: 'www.example.ac.tz' } },
+          input: { location: { hostname: 'test.example.ac.tz' } },
           expected: 'example.ac.tz',
         },
         // not in the SLDs list
         {
-          input: { location: { hostname: 'www.example.sub.com' } },
+          input: { location: { hostname: 'test.example.sub.com' } },
           expected: 'sub.com',
         },
       ];
