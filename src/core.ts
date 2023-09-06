@@ -445,7 +445,7 @@ function TrackerCore(schemas: Schemas, sanitizeEvent: SanitizeEventFn): TrackerF
                     key: SITE_FILTER_METADATA_KEY,
                     value: internals.SITE_FILTER,
                 }
-                const filteredMetadata = (metadata ?? []).filter(({ key }) => !METADATA_SERVICE_KEYS.includes(key.toLowerCase()));
+                const filteredMetadata = (metadata || []).filter(({ key }) => METADATA_SERVICE_KEYS.indexOf(key.toLowerCase()) < 0);
                 filteredMetadata.push(siteFilterMetadataItem);
 
                 return filteredMetadata;

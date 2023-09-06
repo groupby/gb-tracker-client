@@ -60,17 +60,18 @@ describe('utils tests', () => {
   });
 
   describe('getApexDomain', () => {
-    it('returns the appropriate value given a certain input (test table style)', () => {
-      interface Input {
-        location: {
-          hostname: string
-        }
+    interface Input {
+      location: {
+        hostname: string
       }
+    }
 
-      interface TestCase {
-        input: Input;
-        expected: string;
-      }
+    interface TestCase {
+      input: Input;
+      expected: string;
+    }
+
+    it('returns the appropriate value given a certain input (test table style)', () => {
 
       const testCases: TestCase[] = [
         {
@@ -96,6 +97,29 @@ describe('utils tests', () => {
         {
           input: { location: { hostname: 'localhost' } },
           expected: 'localhost',
+        },
+      ];
+      const sut = utils.getApexDomain;
+
+      testCases.forEach(testCase => {
+        expect(sut(testCase.input as Window)).to.eql(testCase.expected);
+      });
+    });
+
+    it('should return a correct value if base domain is on the third level (sub.example.com) and it exists in hardcoded SLDs list', () => {
+      const testCases: TestCase[] = [
+        {
+          input: { location: { hostname: "example.ac.tz" } },
+          expected: "example.ac.tz",
+        },
+        {
+          input: { location: { hostname: 'test.example.ac.tz' } },
+          expected: 'example.ac.tz',
+        },
+        // not in the SLDs list
+        {
+          input: { location: { hostname: 'test.example.sub.com' } },
+          expected: 'sub.com',
         },
       ];
       const sut = utils.getApexDomain;
