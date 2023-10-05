@@ -35,7 +35,7 @@ Add the CDN `<script>` to each page, above where the tracker is instantiated and
 To import and use the tracker:
 
 ```javascript
-import { GbTracker } from 'gb-tracker-client';
+import GbTracker from 'gb-tracker-client';
 
 const tracker = new GbTracker('customer_id', 'area');
 tracker.autoSetVisitor();
@@ -47,7 +47,7 @@ If you're using TypeScript, you can also use the types for each event type. Each
 function has a corresponding TypeScript type that can be imported:
 
 ```typescript
-import { GbTracker } from 'gb-tracker-client';
+import GbTracker from 'gb-tracker-client';
 import { AddToCartEvent } from 'gb-tracker-client/models';
 
 const tracker = new GbTracker('customer_id', 'area');
