@@ -56,4 +56,5 @@ const sanitizeEvent: SanitizeEventFn = (event, sanitization) => {
 };
 
 // Full variant has sanitization and validation.
-module.exports = TrackerCore(SCHEMAS, sanitizeEvent);
+export const GbTracker = TrackerCore(SCHEMAS, sanitizeEvent);
+export default GbTracker;
