@@ -68,15 +68,15 @@ const tracker = new GbTracker('customer_id', 'area', {
 ```
 
 ## SiteFilter support since version 5.1.1
-The new functionality allows to include information about specific site or banner in the request to GroupBy.
+This new functionality allows you to indicate which specific site or banner the tracker is running in.
 
 ```typescript
 const tracker = new GbTracker('customer_id', 'area');
 tracker.setSite('siteName');
 ```
 
-`setSite` function will set a global parameter for that site instance.
-Whenever a `Search`, `View product`, `Add to cart`, `Order`, `Impression` beacon is fired, the site value, if it exists, will be added in a metadata value in the request.
+The `setSite` function will apply the given site to all beacons fired after that point.
+Whenever a `Search`, `View product`, `Add to cart`, `Order`, or `Impression` beacon is fired, the site value, if it exists, will be added as part of the metadata in the request.
 
 ## Shopper tracking
 
