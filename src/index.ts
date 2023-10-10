@@ -56,5 +56,6 @@ const sanitizeEvent: GbTracker.SanitizeEventFn = (event, sanitization) => {
     inspector.sanitize(sanitization, event);
 };
 
+// Full variant has sanitization and validation.
 const GbTracker: TrackerFactory = TrackerCore(SCHEMAS, sanitizeEvent);
 export = GbTracker;
