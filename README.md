@@ -35,7 +35,7 @@ Add the CDN `<script>` to each page, above where the tracker is instantiated and
 To import and use the tracker:
 
 ```javascript
-import { GbTracker } from 'gb-tracker-client';
+import GbTracker from 'gb-tracker-client';
 
 const tracker = new GbTracker('customer_id', 'area');
 tracker.autoSetVisitor();
@@ -47,7 +47,7 @@ If you're using TypeScript, you can also use the types for each event type. Each
 function has a corresponding TypeScript type that can be imported:
 
 ```typescript
-import { GbTracker } from 'gb-tracker-client';
+import GbTracker from 'gb-tracker-client';
 import { AddToCartEvent } from 'gb-tracker-client/models';
 
 const tracker = new GbTracker('customer_id', 'area');
@@ -66,6 +66,17 @@ const tracker = new GbTracker('customer_id', 'area', {
     overrideUrl: '<some_url>' // Optional, overrides the URL the beacon is sent to. Useful for testing.
 });
 ```
+
+## SiteFilter support since version 5.1.1
+This new functionality allows you to indicate which specific site or banner the tracker is running in.
+
+```typescript
+const tracker = new GbTracker('customer_id', 'area');
+tracker.setSite('siteName');
+```
+
+The `setSite` function will apply the given site to all beacons fired after that point.
+Whenever a `Search`, `View product`, `Add to cart`, `Order`, or `Impression` beacon is fired, the site value, if it exists, will be added as part of the metadata in the request.
 
 ## Shopper tracking
 

@@ -11,24 +11,25 @@ import search from './schemas/search';
 import viewProduct from './schemas/viewProduct';
 import impression from './schemas/impression';
 
-import { TrackerCore, AnySendableEvent, Schemas } from './core';
+import { TrackerCore, AnySendableEvent, Schemas, TrackerFactory } from './core';
 
-/**
- * The origin the event. Each property is optional but one of them must be set
- * to true so that GroupBy systems know the origin.
- */
-export interface SendableOrigin {
-    sayt?: boolean;
-    dym?: boolean;
-    search?: boolean;
-    recommendations?: boolean;
-    autosearch?: boolean;
-    navigation?: boolean;
-    collectionSwitcher?: boolean;
+namespace GbTracker {
+    /**
+     * The origin the event. Each property is optional but one of them must be set
+     * to true so that GroupBy systems know the origin.
+     */
+    export interface SendableOrigin {
+        sayt?: boolean;
+        dym?: boolean;
+        search?: boolean;
+        recommendations?: boolean;
+        autosearch?: boolean;
+        navigation?: boolean;
+        collectionSwitcher?: boolean;
+    }
+
+    export type SanitizeEventFn = (event: AnySendableEvent, schema?: any) => any;
 }
-
-export type SanitizeEventFn = (event: AnySendableEvent, schema?: any) => any;
-
 
 /**
  * Sanitization schemas used to transform the data the customer calls the event sending functions with.
@@ -51,9 +52,10 @@ const SCHEMAS: Schemas = {
  * @param event
  * @param sanitization
  */
-const sanitizeEvent: SanitizeEventFn = (event, sanitization) => {
+const sanitizeEvent: GbTracker.SanitizeEventFn = (event, sanitization) => {
     inspector.sanitize(sanitization, event);
 };
 
 // Full variant has sanitization and validation.
-module.exports = TrackerCore(SCHEMAS, sanitizeEvent);
+const GbTracker: TrackerFactory = TrackerCore(SCHEMAS, sanitizeEvent);
+export = GbTracker;
