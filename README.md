@@ -67,6 +67,17 @@ const tracker = new GbTracker('customer_id', 'area', {
 });
 ```
 
+## SiteFilter support since version 5.1.1
+The new functionality allows to include information about specific site or banner in the request to GRS.
+
+```typescript
+const tracker = new GbTracker('customer_id', 'area');
+tracker.setSite('siteName');
+```
+
+`setSite` function will set a global parameter for that site instance.
+Whenever a `search`, `viewProduct`, `addToCart`, `order`, `impression` beacon is fired, the site value, if it exists, will be added in a metadata value in the request.
+
 ## Shopper tracking
 
 The first party cookie `gbi_visitorId` is set with an empiry time of 1 year that is extended each time the shopper visits again. This is used to anonymously track the shopper.
