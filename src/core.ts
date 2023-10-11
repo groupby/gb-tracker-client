@@ -140,7 +140,7 @@ export interface TrackerInternals {
     VERSION: string;
     VISITOR_TIMEOUT_SEC: number;
     WINDOW: Window;
-    COOKIES_LIB: CookiesStatic;
+    COOKIES_LIB: typeof cookiesjs;
     SCHEMAS: Schemas;
     SANITIZE_EVENT: SanitizeEventFn;
     OVERRIDEN_PIXEL_URL: string | undefined;
