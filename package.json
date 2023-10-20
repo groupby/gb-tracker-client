@@ -1,6 +1,6 @@
 {
   "name": "gb-tracker-client",
-  "version": "5.1.3",
+  "version": "5.1.4",
   "description": "GroupBy client-side event tracker",
   "main": "index.js",
   "keywords": [
