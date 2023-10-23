@@ -121,7 +121,7 @@ interface SearchQuery {
 };
 
 interface DirectSearchPartial {
-    id: string;
+    id?: string;
     totalRecordCount: number;
     area?: string;
     biasingProfile?: string;
