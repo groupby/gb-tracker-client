@@ -292,3 +292,12 @@ export interface ImpressionEvent extends BaseEvent {
     impressionType: "search"|"recommendation";
     products: Product[];
 }
+
+/**
+ * The data for a HomePageView event.
+ */
+export interface HomePageViewEvent extends BaseEvent {
+    products?: {
+        items: Item[];
+    }
+}
