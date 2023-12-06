@@ -427,16 +427,24 @@ describe('gb-tracker-client, running in a web browser', () => {
 
         const expectedReceivedBeacon = {
             ...expectedReceivedBeaconBase('homePageView'),
-            products: {
-                items: [{
-                    productId: 'asdfasd',
+            products: [
+                {
+                    productId: 'boat111',
                     category: 'boats',
-                    collection: 'boatssrus',
-                    title: 'boats',
-                    sku: 'asdfasf98',
+                    collection: 'boats',
+                    title: 'black boat',
+                    sku: 'boat111_1',
                     price: 100.21,
-                }],
-            }
+                },
+                {
+                    productId: 'boat111',
+                    category: 'boats',
+                    collection: 'boats',
+                    title: 'white boat',
+                    sku: 'boat111_2',
+                    price: 100.21,
+                }
+            ]
         };
 
         await visitSiteAndAssert(page, expectedReceivedBeacon);
