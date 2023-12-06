@@ -297,7 +297,5 @@ export interface ImpressionEvent extends BaseEvent {
  * The data for a HomePageView event.
  */
 export interface HomePageViewEvent extends BaseEvent {
-    products?: {
-        items: Item[];
-    }
+    products: Product[];
 }

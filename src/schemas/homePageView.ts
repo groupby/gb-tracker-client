@@ -1,5 +1,5 @@
 import { sanitization as experimentsSan } from './partials/experiments';
-import { productsSanitization } from './partials/products';
+import {productSanitization} from './partials/products';
 
 export default {
   sanitization: {
@@ -7,11 +7,11 @@ export default {
     strict: true,
     properties: {
       products: {
-        type: 'object',
-        optional: true,
-        properties: {
-          items: productsSanitization,
-        }
+        type: 'array',
+        optional: false,
+        strict: true,
+        maxItems: 50,
+        items: productSanitization,
       },
       clientVersion: {
         type: 'object',

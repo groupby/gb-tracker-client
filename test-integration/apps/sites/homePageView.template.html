@@ -17,16 +17,24 @@
         gbTracker.setSite('site');
 
         gbTracker.sendHomePageViewEvent({
-            products: {
-                items: [{
-                    productId: 'asdfasd',
+            products: [
+                {
+                    productId: 'boat111',
                     category: 'boats',
-                    collection: 'boatssrus',
-                    title: 'boats',
-                    sku: 'asdfasf98',
+                    collection: 'boats',
+                    title: 'black boat',
+                    sku: 'boat111_1',
                     price: 100.21,
-                }],
-            },
+                },
+                {
+                    productId: 'boat111',
+                    category: 'boats',
+                    collection: 'boats',
+                    title: 'white boat',
+                    sku: 'boat111_2',
+                    price: 100.21,
+                }
+            ],
             experiments: [
                 {
                     experimentId: 'testexperimentid',
