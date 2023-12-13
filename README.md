@@ -67,6 +67,9 @@ const tracker = new GbTracker('customer_id', 'area', {
 });
 ```
 
+## Supported event types
+List of supported event types with code examples available in [event-types.md](docs/event-types.md) file
+
 ## SiteFilter support since version 5.1.1
 This new functionality allows you to indicate which specific site or banner the tracker is running in.
 
@@ -76,7 +79,7 @@ tracker.setSite('siteName');
 ```
 
 The `setSite` function will apply the given site to all beacons fired after that point.
-Whenever a `Search`, `View product`, `Add to cart`, `Order`, or `Impression` beacon is fired, the site value, if it exists, will be added as part of the metadata in the request.
+Whenever a `Search`, `Home page view`, `View product`, `Add to cart`, `Order`, or `Impression` beacon is fired, the site value, if it exists, will be added as part of the metadata in the request.
 
 ## Shopper tracking
 
