@@ -1,12 +1,7 @@
-import {
-    validation as experimentsVal,
-    sanitization as experimentsSan,
-} from './partials/experiments';
+import { sanitization as experimentsSan } from './partials/experiments';
+import { productSanitization } from './partials/products';
 
-import {
-    validation as searchAttributionTokenVal,
-    sanitization as searchAttributionTokenSan,
-} from './partials/searchAttributionToken';
+import { sanitization as searchAttributionTokenSan } from './partials/searchAttributionToken';
 
 export default {
     sanitization: {
@@ -128,99 +123,6 @@ export default {
                     }
                 }
             },
-            product: {
-                type: 'object',
-                strict: true,
-                properties: {
-                    category: {
-                        type: 'string',
-                        maxLength: 10000,
-                        rules: [
-                            'trim',
-                            'lower'
-                        ],
-                        optional: true
-                    },
-                    collection: {
-                        type: 'string',
-                        maxLength: 10000,
-                        rules: [
-                            'trim'
-                        ],
-                        optional: false,
-                        def: 'default'
-                    },
-                    title: {
-                        type: 'string',
-                        maxLength: 10000,
-                        rules: [
-                            'trim',
-                            'lower'
-                        ]
-                    },
-                    sku: {
-                        type: 'string',
-                        maxLength: 10000,
-                        rules: [
-                            'trim'
-                        ],
-                        optional: true
-                    },
-                    productId: {
-                        type: 'string',
-                        maxLength: 10000,
-                        rules: [
-                            'trim'
-                        ]
-                    },
-                    parentId: {
-                        type: 'string',
-                        maxLength: 10000,
-                        rules: [
-                            'trim'
-                        ],
-                        optional: true
-                    },
-                    margin: {
-                        type: 'number',
-                        optional: true
-                    },
-                    price: {
-                        type: 'number',
-                        optional: true
-                    },
-                    currency: {
-                        type: 'string',
-                        optional: true
-                    },
-                    metadata: {
-                        type: 'array',
-                        optional: true,
-                        items: {
-                            strict: true,
-                            type: 'object',
-                            properties: {
-                                key: {
-                                    type: 'string',
-                                    rules: [
-                                        'trim',
-                                        'lower'
-                                    ],
-                                    maxLength: 10000
-                                },
-                                value: {
-                                    type: 'string',
-                                    rules: [
-                                        'trim',
-                                        'lower'
-                                    ],
-                                    maxLength: 10000
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             visit: {
                 type: 'object',
                 strict: true,
@@ -255,6 +157,7 @@ export default {
                     }
                 }
             },
+            product: productSanitization,
             experiments: experimentsSan,
             searchAttributionToken: searchAttributionTokenSan,
         }

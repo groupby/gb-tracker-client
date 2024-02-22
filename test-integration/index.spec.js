@@ -419,4 +419,35 @@ describe('gb-tracker-client, running in a web browser', () => {
         await visitSiteAndAssert(page, expectedReceivedBeacon);
     }).timeout(TIMEOUT_MS);
 
+    // HomePageView
+    it('sends a valid HomePageView beacon to a web API consumer app, which successfully receives the beacon', async () => {
+        build('homePageView');
+
+        const page = await startServersAndBrowser();
+
+        const expectedReceivedBeacon = {
+            ...expectedReceivedBeaconBase('homePageView'),
+            products: [
+                {
+                    productId: 'boat111',
+                    category: 'boats',
+                    collection: 'boats',
+                    title: 'black boat',
+                    sku: 'boat111_1',
+                    price: 100.21,
+                },
+                {
+                    productId: 'boat111',
+                    category: 'boats',
+                    collection: 'boats',
+                    title: 'white boat',
+                    sku: 'boat111_2',
+                    price: 100.21,
+                }
+            ]
+        };
+
+        await visitSiteAndAssert(page, expectedReceivedBeacon);
+    }).timeout(TIMEOUT_MS);
+
 });

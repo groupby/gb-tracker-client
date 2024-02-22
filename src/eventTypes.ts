@@ -5,6 +5,7 @@ export const EVENT_TYPE_ADD_TO_CART = 'addToCart';
 export const EVENT_TYPE_REMOVE_FROM_CART = 'removeFromCart';
 export const EVENT_TYPE_ORDER = 'order';
 export const EVENT_TYPE_IMPRESSION = 'impression';
+export const EVENT_TYPE_HOME_PAGE_VIEW = 'homePageView';
 
 // Deprecated event types.
 export const EVENT_TYPE_VIEW_CART = 'viewCart';

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="{{gbTrackerClientSrc}}"></script>
+    <script>
+        // call autoSetVisitor before using the tracker instance
+        var gbTracker = new GbTracker('testcustomer', 'testarea', {
+            overrideUrl: 'http://localhost:{{beaconConsumerPort}}',
+        });
+        gbTracker.autoSetVisitor();
+
+        gbTracker.setSite('site');
+
+        gbTracker.sendHomePageViewEvent({
+            products: [
+                {
+                    productId: 'boat111',
+                    category: 'boats',
+                    collection: 'boats',
+                    title: 'black boat',
+                    sku: 'boat111_1',
+                    price: 100.21,
+                },
+                {
+                    productId: 'boat111',
+                    category: 'boats',
+                    collection: 'boats',
+                    title: 'white boat',
+                    sku: 'boat111_2',
+                    price: 100.21,
+                }
+            ],
+            experiments: [
+                {
+                    experimentId: 'testexperimentid',
+                    experimentVariant: 'testexperimentvariant',
+                },
+            ],
+        });
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
