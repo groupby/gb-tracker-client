@@ -95,6 +95,82 @@ describe('search tests', () => {
     });
   });
 
+  it('should accept valid search event and not lowercase query', (done) => {
+    const expectedEvent = {
+      search: {
+        totalRecordCount: 10,
+        pageInfo: {
+          recordEnd: 10,
+          recordStart: 5,
+        },
+        selectedNavigation: [
+          {
+            name: 'refined 1',
+            displayName: 'refined 1',
+            or: false,
+            refinements: [
+              {
+                type: 'value',
+                value: 'something',
+                count: 9823,
+              },
+            ],
+          },
+        ],
+        origin: {
+          search: true,
+          dym: false,
+          sayt: false,
+          recommendations: false,
+          autosearch: false,
+          navigation: false,
+          collectionSwitcher: false,
+        },
+        query: 'StUdLy CaPs', // not lowercase
+      },
+      eventType: EVENT_TYPE_SEARCH,
+      customer: {
+        id: 'testcustomer',
+        area: 'area',
+      },
+      visit: {
+        customerData: {
+          visitorId: 'visitor',
+          sessionId: 'session',
+        },
+        generated: {
+          uri: '',
+          timezoneOffset: 240,
+          localTime: '2016-08-14T14:05:26.872Z',
+        },
+      },
+    };
+
+    const gbTrackerCore = new GbTracker(expectedEvent.customer.id, expectedEvent.customer.area);
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done('fail');
+    });
+
+    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
+
+      expect(event.clientVersion.raw).to.not.be.undefined;
+      expect(event.search).to.eql(expectedEvent.search);
+      expect(event.eventType).to.eql(expectedEvent.eventType);
+      expect(event.customer).to.eql(expectedEvent.customer);
+      expect(event.visit.customerData).to.eql(expectedEvent.visit.customerData);
+      expect(event.visit.generated.timezoneOffset).to.not.be.undefined;
+      expect(event.visit.generated.localTime).to.not.be.undefined;
+      done();
+    };
+
+    gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
+
+    gbTrackerCore.sendSearchEvent({
+      search: expectedEvent.search,
+    });
+  });
+
   it('should accept valid search event and not lowercase navigations', (done) => {
     const expectedEvent = {
       search: {
