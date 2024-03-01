@@ -1046,8 +1046,7 @@ export default {
             type: 'string',
             maxLength: 10000,
             rules: [
-              'trim',
-              'lower'
+              'trim'
             ],
             exec: function querySanitizationXSS(schema, post) {
     if (typeof post === 'string') {
@@ -1067,8 +1066,7 @@ export default {
             type: 'string',
             maxLength: 10000,
             rules: [
-              'trim',
-              'lower'
+              'trim'
             ],
             exec: function querySanitizationXSS(schema, post) {
     if (typeof post === 'string') {
@@ -1088,8 +1086,7 @@ export default {
             type: 'string',
             maxLength: 10000,
             rules: [
-              'trim',
-              'lower'
+              'trim'
             ],
             exec: function querySanitizationXSS(schema, post) {
     if (typeof post === 'string') {
@@ -1698,8 +1695,7 @@ export default {
                 type: 'string',
                 maxLength: 10000,
                 rules: [
-                  'trim',
-                  'lower'
+                  'trim'
                 ],
                 exec: function querySanitizationXSS(schema, post) {
     if (typeof post === 'string') {
@@ -1719,8 +1715,7 @@ export default {
                 type: 'string',
                 maxLength: 10000,
                 rules: [
-                  'trim',
-                  'lower'
+                  'trim'
                 ]
               },
               matchStrategyName: {
