@@ -208,25 +208,27 @@ For sending details of which products (or SKUs within products) the shopper is v
 import {ImpressionEvent} from "./models";
 
 const event: ImpressionEvent = {
-    impressionType: "recommendation", // "search"
-    products: [
-        {
-            productId: 'boat111',
-            category: 'boats',
-            collection: 'boats',
-            title: 'black boat',
-            sku: 'boat111_1',
-            price: 100.21
-        },
-        {
-            productId: 'boat112',
-            category: 'boats',
-            collection: 'boats',
-            title: 'white boat',
-            sku: 'boat112_1',
-            price: 100.21
-        }
-    ]
+    impression: {
+        impressionType: "recommendation", // "search"
+        products: [
+            {
+                productId: 'boat111',
+                category: 'boats',
+                collection: 'boats',
+                title: 'black boat',
+                sku: 'boat111_1',
+                price: 100.21
+            },
+            {
+                productId: 'boat112',
+                category: 'boats',
+                collection: 'boats',
+                title: 'white boat',
+                sku: 'boat112_1',
+                price: 100.21
+            }
+        ]
+    }
 };
 tracker.sendImpressionEvent(event);
 ```
