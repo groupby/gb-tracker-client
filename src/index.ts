@@ -26,6 +26,7 @@ namespace GbTracker {
         autosearch?: boolean;
         navigation?: boolean;
         collectionSwitcher?: boolean;
+        conversation?: boolean;
     }
 
     export type SanitizeEventFn = (event: AnySendableEvent, schema?: any) => any;

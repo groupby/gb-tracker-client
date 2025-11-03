@@ -55,6 +55,7 @@ describe('autoSearch tests', () => {
           autosearch: false,
           navigation: false,
           collectionSwitcher: false,
+          conversation: false,
         },
       });
 
@@ -68,6 +69,52 @@ describe('autoSearch tests', () => {
     };
 
     gbTrackerCore.setVisitor(expectedEvent.visit.customerData.visitorId, expectedEvent.visit.customerData.sessionId);
+
+    gbTrackerCore.sendAutoSearchEvent({
+      search: expectedEvent.search,
+    });
+  });
+
+  it('should propagate conversation origin flag', (done) => {
+    const expectedEvent = {
+      search: {
+        id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        origin: {
+          conversation: true,
+        },
+      },
+      customer: {
+        id: 'testcustomer',
+        area: 'area',
+      },
+    };
+
+    const gbTrackerCore = new GbTrackerCore(expectedEvent.customer.id, expectedEvent.customer.area);
+
+    gbTrackerCore.__getInternals().sendEvent = (event: any) => {
+
+      expect(event.search).to.eql({
+        ...expectedEvent.search,
+        origin: {
+          dym: false,
+          sayt: false,
+          search: false,
+          recommendations: false,
+          autosearch: false,
+          navigation: false,
+          collectionSwitcher: false,
+          conversation: true,
+        },
+      });
+
+      done();
+    };
+
+    gbTrackerCore.setVisitor('visitor', 'session');
+
+    gbTrackerCore.setInvalidEventCallback(() => {
+      done('fail');
+    });
 
     gbTrackerCore.sendAutoSearchEvent({
       search: expectedEvent.search,

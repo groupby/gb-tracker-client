@@ -118,6 +118,35 @@ For example, if a shopper performed the following events, the visitor ID `abc` w
 - Waits a while, but less than a year, during which time you upgrade to version 5.
 - Visits the site again, clicks their cart (at which point version 5 replaces the visitor ID `bcd` with `abc`), and completes the purchase.
 
+## Conversational Commerce origin (new)
+
+To attribute analytics for Conversational Commerce correctly, the AutoSearch event now supports a new origin flag: `origin.conversation`.
+
+Example:
+
+```typescript
+import GbTracker from 'gb-tracker-client';
+import { AutoSearchEvent } from 'gb-tracker-client/models';
+
+const tracker = new GbTracker('customer_id', 'area');
+tracker.autoSetVisitor();
+
+const event: AutoSearchEvent = {
+  search: {
+    id: 'response_12345',
+    origin: { conversation: true }
+  }
+};
+
+tracker.sendAutoSearchEvent(event);
+```
+
+Notes:
+- You do not need to send a separate direct search when using AutoSearch for CC; set `origin.conversation=true` and include the CC response ID in `search.id`.
+- Other origin flags (sayt, search, etc.) remain supported; only set the one that applies to the given event.
+
+See also docs/event-types.md for more examples.
+
 ## More Usage Details
 
 See the docs for more detailed information about implementing beacons:

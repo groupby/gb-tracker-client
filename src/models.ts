@@ -196,6 +196,7 @@ export interface SendableOrigin {
     autosearch?: boolean;
     navigation?: boolean;
     collectionSwitcher?: boolean;
+    conversation?: boolean;
 }
 
 /**

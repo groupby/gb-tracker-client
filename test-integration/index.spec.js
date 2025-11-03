@@ -68,8 +68,16 @@ async function startServersAndBrowser() {
     closables.push(siteAppServer);
 
 
+    const ciArgs = process.env.CI ? [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu'
+    ] : [];
+
     const browser = await puppeteer.launch({
         headless: true,
+        args: ciArgs,
         env: {
             TZ: 'UTC',
             ...process.env,
@@ -83,6 +91,9 @@ async function startServersAndBrowser() {
     // is run, since it grabs the latest Chromium binary each time.
     // Therefore, we manually set user agent version to something known.
     await page.setUserAgent('headlesschrome');
+
+    // Make navigation timeout align with our mocha timeout
+    try { page.setDefaultNavigationTimeout(TIMEOUT_MS); } catch (e) { /* old puppeteer may not support */ }
 
     return page;
 }
@@ -123,6 +134,9 @@ async function visitSiteAndAssert(page, expectedReceivedBeacon) {
     expect(receivedBeacon.visit.generated).to.not.be.undefined;
     expect(receivedBeacon.visit.generated).to.be.a('object');
 
+    expect(receivedBeacon.visit.generated.timezoneOffset).to.not.be.undefined;
+    expect(receivedBeacon.visit.generated.timezoneOffset).to.be.a('number');
+
     expect(receivedBeacon.visit.generated.localTime).to.not.be.undefined;
     expect(receivedBeacon.visit.generated.localTime).to.be.a('string');
     // invalid ISO8601 date strings result in an error when parsed with
@@ -131,6 +145,9 @@ async function visitSiteAndAssert(page, expectedReceivedBeacon) {
     const d = new Date(localTime);
     expect(d).to.be.a('Date');
     expect(d.toString()).not.eql('Invalid Date');
+
+    expect(Number.isFinite(receivedBeacon.visit.generated.timezoneOffset)).to.be.true;
+    expectedReceivedBeacon.visit.generated.timezoneOffset = receivedBeacon.visit.generated.timezoneOffset;
 
     // Delete nondeterministic properties and assert on rest of beacon.
     delete receivedBeacon.clientVersion.raw;
@@ -230,6 +247,7 @@ describe('gb-tracker-client, running in a web browser', () => {
                     recommendations: false,
                     sayt: false,
                     search: true,
+                    conversation: false,
                 },
             },
         };

@@ -174,6 +174,11 @@ export default {
                 type: 'boolean',
                 optional: false,
                 def: false
+              },
+              conversation: {
+                type: 'boolean',
+                optional: false,
+                def: false
               }
             }
           },
