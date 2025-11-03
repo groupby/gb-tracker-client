@@ -20,7 +20,7 @@ const PORT_SITE = PORT_BEACON_CONSUMER + 1;
 const PATH_RECEIVED_BEACON = 'receivedBeacon.json';
 const PATH_BUILT_SITE = 'test-integration/apps/site/index.html';
 const UTF8 = 'utf8';
-const TIMEOUT_MS = 11000;
+const TIMEOUT_MS = process.env.CI ? 30000 : 15000;
 const trackerVersion = require('./version');
 const { EVENT_TYPE_ORDER, EVENT_TYPE_SEARCH, EVENT_TYPE_AUTO_SEARCH, EVENT_TYPE_VIEW_PRODUCT, EVENT_TYPE_ADD_TO_CART, EVENT_TYPE_REMOVE_FROM_CART } = require('../src/eventTypes');
 const { SITE_FILTER_METADATA_KEY } = require('../src/constants');
@@ -68,8 +68,16 @@ async function startServersAndBrowser() {
     closables.push(siteAppServer);
 
 
+    const ciArgs = process.env.CI ? [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu'
+    ] : [];
+
     const browser = await puppeteer.launch({
         headless: true,
+        args: ciArgs,
         env: {
             TZ: 'UTC',
             ...process.env,
@@ -79,10 +87,24 @@ async function startServersAndBrowser() {
 
     const page = await browser.newPage();
 
+    // Improve observability in CI
+    page.on('console', msg => {
+        try { console.log(`[BROWSER] ${msg.type()}:`, msg.text()); } catch (e) { /* noop */ }
+    });
+    page.on('pageerror', err => {
+        try { console.error('[BROWSER][pageerror]', err && err.stack || err); } catch (e) { /* noop */ }
+    });
+    page.on('requestfailed', req => {
+        try { console.error('[BROWSER][requestfailed]', req.url(), req.failure() && req.failure().errorText); } catch (e) { /* noop */ }
+    });
+
     // The version will be different depending on when "npm install"
     // is run, since it grabs the latest Chromium binary each time.
     // Therefore, we manually set user agent version to something known.
     await page.setUserAgent('headlesschrome');
+
+    // Make navigation timeout align with our mocha timeout
+    try { page.setDefaultNavigationTimeout(TIMEOUT_MS); } catch (e) { /* old puppeteer may not support */ }
 
     return page;
 }
@@ -451,3 +473,5 @@ describe('gb-tracker-client, running in a web browser', () => {
     }).timeout(TIMEOUT_MS);
 
 });
+
+
