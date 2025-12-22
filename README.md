@@ -1,9 +1,10 @@
-# GroupBy Tracker Client
+# Rezolve Tracker Client
 
 ![Node.js CI badge](https://github.com/groupby/gb-tracker-client/actions/workflows/node.js.yml/badge.svg)
 ![CodeQL static code analytics badge](https://github.com/groupby/gb-tracker-client/actions/workflows/codeql-analysis.yml/badge.svg)
 
-This is the JavaScript SDK used to send beacons to GroupBy. It can only run in the browser. A bundled UMD build is available from our CDN (see GroupBy docs for CDN link) and a CommonJS build is available for linking into NPM build processes with a bundler. E.g. React, Angular.
+This is the JavaScript SDK used to send beacons to Rezolve. It can only run in the browser. A bundled UMD build is available from our CDN (see
+Rezolve docs for CDN link) and a CommonJS build is available for linking into NPM build processes with a bundler. E.g. React, Angular.
 
 ## Usage from CDN
 
@@ -103,7 +104,7 @@ For shoppers to be tracked across your domains, the domains must share the same 
 - `example.com` and `a.example.com`
 
 Starting with version 5.1.2, many two-level domain suffixes such as `.co.uk` are also supported.
-If your domain has a multi-level suffix that is not in the [list of supported domain suffixes](src/slds.ts), please contact support@groupbyinc.com for assistance.
+If your domain has a multi-level suffix that is not in the [list of supported domain suffixes](src/slds.ts), please contact support@rezolve.com for assistance.
 
 ### Upgrading from versions 3 or 4 and visitor ID re-use
 
@@ -122,4 +123,4 @@ For example, if a shopper performed the following events, the visitor ID `abc` w
 
 See the docs for more detailed information about implementing beacons:
 
-https://docs.groupbycloud.com/gb-docs/gb-implementation/beacons/overview
+https://docs.rezolve.com/docs-category/capturing-user-events/
