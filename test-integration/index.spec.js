@@ -67,9 +67,16 @@ async function startServersAndBrowser() {
     });
     closables.push(siteAppServer);
 
+    const ciArgs = process.env.CI ? [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu'
+    ] : [];
 
     const browser = await puppeteer.launch({
         headless: true,
+        args: ciArgs,
         env: {
             TZ: 'UTC',
             ...process.env,
@@ -83,6 +90,9 @@ async function startServersAndBrowser() {
     // is run, since it grabs the latest Chromium binary each time.
     // Therefore, we manually set user agent version to something known.
     await page.setUserAgent('headlesschrome');
+
+    // Make navigation timeout align with our mocha timeout
+    try { page.setDefaultNavigationTimeout(TIMEOUT_MS); } catch (e) { /* old puppeteer may not support */ }
 
     return page;
 }
