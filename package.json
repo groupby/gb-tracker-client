@@ -1,12 +1,13 @@
 {
   "name": "gb-tracker-client",
-  "version": "5.4.0",
-  "description": "GroupBy client-side event tracker",
+  "version": "5.5.0",
+  "description": "Rezolve client-side event tracker",
   "main": "index.js",
   "keywords": [
     "groupby",
     "tracker",
-    "recommendations"
+    "recommendations",
+    "rezolve"
   ],
   "repository": {
     "type": "git",
@@ -27,7 +28,7 @@
     "test:integration": "ts-mocha -p tsconfig.test.json 'test-integration/**/*.spec.js'",
     "webpack": "webpack --config ./config/webpack.config.dev.js && webpack --config ./config/webpack.config.prod.js"
   },
-  "author": "GroupBy Inc.",
+  "author": "Rezolve",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.11.1",
