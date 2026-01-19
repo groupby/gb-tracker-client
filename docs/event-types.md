@@ -49,8 +49,8 @@ tracker.sendHomePageViewEvent(event);
 
 ## Search
 Event type is used in case of:
-- Sends details of the search in case other than GroupBy search API is used
-- For performing an A/B test between client's existing search engine and GroupBy Search
+- Sends details of the search in case other than Rezolve search API is used
+- For performing an A/B test between client's existing search engine and Rezolve Search
 
 ```typescript
 import {SearchEvent} from "./models";
@@ -84,7 +84,9 @@ tracker.sendSearchEvent(event);
 ```
 
 ## Auto search
-After performing a search using a GroupBy search API, this is used for sending details of the search to GroupBy's beacon API. The details are sent from the web browser using this event instead of being retrieved internally by GroupBy so that client tracking works correctly and aligns with the rest of the event types which must be sent from the client.
+After performing a search using a Rezolve search API, this is used for sending details of the search to Rezolve's beacon API. The details are sent 
+from the web browser using this event instead of being retrieved internally by Rezolve so that client tracking works correctly and aligns with the 
+rest of the event types which must be sent from the client.
 
 ```typescript
 import {AutoSearchEvent} from "./models";
@@ -202,7 +204,8 @@ tracker.sendOrderEvent(event);
 ```
 
 ## Impression
-For sending details of which products (or SKUs within products) the shopper is viewing on a page where you're rendering recommendations from a GroupBy recommendation API.
+For sending details of which products (or SKUs within products) the shopper is viewing on a page where you're rendering recommendations from a 
+Rezolve recommendation API.
 
 ```typescript
 import {ImpressionEvent} from "./models";
